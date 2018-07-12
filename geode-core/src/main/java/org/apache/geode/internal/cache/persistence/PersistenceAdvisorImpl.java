@@ -42,7 +42,6 @@ import org.apache.geode.internal.CopyOnWriteHashSet;
 import org.apache.geode.internal.cache.CacheDistributionAdvisor;
 import org.apache.geode.internal.cache.CacheDistributionAdvisor.CacheProfile;
 import org.apache.geode.internal.cache.CacheDistributionAdvisor.InitialImageAdvice;
-import org.apache.geode.internal.cache.DiskRegionStats;
 import org.apache.geode.internal.cache.persistence.PersistentMemberManager.MemberRevocationListener;
 import org.apache.geode.internal.cache.persistence.PersistentStateQueryMessage.PersistentStateQueryReplyProcessor;
 import org.apache.geode.internal.i18n.LocalizedStrings;
@@ -51,6 +50,7 @@ import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.process.StartupStatus;
 import org.apache.geode.internal.util.TransformUtils;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 public class PersistenceAdvisorImpl implements InternalPersistenceAdvisor {
 

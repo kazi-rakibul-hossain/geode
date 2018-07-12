@@ -18,9 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
 import org.apache.geode.internal.CopyOnWriteHashSet;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 /**
  * Adds coarser-grained monitoring of entire Statistics instances.
@@ -41,7 +41,7 @@ import org.apache.geode.internal.CopyOnWriteHashSet;
  * notify.getValue(statId)); } } }; }
  *
  * @since GemFire 7.0
- * @see org.apache.geode.Statistics
+ * @see Statistics
  */
 public class ValueMonitor extends StatisticsMonitor {
 

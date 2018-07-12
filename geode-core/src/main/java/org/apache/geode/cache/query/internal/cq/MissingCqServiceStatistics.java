@@ -14,7 +14,7 @@
  */
 package org.apache.geode.cache.query.internal.cq;
 
-import org.apache.geode.cache.query.CqServiceStatistics;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
 
 public class MissingCqServiceStatistics implements CqServiceStatistics {
 

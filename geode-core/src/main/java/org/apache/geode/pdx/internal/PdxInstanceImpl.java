@@ -31,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.geode.InternalGemFireException;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.internal.ClassPathLoader;
 import org.apache.geode.internal.DSCODE;
 import org.apache.geode.internal.InternalDataSerializer;
@@ -45,6 +44,7 @@ import org.apache.geode.internal.util.Hex;
 import org.apache.geode.pdx.JSONFormatter;
 import org.apache.geode.pdx.PdxSerializationException;
 import org.apache.geode.pdx.WritablePdxInstance;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * Implementation code in this class must be careful to not directly call super class state. Instead

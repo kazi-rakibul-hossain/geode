@@ -15,6 +15,8 @@
 
 package org.apache.geode.internal.cache;
 
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+
 /**
  * Class <code>PartitionedRegionStatus</code> provides information about
  * <code>PartitionedRegion</code>s. This class is used by the monitoring tool.

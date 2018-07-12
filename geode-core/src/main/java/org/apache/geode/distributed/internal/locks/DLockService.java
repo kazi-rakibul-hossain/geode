@@ -36,7 +36,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.CancelException;
 import org.apache.geode.InternalGemFireException;
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.SystemFailure;
 import org.apache.geode.distributed.DistributedLockService;
 import org.apache.geode.distributed.DistributedSystem;
@@ -62,6 +61,8 @@ import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.util.StopWatch;
 import org.apache.geode.internal.util.concurrent.FutureResult;
+import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Implements the distributed locking service with distributed lock grantors.
@@ -122,7 +123,7 @@ public class DLockService extends DistributedLockService {
   private DLockRecoverGrantorProcessor.MessageProcessor recoverGrantorProcessor;
 
   /** Thread-safe reference to DistributedLockStats */
-  private final DistributedLockStats dlockStats;
+  private final DLockStats dlockStats;
 
   /**
    * Protects {@link #lockGrantorId}, {@link #grantor} and {@link #lockGrantorFutureResult}. Final
@@ -1968,7 +1969,7 @@ public class DLockService extends DistributedLockService {
   // Public instance methods
   // -------------------------------------------------------------------------
 
-  public DistributedLockStats getStats() {
+  public DLockStats getStats() {
     return this.dlockStats;
   }
 
@@ -2614,7 +2615,7 @@ public class DLockService extends DistributedLockService {
   private static ThreadGroup threadGroup;
 
   /** DLock statistics; static because multiple dlock instances can exist */
-  private static DistributedLockStats stats = DUMMY_STATS;
+  private static DLockStats stats = DUMMY_STATS;
 
   // -------------------------------------------------------------------------
   // Reserved lock service names
@@ -2900,17 +2901,17 @@ public class DLockService extends DistributedLockService {
   }
 
   /** Get or create static dlock stats */
-  protected static synchronized DistributedLockStats getOrCreateStats(DistributedSystem ds) {
+  protected static synchronized DLockStats getOrCreateStats(
+      DistributedSystem distributedSystem) {
     if (stats == DUMMY_STATS) {
-      Assert.assertTrue(ds != null, "Need an instance of InternalDistributedSystem");
-      StatisticsFactory statFactory = ds;
+      Assert.assertTrue(distributedSystem != null, "Need an instance of InternalDistributedSystem");
       long statId = OSProcess.getId();
-      stats = new DLockStats(statFactory, statId);
+      stats = StatsFactory.createStatsImpl(DLockStats.class, String.valueOf(statId));
     }
     return stats;
   }
 
-  protected static synchronized DistributedLockStats getDistributedLockStats() {
+  protected static synchronized DLockStats getDistributedLockStats() {
     return stats;
   }
 

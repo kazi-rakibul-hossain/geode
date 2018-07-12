@@ -28,10 +28,10 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.partition.PartitionRegionHelper;
 import org.apache.geode.cache.wan.GatewayReceiver;
 import org.apache.geode.internal.cache.CacheServerImpl;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.wan.AbstractGatewaySender;
-import org.apache.geode.internal.cache.wan.GatewayReceiverStats;
 import org.apache.geode.internal.cache.wan.WANTestBase;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
+import org.apache.geode.stats.common.internal.cache.wan.GatewayReceiverStats;
 import org.apache.geode.test.dunit.AsyncInvocation;
 import org.apache.geode.test.junit.categories.WanTest;
 

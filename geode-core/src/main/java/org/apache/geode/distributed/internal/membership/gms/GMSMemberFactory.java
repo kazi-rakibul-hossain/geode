@@ -19,10 +19,8 @@ import java.net.UnknownHostException;
 
 import org.apache.geode.GemFireConfigException;
 import org.apache.geode.SystemConnectException;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.DistributionException;
-import org.apache.geode.distributed.internal.LocatorStats;
 import org.apache.geode.distributed.internal.membership.DistributedMembershipListener;
 import org.apache.geode.distributed.internal.membership.MemberAttributes;
 import org.apache.geode.distributed.internal.membership.MemberServices;
@@ -36,6 +34,8 @@ import org.apache.geode.internal.net.SocketCreator;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.internal.tcp.ConnectionException;
 import org.apache.geode.security.GemFireSecurityException;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
+import org.apache.geode.stats.common.distributed.internal.LocatorStats;
 
 /**
  * Create a new Member based on the given inputs.

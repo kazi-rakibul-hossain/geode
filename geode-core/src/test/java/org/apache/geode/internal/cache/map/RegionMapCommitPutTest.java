@@ -38,7 +38,6 @@ import org.junit.Test;
 import org.apache.geode.cache.Operation;
 import org.apache.geode.cache.TransactionId;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.EntryEventImpl;
 import org.apache.geode.internal.cache.EnumListenerEvent;
 import org.apache.geode.internal.cache.InternalCache;
@@ -51,6 +50,7 @@ import org.apache.geode.internal.cache.TXEntryState;
 import org.apache.geode.internal.cache.TXRmtEvent;
 import org.apache.geode.internal.cache.Token;
 import org.apache.geode.internal.cache.versions.VersionTag;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 public class RegionMapCommitPutTest {
   private final InternalRegion internalRegion = mock(InternalRegion.class);

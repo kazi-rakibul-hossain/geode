@@ -41,7 +41,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.cache.CacheWriterException;
 import org.apache.geode.cache.DiskAccessException;
 import org.apache.geode.cache.DiskStore;
@@ -56,6 +55,8 @@ import org.apache.geode.internal.InternalDataSerializer;
 import org.apache.geode.internal.cache.Oplog.OPLOG_TYPE;
 import org.apache.geode.internal.cache.entries.AbstractDiskLRURegionEntry;
 import org.apache.geode.internal.cache.entries.DiskEntry;
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
 import org.apache.geode.test.dunit.ThreadUtils;
 
 /**
@@ -193,7 +194,7 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
       long id = oplog.getOplogId();
       oplog.close();
 
-      StatisticsFactory factory = cache.getDistributedSystem();
+      StatisticsFactory factory = cache.getDistributedSystem().getStatisticsFactory();
       Oplog newOplog =
           new Oplog(id, dr.getOplogSet(), new DirectoryHolder(factory, dirs[0], 1000, 0));
       dr.getOplogSet().setChild(newOplog);
@@ -214,7 +215,7 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
       Oplog oplog = dr.testHook_getChild();
       long id = oplog.getOplogId();
       oplog.close();
-      StatisticsFactory factory = cache.getDistributedSystem();
+      StatisticsFactory factory = cache.getDistributedSystem().getStatisticsFactory();
       Oplog newOplog =
           new Oplog(id, dr.getOplogSet(), new DirectoryHolder(factory, dirs[0], 1000, 2));
       dr.setChild(newOplog);

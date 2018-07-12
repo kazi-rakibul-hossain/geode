@@ -34,6 +34,7 @@ import org.apache.geode.distributed.internal.membership.MembershipManager;
 import org.apache.geode.internal.Version;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * This interface defines the services provided by any class that is a distribution manager.

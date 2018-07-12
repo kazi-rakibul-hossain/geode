@@ -17,6 +17,7 @@ package org.apache.geode.cache.client.internal;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.pdx.internal.PdxType;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Add a PdxType to a server.

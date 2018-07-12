@@ -36,13 +36,13 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.GemFireIOException;
 import org.apache.geode.InternalGemFireException;
-import org.apache.geode.StatisticDescriptor;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.net.SocketCreator;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
 
 /**
  * StatArchiveWriter provides APIs to write statistic snapshots to an archive file.

@@ -15,15 +15,17 @@
 
 package org.apache.geode.distributed.internal.locks;
 
-import org.apache.geode.distributed.internal.PoolStatHelper;
-import org.apache.geode.distributed.internal.QueueStatHelper;
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
+import org.apache.geode.stats.common.distributed.internal.QueueStatHelper;
+import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 /**
  * Empty implementation of <code>DistributedLockStats</code> used when there is currently no
  * connection to the distributed system.
  *
  */
-public class DummyDLockStats implements DistributedLockStats {
+public class DummyDLockStats implements DLockStats {
 
   public int getLockWaitsInProgress() {
     return -1;
@@ -368,6 +370,16 @@ public class DummyDLockStats implements DistributedLockStats {
   }
 
   public void incFreeResourcesFailed() {}
+
+  @Override
+  public void close() {
+
+  }
+
+  @Override
+  public Statistics getStats() {
+    return null;
+  }
 
   public static class DummyPoolStatHelper implements PoolStatHelper {
     public void startJob() {}

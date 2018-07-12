@@ -17,7 +17,6 @@ package org.apache.geode.internal.util;
 import java.io.IOException;
 
 import org.apache.geode.DataSerializer;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.internal.ByteArrayDataInput;
 import org.apache.geode.internal.DSCODE;
@@ -26,6 +25,7 @@ import org.apache.geode.internal.Version;
 import org.apache.geode.internal.offheap.StoredObject;
 import org.apache.geode.internal.offheap.annotations.Unretained;
 import org.apache.geode.pdx.internal.PdxInputStream;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * A "blob" is a serialized representation of an object into a byte[]. BlobHelper provides utility

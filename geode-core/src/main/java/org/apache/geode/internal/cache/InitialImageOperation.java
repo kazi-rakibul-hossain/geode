@@ -93,6 +93,7 @@ import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.sequencelog.EntryLogger;
 import org.apache.geode.internal.sequencelog.RegionLogger;
 import org.apache.geode.internal.util.ObjectIntProcedure;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Handles requests for an initial image from a cache peer

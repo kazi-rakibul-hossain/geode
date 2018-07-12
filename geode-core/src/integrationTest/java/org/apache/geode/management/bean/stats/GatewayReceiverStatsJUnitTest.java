@@ -21,8 +21,9 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import org.apache.geode.cache.server.ServerLoad;
-import org.apache.geode.internal.cache.wan.GatewayReceiverStats;
 import org.apache.geode.management.internal.beans.GatewayReceiverMBeanBridge;
+import org.apache.geode.stats.common.internal.cache.wan.GatewayReceiverStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.junit.categories.JMXTest;
 
 @Category({JMXTest.class})
@@ -33,7 +34,8 @@ public class GatewayReceiverStatsJUnitTest extends MBeanStatsTestCase {
   private GatewayReceiverStats receiverStats;
 
   public void init() {
-    receiverStats = GatewayReceiverStats.createGatewayReceiverStats("Test Sock Name");
+    receiverStats =
+        StatsFactory.createStatsImpl(GatewayReceiverStats.class, "Test Sock Name");
 
     bridge = new GatewayReceiverMBeanBridge();
     bridge.addGatewayReceiverStats(receiverStats);
@@ -58,7 +60,8 @@ public class GatewayReceiverStatsJUnitTest extends MBeanStatsTestCase {
     receiverStats.incProcessPutTime(startTime);
 
     ServerLoad load = new ServerLoad(1, 1, 1, 1);
-    receiverStats.setLoad(load);
+    receiverStats.setLoad(load.getConnectionLoad(), load.getLoadPerConnection(),
+        load.getSubscriptionConnectionLoad(), load.getLoadPerSubscriptionConnection());
 
     sample();
 

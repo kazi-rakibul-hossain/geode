@@ -29,6 +29,7 @@ import org.apache.geode.internal.logging.LoggingThreadGroup;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.offheap.MemoryAllocator;
 import org.apache.geode.internal.offheap.MemoryUsageListener;
+import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats;
 
 /**
  * Allows for the setting of eviction and critical thresholds. These thresholds are compared against

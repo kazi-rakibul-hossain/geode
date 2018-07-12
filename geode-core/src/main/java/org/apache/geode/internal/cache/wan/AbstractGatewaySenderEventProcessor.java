@@ -59,6 +59,7 @@ import org.apache.geode.internal.logging.LoggingThreadGroup;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
 import org.apache.geode.pdx.internal.PeerTypeRegistration;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
 
 /**
  * EventProcessor responsible for peeking from queue and handling over the events to the dispatcher.

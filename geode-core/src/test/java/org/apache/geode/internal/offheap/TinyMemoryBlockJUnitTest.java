@@ -28,12 +28,13 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.geode.internal.cache.EntryEventImpl;
 import org.apache.geode.internal.offheap.MemoryBlock.State;
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
 
 public class TinyMemoryBlockJUnitTest {
 
   private MemoryAllocatorImpl ma;
   private OutOfOffHeapMemoryListener ooohml;
-  private OffHeapMemoryStats stats;
+  private OffHeapStorageStats stats;
   private Slab[] slabs;
 
   @Rule
@@ -48,7 +49,7 @@ public class TinyMemoryBlockJUnitTest {
         new SlabImpl((int) OffHeapStorage.MIN_SLAB_SIZE),
         new SlabImpl((int) OffHeapStorage.MIN_SLAB_SIZE)};
     ooohml = mock(OutOfOffHeapMemoryListener.class);
-    stats = mock(OffHeapMemoryStats.class);
+    stats = mock(OffHeapStorageStats.class);
     ma = (MemoryAllocatorImpl) MemoryAllocatorImpl.createForUnitTest(ooohml, stats, slabs);
   }
 

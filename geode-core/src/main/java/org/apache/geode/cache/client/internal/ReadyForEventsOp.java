@@ -16,6 +16,7 @@ package org.apache.geode.cache.client.internal;
 
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Tells the server we are ready to receive server-to-client events from durable subscriptions.

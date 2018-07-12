@@ -44,6 +44,7 @@ import org.apache.geode.cache.Scope;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.internal.cache.eviction.EvictionCounters;
 import org.apache.geode.internal.cache.eviction.EvictionList;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 /**
  * This is a test verifies region is LIFO enabled by ENTRY COUNT verifies correct stats updating and

@@ -22,8 +22,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 
 import org.apache.geode.SystemFailure;
 import org.apache.geode.distributed.DistributedMember;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionMessage;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * A MembershipManager is responsible for reporting a MemberView, as well as having explicit

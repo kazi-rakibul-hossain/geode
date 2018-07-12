@@ -39,6 +39,7 @@ import org.apache.geode.cache.RegionShortcut;
 import org.apache.geode.cache30.CertifiableTestCacheListener;
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
 import org.apache.geode.test.dunit.VM;
 import org.apache.geode.test.dunit.cache.CacheTestCase;
 

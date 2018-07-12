@@ -41,10 +41,11 @@ import org.apache.geode.internal.DSCODE;
 import org.apache.geode.internal.HeapDataOutputStream;
 import org.apache.geode.internal.Version;
 import org.apache.geode.internal.cache.BytesAndBitsForCompactor;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.EntryEventImpl;
 import org.apache.geode.internal.cache.RegionEntryContext;
 import org.apache.geode.internal.offheap.MemoryBlock.State;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
 
 public class OffHeapStoredObjectJUnitTest extends AbstractStoredObjectTestBase {
 
@@ -71,7 +72,7 @@ public class OffHeapStoredObjectJUnitTest extends AbstractStoredObjectTestBase {
   @Before
   public void setUp() {
     OutOfOffHeapMemoryListener ooohml = mock(OutOfOffHeapMemoryListener.class);
-    OffHeapMemoryStats stats = mock(OffHeapMemoryStats.class);
+    OffHeapStorageStats stats = mock(OffHeapStorageStats.class);
 
     ma = MemoryAllocatorImpl.create(ooohml, stats, 3, OffHeapStorage.MIN_SLAB_SIZE * 3,
         OffHeapStorage.MIN_SLAB_SIZE);

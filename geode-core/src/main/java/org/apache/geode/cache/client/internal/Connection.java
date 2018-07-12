@@ -22,6 +22,7 @@ import java.nio.ByteBuffer;
 
 import org.apache.geode.distributed.internal.ServerLocation;
 import org.apache.geode.internal.cache.tier.sockets.ServerQueueStatus;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Represents a connection from a client to a server. Instances are created, kept, and used by

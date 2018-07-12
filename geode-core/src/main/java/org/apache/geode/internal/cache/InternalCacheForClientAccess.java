@@ -91,6 +91,7 @@ import org.apache.geode.pdx.PdxInstanceFactory;
 import org.apache.geode.pdx.PdxSerializer;
 import org.apache.geode.pdx.internal.TypeRegistry;
 import org.apache.geode.security.NotAuthorizedException;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * This class delegates all methods to the InternalCache instance

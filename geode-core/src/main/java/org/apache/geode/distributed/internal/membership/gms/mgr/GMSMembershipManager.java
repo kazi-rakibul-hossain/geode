@@ -51,7 +51,6 @@ import org.apache.geode.distributed.DistributedSystemDisconnectedException;
 import org.apache.geode.distributed.Locator;
 import org.apache.geode.distributed.internal.AdminMessageType;
 import org.apache.geode.distributed.internal.ClusterDistributionManager;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.DistributionException;
 import org.apache.geode.distributed.internal.DistributionMessage;
@@ -94,6 +93,7 @@ import org.apache.geode.internal.shared.StringPrintWriter;
 import org.apache.geode.internal.tcp.ConnectExceptions;
 import org.apache.geode.internal.tcp.MemberShunnedException;
 import org.apache.geode.internal.util.Breadcrumbs;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 public class GMSMembershipManager implements MembershipManager, Manager {
   private static final Logger logger = Services.getLogger();

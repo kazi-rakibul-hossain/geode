@@ -18,6 +18,7 @@ import org.apache.geode.internal.cache.EntrySnapshot;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * does getEntry on the server

@@ -23,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.CancelException;
-import org.apache.geode.Statistics;
 import org.apache.geode.SystemFailure;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.internal.NanoTimer;
@@ -36,6 +35,7 @@ import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.net.SocketCreator;
 import org.apache.geode.internal.statistics.platform.OsStatisticsFactory;
 import org.apache.geode.internal.util.concurrent.StoppableCountDownLatch;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 /**
  * HostStatSampler implements a thread which will monitor, sample, and archive statistics. It only
@@ -77,9 +77,9 @@ public abstract class HostStatSampler
 
   private final boolean osStatsDisabled = Boolean.getBoolean(OS_STATS_DISABLED_PROPERTY);
   private final boolean fileSizeLimitInKB;
-  private final StatSamplerStats samplerStats;
+  private final StatSamplerStatsImpl samplerStats;
 
-  private VMStatsContract vmStats;
+  private VMStats vmStats;
   private SampleCollector sampleCollector;
 
   /**
@@ -93,11 +93,11 @@ public abstract class HostStatSampler
 
   private final NanoTimer timer;
 
-  protected HostStatSampler(CancelCriterion stopper, StatSamplerStats samplerStats) {
+  protected HostStatSampler(CancelCriterion stopper, StatSamplerStatsImpl samplerStats) {
     this(stopper, samplerStats, new NanoTimer());
   }
 
-  protected HostStatSampler(CancelCriterion stopper, StatSamplerStats samplerStats,
+  protected HostStatSampler(CancelCriterion stopper, StatSamplerStatsImpl samplerStats,
       NanoTimer timer) {
     this.stopper = stopper;
     this.statSamplerInitializedLatch = new StoppableCountDownLatch(this.stopper, 1);
@@ -107,7 +107,7 @@ public abstract class HostStatSampler
     this.timer = timer;
   }
 
-  public StatSamplerStats getStatSamplerStats() {
+  public StatSamplerStatsImpl getStatSamplerStats() {
     return this.samplerStats;
   }
 
@@ -400,7 +400,7 @@ public abstract class HostStatSampler
    *
    * @since GemFire 3.5
    */
-  public VMStatsContract getVMStats() {
+  public VMStats getVMStats() {
     return this.vmStats;
   }
 

@@ -37,11 +37,11 @@ import org.mockito.InOrder;
 
 import org.apache.geode.cache.DiskAccessException;
 import org.apache.geode.cache.query.internal.index.IndexManager;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.EntryEventImpl;
 import org.apache.geode.internal.cache.InternalRegion;
 import org.apache.geode.internal.cache.RegionEntry;
 import org.apache.geode.internal.cache.RegionEntryFactory;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 public class AbstractRegionMapPutTest {
   private final InternalRegion internalRegion = mock(InternalRegion.class);

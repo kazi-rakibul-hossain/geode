@@ -30,8 +30,6 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.RestoreSystemProperties;
 import org.junit.experimental.categories.Category;
 
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.cache.AttributesFactory;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheFactory;
@@ -47,6 +45,8 @@ import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.internal.AvailablePort;
 import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.InternalCache;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 import org.apache.geode.test.junit.categories.ClientServerTest;
 
 /**
@@ -142,14 +142,14 @@ public class ClientHealthMonitorIntegrationTest {
 
     assertEquals(monitorInterval,
         ClientHealthMonitor
-            .getInstance(mock(InternalCache.class), 0, mock(CacheClientNotifierStats.class))
+            .getInstance(mock(InternalCache.class), 0, mock(CacheClientNotifierStatsImpl.class))
             .getMonitorInterval());
   }
 
   @Test
   public void monitorIntervalDefaultsWhenNotSet() {
     assertNotNull(ClientHealthMonitor
-        .getInstance(mock(InternalCache.class), 0, mock(CacheClientNotifierStats.class))
+        .getInstance(mock(InternalCache.class), 0, mock(CacheClientNotifierStatsImpl.class))
         .getMonitorInterval());
   }
 
@@ -160,7 +160,7 @@ public class ClientHealthMonitorIntegrationTest {
         monitorInterval);
 
     assertNotNull(ClientHealthMonitor
-        .getInstance(mock(InternalCache.class), 0, mock(CacheClientNotifierStats.class))
+        .getInstance(mock(InternalCache.class), 0, mock(CacheClientNotifierStatsImpl.class))
         .getMonitorInterval());
   }
 
@@ -179,8 +179,9 @@ public class ClientHealthMonitorIntegrationTest {
     System.setProperty(ClientHealthMonitor.CLIENT_HEALTH_MONITOR_INTERVAL_PROPERTY, "100");
     PORT = createServer();
     createProxyAndRegionForClient();
-    StatisticsType statisticsType = this.system.findType("CacheServerStats");
-    final Statistics statistics = this.system.findStatisticsByType(statisticsType)[0];
+    StatisticsType statisticsType = this.system.getStatisticsFactory().findType("CacheServerStats");
+    final Statistics statistics =
+        this.system.getStatisticsFactory().findStatisticsByType(statisticsType)[0];
     assertEquals(0, statistics.getInt("currentClients"));
     assertEquals(0, statistics.getInt("currentClientConnections"));
     this.system.getLogWriter()

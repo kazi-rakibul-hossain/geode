@@ -61,7 +61,6 @@ import org.apache.geode.internal.cache.InternalRegionArguments;
 import org.apache.geode.internal.cache.Node;
 import org.apache.geode.internal.cache.PRHARedundancyProvider.DataStoreBuckets;
 import org.apache.geode.internal.cache.PartitionedRegion;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
 import org.apache.geode.internal.cache.ProxyBucketRegion;
 import org.apache.geode.internal.cache.control.MemoryThresholds;
 import org.apache.geode.internal.cache.control.ResourceAdvisor;
@@ -71,6 +70,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
 
 public class RegionAdvisor extends CacheDistributionAdvisor {
   private static final Logger logger = LogService.getLogger();

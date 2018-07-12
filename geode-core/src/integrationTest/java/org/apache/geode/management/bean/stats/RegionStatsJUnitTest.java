@@ -20,17 +20,17 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import org.apache.geode.internal.cache.CachePerfStats;
-import org.apache.geode.internal.cache.DiskRegionStats;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
 import org.apache.geode.management.internal.beans.DiskRegionBridge;
 import org.apache.geode.management.internal.beans.PartitionedRegionBridge;
 import org.apache.geode.management.internal.beans.RegionMBeanBridge;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.junit.categories.JMXTest;
 
 /**
  * Implementing RegionMXBean to ensure test coverage
- *
  */
 @Category({JMXTest.class})
 public class RegionStatsJUnitTest extends MBeanStatsTestCase {
@@ -48,9 +48,13 @@ public class RegionStatsJUnitTest extends MBeanStatsTestCase {
   private DiskRegionStats diskRegionStats;
 
   protected void init() {
-    cachePerfStats = new CachePerfStats(system);
-    partitionedRegionStats = new PartitionedRegionStats(system, "/tests");
-    diskRegionStats = new DiskRegionStats(system, "test-disk");
+    cachePerfStats = StatsFactory.createCachePerfStatsImpl(null);
+    partitionedRegionStats =
+        StatsFactory
+            .createStatsImpl(PartitionedRegionStats.class, "/tests");
+    diskRegionStats =
+        StatsFactory
+            .createStatsImpl(DiskRegionStats.class, "test-disk");
 
     bridge = new RegionMBeanBridge(cachePerfStats);
     parBridge = new PartitionedRegionBridge(partitionedRegionStats);

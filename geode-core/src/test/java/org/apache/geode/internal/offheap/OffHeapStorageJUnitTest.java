@@ -26,13 +26,13 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.RestoreSystemProperties;
 
 import org.apache.geode.OutOfOffHeapMemoryException;
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.distributed.internal.DistributionConfig;
-import org.apache.geode.distributed.internal.DistributionStats;
+import org.apache.geode.distributed.internal.DistributionStatsImpl;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.InternalLocator;
-import org.apache.geode.internal.statistics.LocalStatisticsFactory;
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 public class OffHeapStorageJUnitTest {
 
@@ -122,19 +122,19 @@ public class OffHeapStorageJUnitTest {
   @Test
   public void createOffHeapStorageReturnsNullIfForceLocator() {
     System.setProperty(InternalLocator.FORCE_LOCATOR_DM_TYPE, "true");
-    assertEquals(null, OffHeapStorage.createOffHeapStorage(null, 1, null));
+    assertEquals(null, OffHeapStorage.createOffHeapStorage(1, null));
   }
 
   @Test
   public void createOffHeapStorageReturnsNullIfMemorySizeIsZero() {
-    assertEquals(null, OffHeapStorage.createOffHeapStorage(null, 0, null));
+    assertEquals(null, OffHeapStorage.createOffHeapStorage(0, null));
   }
 
   @Test
   public void exceptionIfSlabCountTooSmall() {
     StatisticsFactory statsFactory = mock(StatisticsFactory.class);
     try {
-      OffHeapStorage.createOffHeapStorage(statsFactory, OffHeapStorage.MIN_SLAB_SIZE - 1, null);
+      OffHeapStorage.createOffHeapStorage(OffHeapStorage.MIN_SLAB_SIZE - 1, null);
     } catch (IllegalArgumentException expected) {
       expected.getMessage()
           .equals("The amount of off heap memory must be at least " + OffHeapStorage.MIN_SLAB_SIZE
@@ -144,9 +144,8 @@ public class OffHeapStorageJUnitTest {
 
   @Test
   public void exceptionIfDistributedSystemNull() {
-    StatisticsFactory statsFactory = mock(StatisticsFactory.class);
     try {
-      OffHeapStorage.createOffHeapStorage(statsFactory, OffHeapStorage.MIN_SLAB_SIZE,
+      OffHeapStorage.createOffHeapStorage(OffHeapStorage.MIN_SLAB_SIZE,
           (DistributedSystem) null);
     } catch (IllegalArgumentException expected) {
       expected.getMessage().equals("InternalDistributedSystem is null");
@@ -155,22 +154,20 @@ public class OffHeapStorageJUnitTest {
 
   @Test
   public void createOffHeapStorageWorks() {
-    StatisticsFactory localStatsFactory = new LocalStatisticsFactory(null);
     InternalDistributedSystem ids = mock(InternalDistributedSystem.class);
     MemoryAllocator ma =
-        OffHeapStorage.createOffHeapStorage(localStatsFactory, OffHeapStorage.MIN_SLAB_SIZE, ids);
+        OffHeapStorage.createOffHeapStorage(OffHeapStorage.MIN_SLAB_SIZE, ids);
     System.setProperty(MemoryAllocatorImpl.FREE_OFF_HEAP_MEMORY_PROPERTY, "true");
     ma.close();
   }
 
   @Test
   public void testCreateOffHeapStorage() {
-    StatisticsFactory localStatsFactory = new LocalStatisticsFactory(null);
     OutOfOffHeapMemoryListener ooohml = mock(OutOfOffHeapMemoryListener.class);
     MemoryAllocator ma =
-        OffHeapStorage.basicCreateOffHeapStorage(localStatsFactory, 1024 * 1024, ooohml);
+        OffHeapStorage.basicCreateOffHeapStorage(1024 * 1024, ooohml);
     try {
-      OffHeapMemoryStats stats = ma.getStats();
+      OffHeapStorageStats stats = ma.getStats();
       assertNotNull(stats.getStats());
       assertEquals(1024 * 1024, stats.getFreeMemory());
       assertEquals(1024 * 1024, stats.getMaxMemory());
@@ -222,12 +219,12 @@ public class OffHeapStorageJUnitTest {
       stats.setLargestFragment(1024 * 1024);
       assertEquals(1024 * 1024, stats.getLargestFragment());
 
-      boolean originalEnableClockStats = DistributionStats.enableClockStats;
-      DistributionStats.enableClockStats = true;
+      boolean originalEnableClockStats = DistributionStatsImpl.enableClockStats;
+      DistributionStatsImpl.enableClockStats = true;
       try {
         long start = stats.startDefragmentation();
         assertEquals(1, stats.getDefragmentationsInProgress());
-        while (DistributionStats.getStatTime() == start) {
+        while (System.nanoTime() == start) {
           Thread.yield();
         }
         stats.endDefragmentation(start);
@@ -235,14 +232,14 @@ public class OffHeapStorageJUnitTest {
         assertEquals(0, stats.getDefragmentationsInProgress());
         assertTrue(stats.getDefragmentationTime() > 0);
       } finally {
-        DistributionStats.enableClockStats = originalEnableClockStats;
+        DistributionStatsImpl.enableClockStats = originalEnableClockStats;
       }
 
       stats.incObjects(100);
       stats.incUsedMemory(100);
       stats.setFragmentation(100);
-      OffHeapStorage ohs = (OffHeapStorage) stats;
-      ohs.initialize(new NullOffHeapMemoryStats());
+      OffHeapStorageStats ohs = stats;
+      ohs.initialize(new NullOffHeapStorageStats());
       assertEquals(0, stats.getFreeMemory());
       assertEquals(0, stats.getMaxMemory());
       assertEquals(0, stats.getUsedMemory());

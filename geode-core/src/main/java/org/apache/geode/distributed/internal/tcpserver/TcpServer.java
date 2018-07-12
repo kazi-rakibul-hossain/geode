@@ -46,11 +46,9 @@ import org.apache.geode.cache.IncompatibleVersionException;
 import org.apache.geode.cache.UnsupportedVersionException;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.DistributionConfigImpl;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.distributed.internal.InternalConfigurationPersistenceService;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.InternalLocator;
-import org.apache.geode.distributed.internal.PoolStatHelper;
 import org.apache.geode.distributed.internal.PooledExecutorWithDMStats;
 import org.apache.geode.internal.DSFIDFactory;
 import org.apache.geode.internal.GemFireVersion;
@@ -69,6 +67,7 @@ import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.net.SocketCreator;
 import org.apache.geode.internal.net.SocketCreatorFactory;
 import org.apache.geode.internal.security.SecurableCommunicationChannel;
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
 
 /**
  * TCP server which listens on a port and delegates requests to a request handler. The server uses
@@ -356,7 +355,7 @@ public class TcpServer {
    */
   private void processRequest(final Socket socket) {
     executor.execute(() -> {
-      long startTime = DistributionStats.getStatTime();
+      long startTime = System.nanoTime();
       DataInputStream input = null;
       try {
         socket.setSoTimeout(READ_TIMEOUT);
@@ -486,7 +485,7 @@ public class TcpServer {
 
       handler.endRequest(request, startTime);
 
-      startTime = DistributionStats.getStatTime();
+      startTime = System.nanoTime();
       if (response != null) {
         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
         if (versionOrdinal != Version.CURRENT_ORDINAL) {
@@ -524,7 +523,7 @@ public class TcpServer {
     try {
       ClientProtocolService clientProtocolService = clientProtocolServiceLoader.lookupService();
       clientProtocolService.initializeStatistics("LocatorStats",
-          internalLocator.getDistributedSystem());
+          internalLocator.getDistributedSystem().getStatisticsFactory());
       try (ClientProtocolProcessor pipeline = clientProtocolService.createProcessorForLocator(
           internalLocator, internalLocator.getCache().getSecurityService())) {
         while (!pipeline.socketProcessingIsFinished()) {

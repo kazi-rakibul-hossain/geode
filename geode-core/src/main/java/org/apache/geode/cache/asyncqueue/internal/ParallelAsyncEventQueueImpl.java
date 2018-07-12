@@ -50,8 +50,9 @@ public class ParallelAsyncEventQueueImpl extends AbstractGatewaySender {
     if (!(this.cache instanceof CacheCreation)) {
       // this sender lies underneath the AsyncEventQueue. Need to have
       // AsyncEventQueueStats
-      this.statistics = new AsyncEventQueueStats(cache.getDistributedSystem(),
-          AsyncEventQueueImpl.getAsyncEventQueueIdFromSenderId(id));
+      this.statistics =
+          new AsyncEventQueueStats(cache.getDistributedSystem().getStatisticsFactory(),
+              AsyncEventQueueImpl.getAsyncEventQueueIdFromSenderId(id));
     }
     this.isForInternalUse = true;
   }

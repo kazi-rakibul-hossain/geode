@@ -28,6 +28,8 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
+
 
 public class OplogTest {
   private final DiskStoreImpl.OplogCompactor compactor = mock(DiskStoreImpl.OplogCompactor.class);

@@ -17,11 +17,11 @@ package org.apache.geode.internal.tcp;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionMessage;
 import org.apache.geode.distributed.internal.ReplyProcessor21;
 import org.apache.geode.internal.InternalDataSerializer;
 import org.apache.geode.internal.Version;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * This class is currently used for reading direct ack responses It should probably be used for all

@@ -29,7 +29,6 @@ import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqExistsException;
 import org.apache.geode.cache.query.CqQuery;
-import org.apache.geode.cache.query.CqServiceStatistics;
 import org.apache.geode.cache.query.Index;
 import org.apache.geode.cache.query.IndexExistsException;
 import org.apache.geode.cache.query.IndexInvalidException;
@@ -44,6 +43,7 @@ import org.apache.geode.cache.query.internal.cq.ClientCQ;
 import org.apache.geode.cache.query.internal.cq.InternalCqQuery;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
 
 /**
  * A wrapper class over an actual QueryService instance. This is used when the

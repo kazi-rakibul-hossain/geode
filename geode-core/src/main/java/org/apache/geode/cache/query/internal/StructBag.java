@@ -30,8 +30,8 @@ import org.apache.geode.cache.query.internal.types.StructTypeImpl;
 import org.apache.geode.cache.query.types.CollectionType;
 import org.apache.geode.cache.query.types.ObjectType;
 import org.apache.geode.cache.query.types.StructType;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * A Bag constrained to contain Structs of all the same type. To conserve on objects, we store the

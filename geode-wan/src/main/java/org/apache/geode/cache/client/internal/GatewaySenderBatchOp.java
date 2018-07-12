@@ -33,6 +33,7 @@ import org.apache.geode.internal.cache.wan.GatewaySenderEventImpl;
 import org.apache.geode.internal.cache.wan.GatewaySenderEventRemoteDispatcher.GatewayAck;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 @SuppressWarnings("unchecked")
 public class GatewaySenderBatchOp {

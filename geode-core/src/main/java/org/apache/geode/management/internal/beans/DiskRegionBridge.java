@@ -14,8 +14,6 @@
  */
 package org.apache.geode.management.internal.beans;
 
-import org.apache.geode.internal.cache.DiskDirectoryStats;
-import org.apache.geode.internal.cache.DiskRegionStats;
 import org.apache.geode.management.internal.ManagementConstants;
 import org.apache.geode.management.internal.beans.stats.AggregateRegionStatsMonitor;
 import org.apache.geode.management.internal.beans.stats.MBeanStatsMonitor;
@@ -23,6 +21,8 @@ import org.apache.geode.management.internal.beans.stats.StatType;
 import org.apache.geode.management.internal.beans.stats.StatsAverageLatency;
 import org.apache.geode.management.internal.beans.stats.StatsKey;
 import org.apache.geode.management.internal.beans.stats.StatsRate;
+import org.apache.geode.stats.common.internal.cache.DiskDirectoryStats;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 public class DiskRegionBridge {
 

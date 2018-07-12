@@ -42,8 +42,8 @@ import org.mockito.stubbing.Answer;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.control.PartitionRebalanceDetailsImpl;
-import org.apache.geode.internal.cache.control.ResourceManagerStats;
 import org.apache.geode.internal.cache.partitioned.rebalance.BucketOperator.Completion;
+import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats;
 
 public class BucketOperatorWrapperTest {
 

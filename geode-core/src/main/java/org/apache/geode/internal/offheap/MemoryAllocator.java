@@ -14,6 +14,8 @@
  */
 package org.apache.geode.internal.offheap;
 
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
+
 /**
  * Basic contract for a heap that manages off heap memory. Any MemoryChunks allocated from a heap
  * are returned to that heap when freed.
@@ -60,7 +62,7 @@ public interface MemoryAllocator {
 
   long getTotalMemory();
 
-  OffHeapMemoryStats getStats();
+  OffHeapStorageStats getStats();
 
   /**
    * This allocator will no longer be used so free up any system memory that belongs to it.

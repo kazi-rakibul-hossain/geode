@@ -34,10 +34,10 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 
 import org.apache.geode.CancelCriterion;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.internal.net.SocketCreator;
 import org.apache.geode.internal.stats50.VMStats50;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 import org.apache.geode.test.junit.categories.StatisticsTest;
 
 /**
@@ -104,7 +104,7 @@ public class SimpleStatSamplerIntegrationTest extends StatSamplerTestCase {
     assertEquals(SocketCreator.getHostName(SocketCreator.getLocalHost()),
         statSampler.getSystemDirectoryPath());
 
-    VMStatsContract vmStats = statSampler.getVMStats();
+    VMStats vmStats = statSampler.getVMStats();
     assertNotNull(vmStats);
     assertTrue(vmStats instanceof VMStats50);
     /*

@@ -17,6 +17,7 @@
 
 dependencies {
   compileOnly project(':geode-core')
+  compileOnly project(':geode-stats-common')
 
   testCompile project(':geode-core')
   testCompile project(':geode-junit')

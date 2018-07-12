@@ -35,11 +35,11 @@ import org.apache.geode.cache.util.CacheListenerAdapter;
 import org.apache.geode.cache.util.TransactionListenerAdapter;
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.DistributedSystem;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.tier.sockets.ClientProxyMembershipID;
 import org.apache.geode.internal.util.StopWatch;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Unit test for basic DataPolicy.EMPTY feature. NOTE: these tests using a loner DistributedSystem

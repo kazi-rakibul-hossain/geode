@@ -41,11 +41,12 @@ import org.apache.geode.cache.client.PoolManager;
 import org.apache.geode.cache.server.CacheServer;
 import org.apache.geode.cache.util.CacheListenerAdapter;
 import org.apache.geode.distributed.DistributedSystem;
-import org.apache.geode.distributed.internal.DistributionStats;
+import org.apache.geode.distributed.internal.DistributionStatsImpl;
 import org.apache.geode.internal.AvailablePort;
 import org.apache.geode.internal.cache.tier.sockets.CacheClientNotifier;
 import org.apache.geode.internal.cache.tier.sockets.CacheClientProxy;
 import org.apache.geode.internal.tcp.ConnectionTable;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 import org.apache.geode.test.dunit.Host;
 import org.apache.geode.test.dunit.NetworkUtils;
 import org.apache.geode.test.dunit.VM;
@@ -453,7 +454,7 @@ public class DeltaPropagationStatsDUnitTest extends JUnit4DistributedTestCase {
       deltaTime = 1; // dummy assignment
     } else if (path == CLIENT_TO_SERVER) {
       numOfDeltasSent = region.getCachePerfStats().getDeltasSent();
-      if (DistributionStats.enableClockStats) {
+      if (DistributionStatsImpl.enableClockStats) {
         deltaTime = region.getCachePerfStats().getDeltasPreparedTime();
       } else {
         deltaTime = 1; // dummy assignment

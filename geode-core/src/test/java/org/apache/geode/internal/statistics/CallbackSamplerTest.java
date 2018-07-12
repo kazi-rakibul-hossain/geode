@@ -42,7 +42,7 @@ public class CallbackSamplerTest {
   @Mock
   CancelCriterion cancelCriterion;
   @Mock
-  StatSamplerStats statSamplerStats;
+  StatSamplerStatsImpl statSamplerStats;
   @Mock
   StatisticsManager statisticsManager;
   @Mock

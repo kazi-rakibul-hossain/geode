@@ -16,7 +16,6 @@ package org.apache.geode.internal.cache.tier.sockets.command;
 
 import java.io.IOException;
 
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.internal.cache.tier.CachedRegionHelper;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.MessageType;
@@ -43,7 +42,7 @@ public class Ping extends BaseCommand {
     if (isDebugEnabled) {
       logger.debug("{}: rcv tx: {} from {} rcvTime: {}", serverConnection.getName(),
           clientMessage.getTransactionId(), serverConnection.getSocketString(),
-          (DistributionStats.getStatTime() - start));
+          (System.nanoTime() - start));
     }
     ClientHealthMonitor chm = ClientHealthMonitor.getInstance();
     if (chm != null)

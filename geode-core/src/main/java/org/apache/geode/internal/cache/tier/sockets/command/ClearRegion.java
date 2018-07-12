@@ -18,14 +18,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.apache.geode.cache.operations.RegionClearOperationContext;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.tier.CachedRegionHelper;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.BaseCommand;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
@@ -35,6 +33,7 @@ import org.apache.geode.internal.security.AuthorizeRequest;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.security.ResourcePermission.Operation;
 import org.apache.geode.security.ResourcePermission.Resource;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 public class ClearRegion extends BaseCommand {
 
@@ -59,7 +58,7 @@ public class ClearRegion extends BaseCommand {
 
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incReadClearRegionRequestTime(start - oldStart);
     }
     // Retrieve the data from the message parts
@@ -138,7 +137,7 @@ public class ClearRegion extends BaseCommand {
     // Update the statistics and write the reply
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incProcessClearRegionTime(start - oldStart);
     }
     writeReply(clientMessage, serverConnection);
@@ -147,7 +146,7 @@ public class ClearRegion extends BaseCommand {
       logger.debug(
           serverConnection.getName() + ": Sent clear region response for region " + regionName);
     }
-    stats.incWriteClearRegionResponseTime(DistributionStats.getStatTime() - start);
+    stats.incWriteClearRegionResponseTime(System.nanoTime() - start);
   }
 
 

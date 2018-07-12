@@ -18,8 +18,8 @@ import org.apache.geode.cache.query.CqClosedException;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqQuery;
 import org.apache.geode.cache.query.CqState;
-import org.apache.geode.cache.query.internal.CqQueryVsdStats;
 import org.apache.geode.internal.cache.LocalRegion;
+import org.apache.geode.stats.common.cache.query.internal.CqQueryVsdStats;
 
 public interface InternalCqQuery extends CqQuery {
 

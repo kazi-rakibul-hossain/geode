@@ -20,11 +20,11 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.cache.RegionDestroyedException;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Takes delta to be evicted and tries to evict the least no of LRU entry which would make

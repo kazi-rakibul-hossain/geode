@@ -23,7 +23,6 @@ import org.apache.geode.cache.Operation;
 import org.apache.geode.cache.RegionDestroyedException;
 import org.apache.geode.cache.operations.DestroyOperationContext;
 import org.apache.geode.cache.operations.RegionDestroyOperationContext;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.EventIDHolder;
 import org.apache.geode.internal.cache.LocalRegion;
@@ -34,7 +33,6 @@ import org.apache.geode.internal.cache.tier.CachedRegionHelper;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.BaseCommand;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
@@ -47,6 +45,7 @@ import org.apache.geode.internal.util.Breadcrumbs;
 import org.apache.geode.security.GemFireSecurityException;
 import org.apache.geode.security.ResourcePermission;
 import org.apache.geode.security.ResourcePermission.Resource;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 public class Destroy65 extends BaseCommand {
 
@@ -115,7 +114,7 @@ public class Destroy65 extends BaseCommand {
     CacheServerStats stats = serverConnection.getCacheServerStats();
     serverConnection.setAsTrue(REQUIRES_RESPONSE);
 
-    long now = DistributionStats.getStatTime();
+    long now = System.nanoTime();
     stats.incReadDestroyRequestTime(now - start);
 
     // Retrieve the data from the message parts
@@ -316,7 +315,7 @@ public class Destroy65 extends BaseCommand {
     }
 
     // Update the statistics and write the reply
-    now = DistributionStats.getStatTime();
+    now = System.nanoTime();
     stats.incProcessDestroyTime(now - start);
 
     if (region instanceof PartitionedRegion) {
@@ -340,7 +339,7 @@ public class Destroy65 extends BaseCommand {
       logger.debug("{}: Sent destroy response for region {} key {}", serverConnection.getName(),
           regionName, key);
     }
-    stats.incWriteDestroyResponseTime(DistributionStats.getStatTime() - start);
+    stats.incWriteDestroyResponseTime(System.nanoTime() - start);
 
 
   }

@@ -31,6 +31,7 @@ import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Does a Execution of function on server region It does not get the resul from the server (follows

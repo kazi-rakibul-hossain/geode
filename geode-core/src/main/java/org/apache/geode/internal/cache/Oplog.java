@@ -112,6 +112,7 @@ import org.apache.geode.internal.sequencelog.EntryLogger;
 import org.apache.geode.internal.shared.NativeCalls;
 import org.apache.geode.internal.util.BlobHelper;
 import org.apache.geode.pdx.internal.PdxWriterImpl;
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
 
 /**
  * Implements an operation log to write to disk. As of prPersistSprint2 this file only supports

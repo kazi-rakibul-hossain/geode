@@ -51,6 +51,7 @@ import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.internal.SystemTimer;
 import org.apache.geode.internal.cache.partitioned.DestroyMessage;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 import org.apache.geode.test.fake.Fakes;
 
 

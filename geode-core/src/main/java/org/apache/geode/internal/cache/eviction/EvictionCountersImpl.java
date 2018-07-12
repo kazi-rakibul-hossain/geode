@@ -16,7 +16,8 @@ package org.apache.geode.internal.cache.eviction;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.geode.Statistics;
+import org.apache.geode.stats.common.internal.cache.eviction.EvictionStats;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 class EvictionCountersImpl implements EvictionCounters {
 

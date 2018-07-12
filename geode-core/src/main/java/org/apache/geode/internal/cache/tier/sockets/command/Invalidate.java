@@ -20,7 +20,6 @@ import java.nio.ByteBuffer;
 import org.apache.geode.cache.EntryNotFoundException;
 import org.apache.geode.cache.RegionDestroyedException;
 import org.apache.geode.cache.operations.InvalidateOperationContext;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.EventIDHolder;
 import org.apache.geode.internal.cache.LocalRegion;
@@ -28,7 +27,6 @@ import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.BaseCommand;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
@@ -41,6 +39,7 @@ import org.apache.geode.internal.util.Breadcrumbs;
 import org.apache.geode.security.GemFireSecurityException;
 import org.apache.geode.security.ResourcePermission.Operation;
 import org.apache.geode.security.ResourcePermission.Resource;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 public class Invalidate extends BaseCommand {
 
@@ -63,7 +62,7 @@ public class Invalidate extends BaseCommand {
 
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incReadInvalidateRequestTime(start - oldStart);
     }
     // Retrieve the data from the message parts
@@ -199,7 +198,7 @@ public class Invalidate extends BaseCommand {
     // Update the statistics and write the reply
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incProcessInvalidateTime(start - oldStart);
     }
     if (region instanceof PartitionedRegion) {
@@ -219,7 +218,7 @@ public class Invalidate extends BaseCommand {
       logger.debug("{}: Sent invalidate response for region {} key {}", serverConnection.getName(),
           regionName, key);
     }
-    stats.incWriteInvalidateResponseTime(DistributionStats.getStatTime() - start);
+    stats.incWriteInvalidateResponseTime(System.nanoTime() - start);
   }
 
   protected void writeReply(Message origMsg, ServerConnection servConn, VersionTag tag)

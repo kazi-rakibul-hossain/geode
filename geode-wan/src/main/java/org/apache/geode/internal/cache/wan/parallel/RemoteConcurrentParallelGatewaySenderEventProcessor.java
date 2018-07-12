@@ -21,8 +21,8 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.internal.cache.wan.AbstractGatewaySender;
 import org.apache.geode.internal.cache.wan.GatewaySenderEventRemoteDispatcher;
-import org.apache.geode.internal.cache.wan.GatewaySenderStats;
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
 
 /**
  * Remote version of GatewaySenderEvent Processor

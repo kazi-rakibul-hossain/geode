@@ -15,10 +15,10 @@
 
 package org.apache.geode.internal.cache.client.protocol;
 
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.distributed.internal.InternalLocator;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.security.SecurityService;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 /**
  * Provides a convenient location for a client protocol service to be loaded into the system.

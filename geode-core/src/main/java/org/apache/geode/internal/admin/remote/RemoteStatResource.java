@@ -21,10 +21,10 @@ import java.io.IOException;
 
 import org.apache.geode.DataSerializable;
 import org.apache.geode.DataSerializer;
-import org.apache.geode.Statistics;
 import org.apache.geode.internal.admin.GemFireVM;
 import org.apache.geode.internal.admin.Stat;
 import org.apache.geode.internal.admin.StatResource;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 public class RemoteStatResource implements StatResource, DataSerializable {
   private static final long serialVersionUID = -3118720083415516133L;

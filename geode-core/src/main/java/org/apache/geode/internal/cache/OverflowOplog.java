@@ -44,6 +44,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
 
 /**
  * An oplog used for overflow-only regions. For regions that are persistent (i.e. they can be

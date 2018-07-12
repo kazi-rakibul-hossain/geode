@@ -18,11 +18,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
-import org.apache.geode.StatisticsTypeFactory;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
+import org.apache.geode.stats.common.statistics.StatisticsTypeFactory;
 
 /**
  * Gathers together a number of {@link StatisticDescriptor statistics} into one logical type.
@@ -187,6 +187,7 @@ public class StatisticsTypeImpl implements StatisticsType {
   /**
    * Gets the number of statistics in this type that are ints.
    */
+  @Override
   public int getIntStatCount() {
     return this.intStatCount;
   }
@@ -194,6 +195,7 @@ public class StatisticsTypeImpl implements StatisticsType {
   /**
    * Gets the number of statistics in this type that are longs.
    */
+  @Override
   public int getLongStatCount() {
     return this.longStatCount;
   }
@@ -201,6 +203,7 @@ public class StatisticsTypeImpl implements StatisticsType {
   /**
    * Gets the number of statistics that are doubles.
    */
+  @Override
   public int getDoubleStatCount() {
     return this.doubleStatCount;
   }

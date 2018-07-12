@@ -41,13 +41,14 @@ import org.apache.geode.cache.RegionExistsException;
 import org.apache.geode.cache.Scope;
 import org.apache.geode.cache.TimeoutException;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.HasCachePerfStats;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.cache.InternalRegionArguments;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.LoggingThreadGroup;
 import org.apache.geode.management.ManagementException;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * DistributionHelper solves the following problems
@@ -136,7 +137,7 @@ public class LocalManager extends Manager {
         // Create anonymous stats holder for Management Regions
         final HasCachePerfStats monitoringRegionStats = new HasCachePerfStats() {
           public CachePerfStats getCachePerfStats() {
-            return new CachePerfStats(cache.getDistributedSystem(), "managementRegionStats");
+            return StatsFactory.createStatsImpl(CachePerfStats.class, "managementRegionStats");
           }
         };
 
@@ -174,13 +175,8 @@ public class LocalManager extends Manager {
                   monitoringRegionAttrs, internalArgs));
           monitoringRegionCreated = true;
 
-        } catch (TimeoutException e) {
-          throw new ManagementException(e);
-        } catch (RegionExistsException e) {
-          throw new ManagementException(e);
-        } catch (IOException e) {
-          throw new ManagementException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (TimeoutException | RegionExistsException | IOException
+            | ClassNotFoundException e) {
           throw new ManagementException(e);
         }
 
@@ -189,13 +185,8 @@ public class LocalManager extends Manager {
               cache.createVMRegion(ManagementConstants.NOTIFICATION_REGION + "_" + appender,
                   notifRegionAttrs, internalArgs));
           notifRegionCreated = true;
-        } catch (TimeoutException e) {
-          throw new ManagementException(e);
-        } catch (RegionExistsException e) {
-          throw new ManagementException(e);
-        } catch (IOException e) {
-          throw new ManagementException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (TimeoutException | ClassNotFoundException | IOException
+            | RegionExistsException e) {
           throw new ManagementException(e);
         } finally {
           if (!notifRegionCreated && monitoringRegionCreated) {

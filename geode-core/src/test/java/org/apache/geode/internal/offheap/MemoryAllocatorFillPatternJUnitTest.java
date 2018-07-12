@@ -61,7 +61,7 @@ public class MemoryAllocatorFillPatternJUnitTest {
     System.setProperty(DistributionConfig.GEMFIRE_PREFIX + "validateOffHeapWithFill", "true");
     this.slab = new SlabImpl(SLAB_SIZE);
     this.allocator = MemoryAllocatorImpl.createForUnitTest(new NullOutOfOffHeapMemoryListener(),
-        new NullOffHeapMemoryStats(), new SlabImpl[] {this.slab});
+        new NullOffHeapStorageStats(), new SlabImpl[] {this.slab});
   }
 
   /**

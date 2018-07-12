@@ -14,20 +14,16 @@
  */
 package org.apache.geode.cache.query.internal.cq;
 
-import org.apache.geode.cache.query.CqStatistics;
+import org.apache.geode.stats.common.cache.query.CqStatistics;
+import org.apache.geode.stats.common.statistics.GFSStatsImplementer;
 
 /**
  * Provides statistical information about a CqQuery.
  *
  * @since GemFire 5.5
  */
-public class CqStatisticsImpl implements CqStatistics {
+public class CqStatisticsImpl implements CqStatistics, GFSStatsImplementer {
   private CqQueryImpl cqQuery;
-
-  // private long numInserts;
-  // private long numDeletes;
-  // private long numUpdates;
-  // private long numEvents;
 
   /**
    * Constructor for CqStatisticsImpl
@@ -43,7 +39,7 @@ public class CqStatisticsImpl implements CqStatistics {
    *
    * @return the number of insert events
    */
-  public long numInserts() {
+  public long getNumInserts() {
     return this.cqQuery.getVsdStats().getNumInserts();
   }
 
@@ -52,7 +48,7 @@ public class CqStatisticsImpl implements CqStatistics {
    *
    * @return the number of delete events
    */
-  public long numDeletes() {
+  public long getNumDeletes() {
     return this.cqQuery.getVsdStats().getNumDeletes();
   }
 
@@ -61,7 +57,7 @@ public class CqStatisticsImpl implements CqStatistics {
    *
    * @return the number of update events
    */
-  public long numUpdates() {
+  public long getNumUpdates() {
     return this.cqQuery.getVsdStats().getNumUpdates();
   }
 
@@ -70,7 +66,7 @@ public class CqStatisticsImpl implements CqStatistics {
    *
    * @return the total number of insert, update, and delete events
    */
-  public long numEvents() {
+  public long getNumEvents() {
     return cqQuery.getVsdStats().getNumEvents();
   }
 

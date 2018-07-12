@@ -75,7 +75,7 @@ import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.DistributionConfigImpl;
 import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.distributed.internal.DistributionMessage;
-import org.apache.geode.distributed.internal.DistributionStats;
+import org.apache.geode.distributed.internal.DistributionStatsImpl;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.SerialAckedMessage;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
@@ -103,6 +103,8 @@ import org.apache.geode.internal.Version;
 import org.apache.geode.internal.admin.remote.RemoteTransportConfig;
 import org.apache.geode.internal.cache.DistributedCacheOperation;
 import org.apache.geode.internal.logging.log4j.AlertAppender;
+import org.apache.geode.stats.common.distributed.internal.DistributionStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.junit.categories.MembershipTest;
 
 @Category({MembershipTest.class})
@@ -167,7 +169,9 @@ public class JGroupsMessengerJUnitTest {
     DistributionManager dm = mock(DistributionManager.class);
     InternalDistributedSystem system =
         InternalDistributedSystem.newInstanceForTesting(dm, nonDefault);
-    when(services.getStatistics()).thenReturn(new DistributionStats(system, statsId));
+    when(services.getStatistics()).thenReturn(StatsFactory
+        .createStatsImpl(DistributionStats.class, system.getStatisticsFactory(),
+            String.valueOf(statsId)));
 
     messenger = new JGroupsMessenger();
     messenger.init(services);
@@ -472,7 +476,6 @@ public class JGroupsMessengerJUnitTest {
     NetView v = new NetView(addr);
     when(joinLeave.getView()).thenReturn(v);
 
-
     InternalDistributedMember sender = createAddress(8888);
 
     JoinRequestMessage msg = new JoinRequestMessage(messenger.localAddress, sender, null, -1, 0);
@@ -559,8 +562,9 @@ public class JGroupsMessengerJUnitTest {
     for (Message m : messages) {
       m.setSrc(fakeMember);
       UNICAST3.Header oldHeader = (UNICAST3.Header) m.getHeader(unicastHeaderId);
-      if (oldHeader == null)
+      if (oldHeader == null) {
         continue;
+      }
       UNICAST3.Header newHeader =
           UNICAST3.Header.createDataHeader(seqno, oldHeader.connId(), seqno == 1);
       seqno += 1;
@@ -833,7 +837,7 @@ public class JGroupsMessengerJUnitTest {
   @Test
   public void testReceiver() throws Exception {
     try {
-      DistributionStats.enableClockStats = true;
+      DistributionStatsImpl.enableClockStats = true;
       initMocks(false);
       JGroupsReceiver receiver = (JGroupsReceiver) messenger.myChannel.getReceiver();
 
@@ -872,7 +876,7 @@ public class JGroupsMessengerJUnitTest {
       assertTrue("There should be UDPDispatchRequestTime stats",
           services.getStatistics().getUDPDispatchRequestTime() > 0);
     } finally {
-      DistributionStats.enableClockStats = false;
+      DistributionStatsImpl.enableClockStats = false;
     }
   }
 

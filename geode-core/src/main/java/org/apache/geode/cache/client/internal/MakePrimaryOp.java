@@ -16,6 +16,7 @@ package org.apache.geode.cache.client.internal;
 
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Tell a server to become the primary host of a server-to-client queue

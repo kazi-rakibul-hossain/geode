@@ -47,6 +47,7 @@ import org.apache.geode.internal.cache.tier.sockets.HAEventWrapper;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.offheap.annotations.Released;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * This region is being implemented to suppress distribution of puts and to allow localDestroys on

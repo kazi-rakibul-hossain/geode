@@ -28,8 +28,8 @@ import org.jgroups.protocols.pbcast.NAKACK2;
 import org.jgroups.protocols.pbcast.NakAckHeader2;
 import org.jgroups.stack.Protocol;
 
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.membership.gms.Services;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * JGroups doesn't capture quite the stats we want so this protocol is inserted into the stack to

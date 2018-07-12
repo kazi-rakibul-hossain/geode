@@ -16,13 +16,12 @@ package org.apache.geode.internal.cache.tier.sockets.command;
 
 import java.io.IOException;
 
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.sockets.BaseCommand;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
 import org.apache.geode.internal.security.SecurityService;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 
 public class ClientReady extends BaseCommand {
@@ -41,7 +40,7 @@ public class ClientReady extends BaseCommand {
     CacheServerStats stats = serverConnection.getCacheServerStats();
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incReadClientReadyRequestTime(start - oldStart);
     }
     try {
@@ -57,7 +56,7 @@ public class ClientReady extends BaseCommand {
           .readyForEvents(serverConnection.getProxyID());
 
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incProcessClientReadyTime(start - oldStart);
 
       writeReply(clientMessage, serverConnection);
@@ -68,7 +67,7 @@ public class ClientReady extends BaseCommand {
             + serverConnection.getProxyID() + " on " + clientHost + ":" + clientPort);
       }
     } finally {
-      stats.incWriteClientReadyResponseTime(DistributionStats.getStatTime() - start);
+      stats.incWriteClientReadyResponseTime(System.nanoTime() - start);
     }
 
   }

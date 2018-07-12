@@ -26,19 +26,21 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.TestName;
 
-import org.apache.geode.distributed.internal.DistributionStats;
-import org.apache.geode.distributed.internal.locks.DLockStats;
+import org.apache.geode.distributed.internal.DistributionStatsImpl;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.OSProcess;
-import org.apache.geode.internal.cache.CachePerfStats;
-import org.apache.geode.internal.cache.DiskStoreStats;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
 import org.apache.geode.internal.cache.execute.FunctionServiceStats;
-import org.apache.geode.internal.statistics.VMStatsContract;
+import org.apache.geode.internal.statistics.VMStats;
 import org.apache.geode.internal.stats50.VMStats50;
 import org.apache.geode.management.ManagementService;
 import org.apache.geode.management.internal.beans.MemberMBeanBridge;
+import org.apache.geode.stats.common.distributed.internal.DistributionStats;
+import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.junit.categories.JMXTest;
 
 @Category({JMXTest.class})
@@ -65,12 +67,16 @@ public class MemberLevelStatsJUnitTest extends MBeanStatsTestCase {
   private static long testStartTime = NanoTimer.getTime();
 
   public void init() {
-    cachePerfStats = new CachePerfStats(system);
-    funcServiceStats = new FunctionServiceStats(system, "FunctionExecution");
+    cachePerfStats =
+        StatsFactory.createStatsImpl(CachePerfStats.class, null);
+    funcServiceStats = new FunctionServiceStats(system.getStatisticsFactory(), "FunctionExecution");
     long statId = OSProcess.getId();
-    distributionStats = new DistributionStats(system, statId);
-    DistributionStats.enableClockStats = true;
-    dlockStats = new DLockStats(system, statId);
+    distributionStats =
+        StatsFactory.createStatsImpl(DistributionStats.class,
+            String.valueOf(statId));
+    DistributionStatsImpl.enableClockStats = true;
+    dlockStats = StatsFactory.createStatsImpl(DLockStats.class,
+        String.valueOf(statId));
 
     bridge = new MemberMBeanBridge();
     bridge.addCacheStats(cachePerfStats);
@@ -79,20 +85,24 @@ public class MemberLevelStatsJUnitTest extends MBeanStatsTestCase {
     bridge.addLockServiceStats(dlockStats);
 
 
-    VMStatsContract vmstats = system.getStatSampler().getVMStats();
+    VMStats vmstats =
+        system.getInternalDistributedSystemStats().getStatSampler().getVMStats();
     assertTrue(vmstats instanceof VMStats50);
 
     bridge.addSystemStats();
     bridge.addVMStats();
 
     for (int i = 0; i < 4; i++) {
-      DiskStoreStats stats = new DiskStoreStats(system, name.getMethodName() + i);
+      DiskStoreStats stats =
+          StatsFactory.createStatsImpl(DiskStoreStats.class,
+              name.getMethodName() + i);
       diskStatsList.add(stats);
       bridge.addDiskStoreStats(stats);
     }
 
     for (int i = 0; i < 4; i++) {
-      PartitionedRegionStats stats = new PartitionedRegionStats(system, name.getMethodName() + i);
+      PartitionedRegionStats stats = StatsFactory.createStatsImpl(PartitionedRegionStats.class,
+          name.getMethodName() + i);
       parRegionStatsList.add(stats);
       bridge.addPartionRegionStats(stats);
     }

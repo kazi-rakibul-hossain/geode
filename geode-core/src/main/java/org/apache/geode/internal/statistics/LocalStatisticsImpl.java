@@ -14,9 +14,9 @@
  */
 package org.apache.geode.internal.statistics;
 
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.internal.OSProcess;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * An implementation of {@link Statistics} that stores its statistics in local java memory.
@@ -79,7 +79,7 @@ public class LocalStatisticsImpl extends StatisticsImpl {
 
     this.dSystem = system;
 
-    StatisticsTypeImpl realType = (StatisticsTypeImpl) type;
+    StatisticsType realType = type;
     int intCount = realType.getIntStatCount();
     int longCount = realType.getLongStatCount();
     int doubleCount = realType.getDoubleStatCount();

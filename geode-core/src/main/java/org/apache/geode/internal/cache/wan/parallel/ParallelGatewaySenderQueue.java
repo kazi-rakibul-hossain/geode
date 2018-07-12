@@ -62,7 +62,6 @@ import org.apache.geode.internal.cache.BucketRegion;
 import org.apache.geode.internal.cache.BucketRegionQueue;
 import org.apache.geode.internal.cache.ColocationHelper;
 import org.apache.geode.internal.cache.Conflatable;
-import org.apache.geode.internal.cache.DiskRegionStats;
 import org.apache.geode.internal.cache.DistributedRegion;
 import org.apache.geode.internal.cache.EntryEventImpl;
 import org.apache.geode.internal.cache.ForceReattemptException;
@@ -78,7 +77,6 @@ import org.apache.geode.internal.cache.wan.AsyncEventQueueConfigurationException
 import org.apache.geode.internal.cache.wan.GatewaySenderConfigurationException;
 import org.apache.geode.internal.cache.wan.GatewaySenderEventImpl;
 import org.apache.geode.internal.cache.wan.GatewaySenderException;
-import org.apache.geode.internal.cache.wan.GatewaySenderStats;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.LoggingThreadGroup;
@@ -89,6 +87,8 @@ import org.apache.geode.internal.util.concurrent.StoppableReentrantLock;
 import org.apache.geode.management.ManagementService;
 import org.apache.geode.management.internal.beans.AsyncEventQueueMBean;
 import org.apache.geode.management.internal.beans.GatewaySenderMBean;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
 
 public class ParallelGatewaySenderQueue implements RegionQueue {
 

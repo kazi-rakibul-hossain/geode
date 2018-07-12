@@ -48,6 +48,7 @@ import org.apache.geode.distributed.internal.DistributionMessage;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.internal.cache.partitioned.RegionAdvisor;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 import org.apache.geode.test.fake.Fakes;
 
 public class PartitionedRegionQueryEvaluatorTest {

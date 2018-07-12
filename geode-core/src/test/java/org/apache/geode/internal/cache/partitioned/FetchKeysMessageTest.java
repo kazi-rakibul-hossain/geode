@@ -38,12 +38,12 @@ import org.mockito.Mock;
 import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.TXId;
 import org.apache.geode.internal.cache.TXManagerImpl;
 import org.apache.geode.internal.cache.TXStateProxy;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 public class FetchKeysMessageTest {
   @Mock(answer = RETURNS_DEEP_STUBS)

@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.geode.SystemFailure;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
 
 /**
  * A ThreadPoolExecutor with stat support.

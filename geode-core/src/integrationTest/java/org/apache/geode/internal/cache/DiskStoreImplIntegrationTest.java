@@ -39,6 +39,7 @@ import org.apache.geode.cache.RegionFactory;
 import org.apache.geode.cache.RegionShortcut;
 import org.apache.geode.distributed.ConfigurationProperties;
 import org.apache.geode.internal.cache.backup.BackupService;
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
 
 
 public class DiskStoreImplIntegrationTest {

@@ -57,6 +57,7 @@ import org.apache.geode.internal.monitoring.ThreadsMonitoring;
 import org.apache.geode.internal.monitoring.ThreadsMonitoringImpl;
 import org.apache.geode.internal.monitoring.ThreadsMonitoringImplDummy;
 import org.apache.geode.internal.net.SocketCreator;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * A <code>LonerDistributionManager</code> is a dm that never communicates with anyone else.
@@ -91,7 +92,7 @@ public class LonerDistributionManager implements DistributionManager {
     this.localAddress = generateMemberId();
     this.allIds = Collections.singleton(localAddress);
     this.viewMembers = new ArrayList<>(allIds);
-    DistributionStats.enableClockStats = this.system.getConfig().getEnableTimeStatistics();
+    DistributionStatsImpl.enableClockStats = this.system.getConfig().getEnableTimeStatistics();
 
     Properties nonDefault = new Properties();
     DistributionConfigImpl distributionConfigImpl = new DistributionConfigImpl(nonDefault);
@@ -996,7 +997,7 @@ public class LonerDistributionManager implements DistributionManager {
     public void endUDPMsgDecryption(long start) {}
 
     @Override
-    public long getUDPMsgEncryptionTiime() {
+    public long getUDPMsgEncryptionTime() {
       return 0;
     }
 

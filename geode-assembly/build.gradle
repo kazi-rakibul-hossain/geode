@@ -91,6 +91,7 @@ configurations {
 
 dependencies {
   archives project(':geode-common')
+  archives project(':geode-stats-common')
   archives project(':geode-json')
   archives project(':geode-core')
   archives project(':geode-connectors')
@@ -250,6 +251,8 @@ def cp = {
         it.contains('lucene-queryparser') ||
         it.contains('lucene-analyzers-phonetic') ||
 
+        it.contains('micrometer-stats') ||
+
         // dependencies from geode-protobuf
         it.contains('protobuf-java') ||
 
@@ -389,6 +392,10 @@ distributions {
       into ('lib') {
         from project(":geode-common").configurations.runtimeClasspath
         from project(":geode-common").configurations.archives.allArtifacts.files
+
+        from project(":geode-stats-common").configurations.runtime
+        from project(":geode-stats-common").configurations.archives.allArtifacts.files
+
         from project(":geode-json").configurations.runtimeClasspath
         from project(":geode-json").configurations.archives.allArtifacts.files
         from project(":geode-wan").configurations.runtimeClasspath
@@ -409,6 +416,9 @@ distributions {
         from project(":geode-protobuf-messages").configurations.archives.allArtifacts.files
         from project(":geode-rebalancer").configurations.runtimeClasspath
         from project(":geode-rebalancer").configurations.archives.allArtifacts.files
+
+        from project(":geode-micrometer-stats").configurations.runtime
+        from project(":geode-micrometer-stats").configurations.archives.allArtifacts.files
 
         from configurations.bundled
         from configurations.gfshDependencies

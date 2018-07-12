@@ -27,6 +27,7 @@ import org.apache.geode.i18n.StringId;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
 
 /**
  * Class <code>SerialGatewayEventCallbackDispatcher</code> dispatches batches of

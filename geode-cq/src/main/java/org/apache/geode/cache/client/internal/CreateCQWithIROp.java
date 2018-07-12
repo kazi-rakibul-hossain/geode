@@ -17,6 +17,7 @@ package org.apache.geode.cache.client.internal;
 import org.apache.geode.cache.client.internal.QueryOp.QueryOpImpl;
 import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.internal.cache.tier.MessageType;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Creates a CQ and fetches initial results on a server

@@ -41,6 +41,7 @@ import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.offheap.StoredObject;
 import org.apache.geode.internal.offheap.annotations.Unretained;
 import org.apache.geode.internal.util.BlobHelper;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.MessageStats;
 
 /**
  * This class encapsulates the wire protocol. It provides accessors to encode and decode a message
@@ -691,8 +692,8 @@ public class Message {
             this.messageLimiter.acquire(1);
           } else {
             if (!this.messageLimiter.tryAcquire(1, timeToWait, TimeUnit.MILLISECONDS)) {
-              if (this.messageStats instanceof CacheServerStats) {
-                ((CacheServerStats) this.messageStats).incConnectionsTimedOut();
+              if (this.messageStats instanceof CacheServerStatsImpl) {
+                ((CacheServerStatsImpl) this.messageStats).incConnectionsTimedOut();
               }
               throw new IOException(
                   LocalizedStrings.Message_OPERATION_TIMED_OUT_ON_SERVER_WAITING_ON_CONCURRENT_MESSAGE_LIMITER_AFTER_WAITING_0_MILLISECONDS

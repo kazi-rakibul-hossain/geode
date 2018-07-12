@@ -42,6 +42,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
+import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
 
 /**
  * Provides handling of remote and local lock requests. <br>
@@ -816,7 +817,7 @@ public class DLockRequestProcessor extends ReplyProcessor21 {
     private void endGrantWaitStatistic() {
       if (this.statStart == -1)
         return; // failed to start the stat
-      DistributedLockStats stats = DLockService.getDistributedLockStats();
+      DLockStats stats = DLockService.getDistributedLockStats();
       switch (this.response.responseCode) {
         case DLockResponseMessage.GRANT:
           stats.endGrantWait(this.statStart);

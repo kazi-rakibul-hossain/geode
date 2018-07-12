@@ -20,6 +20,7 @@ import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.pdx.internal.EnumInfo;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Retrieve the PDXType, given an integer PDX id, from a server.

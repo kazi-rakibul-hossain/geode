@@ -17,13 +17,13 @@ package org.apache.geode.internal.statistics;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.CancelCriterion;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsFactory;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * A standalone implementation of {@link StatisticsFactory}. It can be used in contexts that do not
@@ -42,7 +42,8 @@ public class LocalStatisticsFactory extends AbstractStatisticsFactory
   private final boolean statsDisabled;
 
   public LocalStatisticsFactory(CancelCriterion stopper) {
-    super(initId(), initName(), initStartTime());
+    super((StatisticsFactory) new StatisticsTypeFactoryImpl(), initId(), initName(),
+        initStartTime());
 
     this.statsDisabled = Boolean.getBoolean(STATS_DISABLE_NAME_PROPERTY);
     if (statsDisabled) {
@@ -81,7 +82,7 @@ public class LocalStatisticsFactory extends AbstractStatisticsFactory
   }
 
   @Override
-  protected Statistics createOsStatistics(StatisticsType type, String textId, long numericId,
+  public Statistics createOsStatistics(StatisticsType type, String textId, long numericId,
       int osStatFlags) {
     if (this.statsDisabled) {
       return new DummyStatisticsImpl(type, textId, numericId);

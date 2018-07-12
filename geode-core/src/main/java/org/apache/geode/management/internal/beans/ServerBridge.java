@@ -17,13 +17,13 @@ package org.apache.geode.management.internal.beans;
 import org.apache.geode.cache.server.CacheServer;
 import org.apache.geode.internal.cache.CacheServerImpl;
 import org.apache.geode.internal.cache.tier.sockets.AcceptorImpl;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.management.internal.ManagementStrings;
 import org.apache.geode.management.internal.beans.stats.MBeanStatsMonitor;
 import org.apache.geode.management.internal.beans.stats.StatType;
 import org.apache.geode.management.internal.beans.stats.StatsAverageLatency;
 import org.apache.geode.management.internal.beans.stats.StatsKey;
 import org.apache.geode.management.internal.beans.stats.StatsRate;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 public class ServerBridge {
 

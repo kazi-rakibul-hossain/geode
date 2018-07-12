@@ -14,7 +14,7 @@
  */
 package org.apache.geode.internal.cache.eviction;
 
-import org.apache.geode.Statistics;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 class DisabledEvictionCounters implements EvictionCounters {
 

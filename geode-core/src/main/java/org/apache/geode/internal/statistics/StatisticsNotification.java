@@ -16,9 +16,9 @@ package org.apache.geode.internal.statistics;
 
 import java.util.Iterator;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * @since GemFire 7.0

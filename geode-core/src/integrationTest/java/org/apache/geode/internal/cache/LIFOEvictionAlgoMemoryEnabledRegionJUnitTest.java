@@ -63,6 +63,7 @@ import org.apache.geode.internal.cache.persistence.DiskRecoveryStore;
 import org.apache.geode.internal.cache.versions.VersionSource;
 import org.apache.geode.internal.cache.versions.VersionStamp;
 import org.apache.geode.internal.cache.versions.VersionTag;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 /**
  * This is a test verifies region is LIFO enabled by MEMORY verifies correct stats updating and

@@ -425,7 +425,8 @@ public class PartitionedIndex extends AbstractIndex {
     private IndexStats vsdStats;
 
     public PartitionedIndexStatistics(String indexName) {
-      this.vsdStats = new IndexStats(getRegion().getCache().getDistributedSystem(), indexName);
+      this.vsdStats = new IndexStats(
+          getRegion().getCache().getDistributedSystem().getStatisticsFactory(), indexName);
     }
 
     /**

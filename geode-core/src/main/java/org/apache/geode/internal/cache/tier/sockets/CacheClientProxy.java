@@ -44,7 +44,6 @@ import org.apache.shiro.util.ThreadState;
 
 import org.apache.geode.CancelException;
 import org.apache.geode.DataSerializer;
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheException;
 import org.apache.geode.cache.ClientSession;
@@ -90,7 +89,6 @@ import org.apache.geode.internal.cache.StateFlushOperation;
 import org.apache.geode.internal.cache.ha.HAContainerWrapper;
 import org.apache.geode.internal.cache.ha.HARegionQueue;
 import org.apache.geode.internal.cache.ha.HARegionQueueAttributes;
-import org.apache.geode.internal.cache.ha.HARegionQueueStats;
 import org.apache.geode.internal.cache.tier.InterestType;
 import org.apache.geode.internal.cache.tier.sockets.ClientUpdateMessageImpl.CqNameToOp;
 import org.apache.geode.internal.cache.tier.sockets.command.Get70;
@@ -104,6 +102,8 @@ import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.security.AuthorizeRequestPP;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.security.AccessControl;
+import org.apache.geode.stats.common.internal.cache.ha.HARegionQueueStats;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 /**
  * Class <code>CacheClientProxy</code> represents the server side of the {@link CacheClientUpdater}.
@@ -347,7 +347,7 @@ public class CacheClientProxy implements ClientSession {
     this._messageTimeToLive = ccn.getMessageTimeToLive();
     this._acceptorId = acceptorId;
     this.notifyBySubscription = notifyBySubscription;
-    StatisticsFactory factory = this._cache.getDistributedSystem();
+    StatisticsFactory factory = this._cache.getDistributedSystem().getStatisticsFactory();
     this._statistics =
         new CacheClientProxyStats(factory, "id_" + this.proxyID.getDistributedMember().getId()
             + "_at_" + this._remoteHostAddress + ":" + this._socket.getPort());

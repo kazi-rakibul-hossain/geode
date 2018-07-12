@@ -34,6 +34,7 @@ import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LogMarker;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Represents an operation that can be performed in a client by sending a message to a server.

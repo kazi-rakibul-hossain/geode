@@ -59,6 +59,7 @@ import org.apache.geode.internal.cache.GridAdvisor.GridProfile;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.net.SocketCreator;
+import org.apache.geode.stats.common.distributed.internal.LocatorStats;
 
 /**
  *

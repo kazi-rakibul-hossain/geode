@@ -40,7 +40,6 @@ import org.apache.geode.internal.cache.InternalRegion;
 import org.apache.geode.internal.cache.KeyInfo;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.PartitionedRegion.RetryTimeKeeper;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
 import org.apache.geode.internal.cache.PrimaryBucketException;
 import org.apache.geode.internal.cache.PutAllPartialResultException;
 import org.apache.geode.internal.cache.PutAllPartialResultException.PutAllPartialResult;
@@ -392,7 +391,7 @@ public class PartitionedTXRegionStub extends AbstractPeerTXRegionStub {
     }
 
     PartitionedRegion pr = (PartitionedRegion) r;
-    final long startTime = PartitionedRegionStats.startTime();
+    final long startTime = System.nanoTime();
     // build all the msgs by bucketid
     HashMap prMsgMap = putallO.createPRMessages();
     PutAllPartialResult partialKeys = new PutAllPartialResult(putallO.putAllDataSize);
@@ -452,7 +451,7 @@ public class PartitionedTXRegionStub extends AbstractPeerTXRegionStub {
     }
 
     PartitionedRegion pr = (PartitionedRegion) r;
-    final long startTime = PartitionedRegionStats.startTime();
+    final long startTime = System.nanoTime();
     // build all the msgs by bucketid
     HashMap<Integer, RemoveAllPRMessage> prMsgMap = op.createPRMessages();
     PutAllPartialResult partialKeys = new PutAllPartialResult(op.removeAllDataSize);

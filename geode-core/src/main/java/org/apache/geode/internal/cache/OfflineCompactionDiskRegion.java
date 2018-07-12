@@ -20,6 +20,8 @@ import org.apache.geode.internal.cache.entries.DiskEntry;
 import org.apache.geode.internal.cache.persistence.DiskExceptionHandler;
 import org.apache.geode.internal.cache.persistence.DiskRecoveryStore;
 import org.apache.geode.internal.cache.persistence.DiskRegionView;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * A disk region that is created when doing offline compaction.
@@ -27,7 +29,7 @@ import org.apache.geode.internal.cache.persistence.DiskRegionView;
 public class OfflineCompactionDiskRegion extends DiskRegion implements DiskRecoveryStore {
   private OfflineCompactionDiskRegion(DiskStoreImpl ds, DiskRegionView drv) {
     super(ds, drv.getName(), drv.isBucket(), true, false, true,
-        new DiskRegionStats(ds.getCache().getDistributedSystem(), drv.getName()),
+        StatsFactory.createStatsImpl(DiskRegionStats.class, drv.getName()),
         new DummyCancelCriterion(), new DummyDiskExceptionHandler(), null, drv.getFlags(),
         drv.getPartitionName(), drv.getStartingBucketId(), drv.getCompressorClassName(),
         drv.getOffHeap());

@@ -38,6 +38,7 @@ import org.apache.geode.internal.cache.RegionEntry;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.offheap.annotations.OffHeapIdentifier;
 import org.apache.geode.internal.offheap.annotations.Unretained;
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
 
 /**
  * This allocator is somewhat like an Arena allocator. We start out with an array of multiple large
@@ -56,7 +57,7 @@ public class MemoryAllocatorImpl implements MemoryAllocator {
   public static final String FREE_OFF_HEAP_MEMORY_PROPERTY =
       DistributionConfig.GEMFIRE_PREFIX + "free-off-heap-memory";
 
-  private volatile OffHeapMemoryStats stats;
+  private volatile OffHeapStorageStats stats;
 
   private volatile OutOfOffHeapMemoryListener ooohml;
 
@@ -83,7 +84,7 @@ public class MemoryAllocatorImpl implements MemoryAllocator {
   private static final boolean DO_EXPENSIVE_VALIDATION =
       Boolean.getBoolean(DistributionConfig.GEMFIRE_PREFIX + "OFF_HEAP_DO_EXPENSIVE_VALIDATION");
 
-  public static MemoryAllocator create(OutOfOffHeapMemoryListener ooohml, OffHeapMemoryStats stats,
+  public static MemoryAllocator create(OutOfOffHeapMemoryListener ooohml, OffHeapStorageStats stats,
       int slabCount, long offHeapMemorySize, long maxSlabSize) {
     return create(ooohml, stats, slabCount, offHeapMemorySize, maxSlabSize, null,
         new SlabFactory() {
@@ -95,7 +96,7 @@ public class MemoryAllocatorImpl implements MemoryAllocator {
   }
 
   private static MemoryAllocatorImpl create(OutOfOffHeapMemoryListener ooohml,
-      OffHeapMemoryStats stats, int slabCount, long offHeapMemorySize, long maxSlabSize,
+      OffHeapStorageStats stats, int slabCount, long offHeapMemorySize, long maxSlabSize,
       Slab[] slabs, SlabFactory slabFactory) {
     MemoryAllocatorImpl result = singleton;
     boolean created = false;
@@ -159,13 +160,13 @@ public class MemoryAllocatorImpl implements MemoryAllocator {
   }
 
   static MemoryAllocatorImpl createForUnitTest(OutOfOffHeapMemoryListener ooohml,
-      OffHeapMemoryStats stats, int slabCount, long offHeapMemorySize, long maxSlabSize,
+      OffHeapStorageStats stats, int slabCount, long offHeapMemorySize, long maxSlabSize,
       SlabFactory memChunkFactory) {
     return create(ooohml, stats, slabCount, offHeapMemorySize, maxSlabSize, null, memChunkFactory);
   }
 
   public static MemoryAllocatorImpl createForUnitTest(OutOfOffHeapMemoryListener oooml,
-      OffHeapMemoryStats stats, Slab[] slabs) {
+      OffHeapStorageStats stats, Slab[] slabs) {
     int slabCount = 0;
     long offHeapMemorySize = 0;
     long maxSlabSize = 0;
@@ -183,7 +184,7 @@ public class MemoryAllocatorImpl implements MemoryAllocator {
   }
 
 
-  private void reuse(OutOfOffHeapMemoryListener oooml, OffHeapMemoryStats newStats,
+  private void reuse(OutOfOffHeapMemoryListener oooml, OffHeapStorageStats newStats,
       long offHeapMemorySize, Slab[] slabs) {
     if (isClosed()) {
       throw new IllegalStateException("Can not reuse a closed off-heap memory manager.");
@@ -205,7 +206,7 @@ public class MemoryAllocatorImpl implements MemoryAllocator {
   }
 
   private MemoryAllocatorImpl(final OutOfOffHeapMemoryListener oooml,
-      final OffHeapMemoryStats stats, final Slab[] slabs) {
+      final OffHeapStorageStats stats, final Slab[] slabs) {
     if (oooml == null) {
       throw new IllegalArgumentException("OutOfOffHeapMemoryListener is null");
     }
@@ -417,7 +418,7 @@ public class MemoryAllocatorImpl implements MemoryAllocator {
     return this.freeList.findSlab(addr);
   }
 
-  public OffHeapMemoryStats getStats() {
+  public OffHeapStorageStats getStats() {
     return this.stats;
   }
 

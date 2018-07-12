@@ -46,6 +46,7 @@ import org.apache.geode.internal.cache.tier.Encryptor;
 import org.apache.geode.internal.cache.tier.ServerSideHandshake;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.security.AuthenticationRequiredException;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.test.junit.categories.ClientServerTest;
 import org.apache.geode.test.junit.rules.RestoreLocaleRule;
 

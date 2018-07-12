@@ -40,6 +40,8 @@ import org.apache.geode.internal.cache.versions.VersionSource;
 import org.apache.geode.internal.cache.versions.VersionStamp;
 import org.apache.geode.internal.cache.versions.VersionTag;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * A disk region that is created when doing offline validation.
@@ -47,16 +49,22 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
  * @since GemFire prPersistSprint3
  */
 public class ValidatingDiskRegion extends DiskRegion implements DiskRecoveryStore {
-  protected ValidatingDiskRegion(DiskStoreImpl ds, DiskRegionView drv) {
-    super(ds, drv.getName(), drv.isBucket(), true, false, true,
-        new DiskRegionStats(ds.getCache().getDistributedSystem(), drv.getName()),
-        new DummyCancelCriterion(), new DummyDiskExceptionHandler(), null, drv.getFlags(),
-        drv.getPartitionName(), drv.getStartingBucketId(), drv.getCompressorClassName(),
-        drv.getOffHeap());
-    setConfig(drv.getLruAlgorithm(), drv.getLruAction(), drv.getLruLimit(),
-        drv.getConcurrencyLevel(), drv.getInitialCapacity(), drv.getLoadFactor(),
-        drv.getStatisticsEnabled(), drv.isBucket(), drv.getFlags(), drv.getPartitionName(),
-        drv.getStartingBucketId(), drv.getCompressorClassName(), drv.getOffHeap());
+  protected ValidatingDiskRegion(DiskStoreImpl diskStore, DiskRegionView diskRegionView) {
+    super(diskStore, diskRegionView.getName(), diskRegionView.isBucket(), true, false, true,
+        StatsFactory.createStatsImpl(DiskRegionStats.class, diskRegionView.getName()),
+        new DummyCancelCriterion(), new DummyDiskExceptionHandler(), null,
+        diskRegionView.getFlags(),
+        diskRegionView.getPartitionName(), diskRegionView.getStartingBucketId(),
+        diskRegionView.getCompressorClassName(),
+        diskRegionView.getOffHeap());
+    setConfig(diskRegionView.getLruAlgorithm(), diskRegionView.getLruAction(),
+        diskRegionView.getLruLimit(),
+        diskRegionView.getConcurrencyLevel(), diskRegionView.getInitialCapacity(),
+        diskRegionView.getLoadFactor(),
+        diskRegionView.getStatisticsEnabled(), diskRegionView.isBucket(), diskRegionView.getFlags(),
+        diskRegionView.getPartitionName(),
+        diskRegionView.getStartingBucketId(), diskRegionView.getCompressorClassName(),
+        diskRegionView.getOffHeap());
   }
 
   static ValidatingDiskRegion create(DiskStoreImpl dsi, DiskRegionView drv) {
@@ -404,13 +412,15 @@ public class ValidatingDiskRegion extends DiskRegion implements DiskRecoveryStor
 
     @Override
     public boolean initialImagePut(InternalRegion region, long lastModified, Object newValue,
-        boolean wasRecovered, boolean acceptedVersionTag) throws RegionClearedException {
+        boolean wasRecovered, boolean acceptedVersionTag)
+        throws RegionClearedException {
       return false;
     }
 
     @Override
     public boolean initialImageInit(InternalRegion region, long lastModified, Object newValue,
-        boolean create, boolean wasRecovered, boolean acceptedVersionTag)
+        boolean create, boolean wasRecovered,
+        boolean acceptedVersionTag)
         throws RegionClearedException {
       return false;
     }
@@ -418,7 +428,8 @@ public class ValidatingDiskRegion extends DiskRegion implements DiskRecoveryStor
     @Override
     public boolean destroy(InternalRegion region, EntryEventImpl event, boolean inTokenMode,
         boolean cacheWrite, Object expectedOldValue, boolean forceDestroy,
-        boolean removeRecoveredEntry) throws CacheWriterException, EntryNotFoundException,
+        boolean removeRecoveredEntry)
+        throws CacheWriterException, EntryNotFoundException,
         TimeoutException, RegionClearedException {
       return false;
     }
@@ -538,7 +549,6 @@ public class ValidatingDiskRegion extends DiskRegion implements DiskRecoveryStor
       return false;
     }
   }
-
 
   //////////////// DiskExceptionHandler methods ////////////////////
 

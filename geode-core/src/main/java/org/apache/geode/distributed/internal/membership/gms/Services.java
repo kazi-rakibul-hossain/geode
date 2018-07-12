@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.ForcedDisconnectException;
 import org.apache.geode.distributed.DistributedSystemDisconnectedException;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.InternalLocator;
 import org.apache.geode.distributed.internal.membership.DistributedMembershipListener;
@@ -47,6 +46,7 @@ import org.apache.geode.internal.logging.LoggingThreadGroup;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.internal.security.SecurityServiceFactory;
 import org.apache.geode.security.AuthenticationFailedException;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 @SuppressWarnings("ConstantConditions")
 public class Services {

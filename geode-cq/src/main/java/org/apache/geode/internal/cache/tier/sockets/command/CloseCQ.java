@@ -21,11 +21,9 @@ import java.util.Set;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.internal.cq.CqService;
 import org.apache.geode.cache.query.internal.cq.InternalCqQuery;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.internal.cache.tier.CachedRegionHelper;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.MessageType;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.ClientProxyMembershipID;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
@@ -34,6 +32,7 @@ import org.apache.geode.internal.security.AuthorizeRequest;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.security.ResourcePermission.Operation;
 import org.apache.geode.security.ResourcePermission.Resource;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 public class CloseCQ extends BaseCQCommand {
 
@@ -57,7 +56,7 @@ public class CloseCQ extends BaseCQCommand {
     serverConnection.setAsTrue(REQUIRES_RESPONSE);
     serverConnection.setAsTrue(REQUIRES_CHUNKED_RESPONSE);
 
-    start = DistributionStats.getStatTime();
+    start = System.nanoTime();
     // Retrieve the data from the message parts
     String cqName = clientMessage.getPart(0).getString();
 
@@ -125,7 +124,7 @@ public class CloseCQ extends BaseCQCommand {
     serverConnection.setAsTrue(RESPONDED);
 
     long oldStart = start;
-    start = DistributionStats.getStatTime();
+    start = System.nanoTime();
     stats.incProcessCloseCqTime(start - oldStart);
   }
 

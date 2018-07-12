@@ -33,13 +33,14 @@ import org.junit.Test;
 
 import org.apache.geode.OutOfOffHeapMemoryException;
 import org.apache.geode.distributed.internal.DistributionConfig;
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
 
 public class FreeListManagerTest {
 
   private final int DEFAULT_SLAB_SIZE = 1024 * 1024 * 5;
 
   private final MemoryAllocatorImpl ma = mock(MemoryAllocatorImpl.class);
-  private final OffHeapMemoryStats stats = mock(OffHeapMemoryStats.class);
+  private final OffHeapStorageStats stats = mock(OffHeapStorageStats.class);
   private TestableFreeListManager freeListManager;
 
   @Before

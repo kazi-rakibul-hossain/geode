@@ -29,6 +29,7 @@ import org.apache.geode.cache.client.internal.pooling.ConnectionDestroyedExcepti
 import org.apache.geode.distributed.internal.ServerLocation;
 import org.apache.geode.internal.cache.tier.sockets.ServerQueueStatus;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 
 /**

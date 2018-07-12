@@ -16,6 +16,7 @@ package org.apache.geode.cache.client.internal;
 
 import org.apache.geode.cache.client.internal.CreateCQOp.CreateCQOpImpl;
 import org.apache.geode.internal.cache.tier.MessageType;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Close a continuous query on the server

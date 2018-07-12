@@ -52,8 +52,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.DataSerializer;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.cache.AttributesMutator;
 import org.apache.geode.cache.Operation;
 import org.apache.geode.cache.RegionAttributes;
@@ -76,6 +74,9 @@ import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.cache.InternalRegionArguments;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.security.SecurityService;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 import org.apache.geode.test.junit.categories.ClientSubscriptionTest;
 
 @Category({ClientSubscriptionTest.class})
@@ -267,7 +268,8 @@ public class CacheClientNotifierIntegrationTest {
 
     doReturn(mock(InternalDistributedMember.class)).when(mockInternalDistributedSystem)
         .getDistributedMember();
-    doReturn(mock(Statistics.class)).when(mockInternalDistributedSystem)
+    doReturn(mock(Statistics.class))
+        .when(mockInternalDistributedSystem.getInternalDistributedSystemStats())
         .createAtomicStatistics(any(StatisticsType.class), any(String.class));
     doReturn(mock(DistributionConfig.class)).when(mockDistributionManager).getConfig();
     doReturn(mockDistributionManager).when(mockInternalDistributedSystem).getDistributionManager();

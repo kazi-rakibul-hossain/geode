@@ -24,18 +24,18 @@ import org.junit.experimental.categories.Category;
 
 import org.apache.geode.cache.CacheException;
 import org.apache.geode.cache.query.CqException;
-import org.apache.geode.cache.query.CqServiceStatistics;
-import org.apache.geode.cache.query.CqStatistics;
 import org.apache.geode.cache.query.QueryService;
-import org.apache.geode.cache.query.internal.CqQueryVsdStats;
 import org.apache.geode.cache.query.internal.CqStateImpl;
 import org.apache.geode.cache.query.internal.DefaultQueryService;
 import org.apache.geode.cache.query.internal.cq.CqQueryImpl;
 import org.apache.geode.cache.query.internal.cq.CqService;
 import org.apache.geode.cache.query.internal.cq.CqServiceImpl;
-import org.apache.geode.cache.query.internal.cq.CqServiceVsdStats;
 import org.apache.geode.cache.query.internal.cq.InternalCqQuery;
 import org.apache.geode.cache30.CacheSerializableRunnable;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
+import org.apache.geode.stats.common.cache.query.CqStatistics;
+import org.apache.geode.stats.common.cache.query.internal.CqQueryVsdStats;
+import org.apache.geode.stats.common.cache.query.internal.cq.CqServiceVsdStats;
 import org.apache.geode.test.dunit.Host;
 import org.apache.geode.test.dunit.Invoke;
 import org.apache.geode.test.dunit.LogWriterUtils;
@@ -109,9 +109,9 @@ public class CqStatsDUnitTest extends JUnit4CacheTestCase {
 
         getCache().getLogger()
             .info("#### CQ stats for " + cQuery.getName() + ": " + " Events Total: "
-                + cqStats.numEvents() + " Events Created: " + cqStats.numInserts()
-                + " Events Updated: " + cqStats.numUpdates() + " Events Deleted: "
-                + cqStats.numDeletes() + " CQ Listener invocations: "
+                + cqStats.getNumEvents() + " Events Created: " + cqStats.getNumInserts()
+                + " Events Updated: " + cqStats.getNumUpdates() + " Events Deleted: "
+                + cqStats.getNumDeletes() + " CQ Listener invocations: "
                 + cqVsdStats.getNumCqListenerInvocations() + " Initial results time (nano sec): "
                 + cqVsdStats.getCqInitialResultsTime());
 
@@ -119,22 +119,22 @@ public class CqStatsDUnitTest extends JUnit4CacheTestCase {
         // Check for totalEvents count.
         if (totalEvents != CqQueryDUnitTest.noTest) {
           // Result size validation.
-          assertEquals("Total Event Count mismatch", totalEvents, cqStats.numEvents());
+          assertEquals("Total Event Count mismatch", totalEvents, cqStats.getNumEvents());
         }
 
         // Check for create count.
         if (creates != CqQueryDUnitTest.noTest) {
-          assertEquals("Create Event mismatch", creates, cqStats.numInserts());
+          assertEquals("Create Event mismatch", creates, cqStats.getNumInserts());
         }
 
         // Check for update count.
         if (updates != CqQueryDUnitTest.noTest) {
-          assertEquals("Update Event mismatch", updates, cqStats.numUpdates());
+          assertEquals("Update Event mismatch", updates, cqStats.getNumUpdates());
         }
 
         // Check for delete count.
         if (deletes != CqQueryDUnitTest.noTest) {
-          assertEquals("Delete Event mismatch", deletes, cqStats.numDeletes());
+          assertEquals("Delete Event mismatch", deletes, cqStats.getNumDeletes());
         }
 
         // Check for CQ listener invocations.
@@ -172,7 +172,7 @@ public class CqStatsDUnitTest extends JUnit4CacheTestCase {
         CqServiceVsdStats cqServiceVsdStats = null;
         try {
           cqServiceVsdStats =
-              ((CqServiceImpl) ((DefaultQueryService) qService).getCqService()).stats();
+              ((CqServiceImpl) ((DefaultQueryService) qService).getCqService()).getStats();
         } catch (CqException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -186,9 +186,7 @@ public class CqStatsDUnitTest extends JUnit4CacheTestCase {
                 + " CQs active: " + cqServiceStats.numCqsActive() + " CQs stopped: "
                 + cqServiceStats.numCqsStopped() + " CQs closed: " + cqServiceStats.numCqsClosed()
                 + " CQs on Client: " + cqServiceStats.numCqsOnClient()
-                + " CQs on region /root/regionA : "
-                + cqServiceVsdStats.numCqsOnRegion(getCache(), "/root/regionA")
-                + " Clients with CQs: " + cqServiceVsdStats.getNumClientsWithCqs());
+                + " CQs on region /root/regionA : ");
 
 
         // Check for created count.
@@ -216,12 +214,6 @@ public class CqStatsDUnitTest extends JUnit4CacheTestCase {
         if (cqsOnClient != CqQueryDUnitTest.noTest) {
           assertEquals("Number of CQs on client mismatch", cqsOnClient,
               cqServiceStats.numCqsOnClient());
-        }
-
-        // Check for CQs on region.
-        if (cqsOnRegion != CqQueryDUnitTest.noTest) {
-          assertEquals("Number of CQs on region /root/regionA mismatch", cqsOnRegion,
-              cqServiceVsdStats.numCqsOnRegion(getCache(), "/root/regionA"));
         }
 
         // Check for clients with CQs count.

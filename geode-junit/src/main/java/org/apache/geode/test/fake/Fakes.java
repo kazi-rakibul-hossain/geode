@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.LogWriter;
-import org.apache.geode.Statistics;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.DataPolicy;
 import org.apache.geode.cache.Region;
@@ -35,12 +34,13 @@ import org.apache.geode.distributed.internal.DSClock;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.internal.cache.TXManagerImpl;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.pdx.PdxInstanceFactory;
 import org.apache.geode.pdx.internal.TypeRegistry;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 /**
  * Factory methods for fake objects for use in test.
@@ -101,8 +101,12 @@ public class Fakes {
     when(system.getClock()).thenReturn(clock);
     when(system.getLogWriter()).thenReturn(logger);
     when(system.getSecurityService()).thenReturn(mock(SecurityService.class));
-    when(system.createAtomicStatistics(any(), any(), anyLong())).thenReturn(stats);
-    when(system.createAtomicStatistics(any(), any())).thenReturn(stats);
+    when(system.getInternalDistributedSystemStats().getStatisticsFactory()
+        .createAtomicStatistics(any(), any(), anyLong()))
+            .thenReturn(stats);
+    when(system.getInternalDistributedSystemStats().getStatisticsFactory()
+        .createAtomicStatistics(any(), any()))
+            .thenReturn(stats);
     when(system.getCache()).thenReturn(cache);
 
     when(distributionManager.getId()).thenReturn(member);

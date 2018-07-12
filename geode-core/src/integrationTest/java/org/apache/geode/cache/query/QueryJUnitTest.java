@@ -52,6 +52,7 @@ import org.apache.geode.cache.RegionShortcut;
 import org.apache.geode.cache.query.data.Portfolio;
 import org.apache.geode.cache.query.internal.DefaultQuery;
 import org.apache.geode.cache.query.internal.index.IndexProtocol;
+import org.apache.geode.stats.common.cache.query.QueryStatistics;
 import org.apache.geode.test.junit.categories.OQLQueryTest;
 
 @FixMethodOrder(NAME_ASCENDING)

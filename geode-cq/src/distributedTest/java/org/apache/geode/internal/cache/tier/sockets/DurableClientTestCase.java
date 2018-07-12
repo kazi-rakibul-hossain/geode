@@ -1794,7 +1794,8 @@ public class DurableClientTestCase extends JUnit4DistributedTestCase {
   }
 
   /*
-   * @param numEventsToWaitFor most times will be the same as numEvents, but there are times where
+   * @param numEventsToWaitFor most times will be the same as getNumEvents, but there are times
+   * where
    * we want to wait for an event we know is not coming just to be sure an event actually isnt
    * received
    *

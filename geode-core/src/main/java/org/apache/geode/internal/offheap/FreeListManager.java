@@ -32,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.geode.OutOfOffHeapMemoryException;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
 
 /**
  * Manages the free lists and slabs for a MemoryAllocator
@@ -250,7 +251,7 @@ public class FreeListManager {
   }
 
   void logOffHeapState(Logger lw, int chunkSize) {
-    OffHeapMemoryStats stats = this.ma.getStats();
+    OffHeapStorageStats stats = this.ma.getStats();
     lw.info("OutOfOffHeapMemory allocating size of " + chunkSize + ". allocated="
         + this.allocatedSize.get() + " defragmentations=" + this.defragmentationCount.get()
         + " objects=" + stats.getObjects() + " free=" + stats.getFreeMemory() + " fragments="
@@ -782,7 +783,7 @@ public class FreeListManager {
   private void free(long addr, boolean updateStats) {
     int cSize = OffHeapStoredObject.getSize(addr);
     if (updateStats) {
-      OffHeapMemoryStats stats = this.ma.getStats();
+      OffHeapStorageStats stats = this.ma.getStats();
       stats.incObjects(-1);
       this.allocatedSize.addAndGet(-cSize);
       stats.incUsedMemory(-cSize);

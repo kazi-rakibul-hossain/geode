@@ -26,7 +26,6 @@ import org.apache.geode.cache.CacheClosedException;
 import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.distributed.internal.DistributionMessage;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.ReplyException;
 import org.apache.geode.distributed.internal.ReplyMessage;
@@ -341,7 +340,7 @@ public class ManageBackupBucketMessage extends PartitionMessage {
       if (logger.isTraceEnabled(LogMarker.DM_VERBOSE)) {
         logger.trace(LogMarker.DM_VERBOSE, "{} processed {}", processor, this);
       }
-      dm.getStats().incReplyMessageTime(DistributionStats.getStatTime() - startTime);
+      dm.getStats().incReplyMessageTime(System.nanoTime() - startTime);
     }
 
     @Override

@@ -25,7 +25,6 @@ import org.apache.geode.cache.operations.DestroyOperationContext;
 import org.apache.geode.cache.operations.PutOperationContext;
 import org.apache.geode.cache.wan.GatewayReceiver;
 import org.apache.geode.distributed.DistributedSystem;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.i18n.StringId;
 import org.apache.geode.internal.Version;
@@ -43,7 +42,6 @@ import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
 import org.apache.geode.internal.cache.versions.VersionTag;
 import org.apache.geode.internal.cache.wan.BatchException70;
-import org.apache.geode.internal.cache.wan.GatewayReceiverStats;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.security.AuthorizeRequest;
@@ -55,6 +53,7 @@ import org.apache.geode.pdx.internal.EnumId;
 import org.apache.geode.pdx.internal.EnumInfo;
 import org.apache.geode.pdx.internal.PdxType;
 import org.apache.geode.pdx.internal.PeerTypeRegistration;
+import org.apache.geode.stats.common.internal.cache.wan.GatewayReceiverStats;
 
 public class GatewayReceiverCommand extends BaseCommand {
 
@@ -93,7 +92,7 @@ public class GatewayReceiverCommand extends BaseCommand {
     // requiresResponse = true;// let PROCESS_BATCH deal with this itself
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incReadProcessBatchRequestTime(start - oldStart);
     }
     Part callbackArgExistsPart;
@@ -740,7 +739,7 @@ public class GatewayReceiverCommand extends BaseCommand {
 
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incProcessBatchTime(start - oldStart);
     }
     if (fatalException != null) {
@@ -758,7 +757,7 @@ public class GatewayReceiverCommand extends BaseCommand {
 
       writeReply(clientMessage, serverConnection, batchId, numberOfEvents);
       serverConnection.setAsTrue(RESPONDED);
-      stats.incWriteProcessBatchResponseTime(DistributionStats.getStatTime() - start);
+      stats.incWriteProcessBatchResponseTime(System.nanoTime() - start);
       if (logger.isDebugEnabled()) {
         logger.debug(
             "{}: Sent process batch normal response for batch {} containing {} events ({} bytes) with {} acknowledgement on {}",

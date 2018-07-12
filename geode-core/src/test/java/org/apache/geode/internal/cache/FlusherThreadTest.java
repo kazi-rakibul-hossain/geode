@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.geode.cache.DiskAccessException;
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
 
 public class FlusherThreadTest {
 

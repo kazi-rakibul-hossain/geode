@@ -28,6 +28,7 @@ import org.apache.geode.cache.client.internal.UserAttributes;
 import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqAttributesMutator;
 import org.apache.geode.cache.query.CqClosedException;
+import org.apache.geode.cache.query.CqEvent;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqListener;
 import org.apache.geode.cache.query.CqResults;
@@ -60,9 +61,9 @@ public class ClientCQImpl extends CqQueryImpl implements ClientCQ {
 
   private boolean connected = false;
 
-  public ClientCQImpl(CqServiceImpl cqService, String cqName, String queryString,
+  public ClientCQImpl(CqService cqService, String cqName, String queryString,
       CqAttributes cqAttributes, ServerCQProxyImpl serverProxy, boolean isDurable) {
-    super(cqService, cqName, queryString, isDurable);
+    super(cqService, cqName, queryString, isDurable, cqService.getCache());
     this.cqAttributes = cqAttributes;
     this.cqProxy = serverProxy;
   }
@@ -81,7 +82,7 @@ public class ClientCQImpl extends CqQueryImpl implements ClientCQ {
    * value of this CQ.
    */
   private void initConnectionProxy() throws CqException, RegionNotFoundException {
-    cqBaseRegion = (LocalRegion) cqService.getCache().getRegion(regionName);
+    cqBaseRegion = (LocalRegion) getCache().getRegion(regionName);
     // Check if the region exists on the local cache.
     // In the current implementation of 5.1 the Server Connection is (ConnectionProxyImpl)
     // is obtained by the Bridge Client/writer/loader on the local region.
@@ -166,17 +167,18 @@ public class ClientCQImpl extends CqQueryImpl implements ClientCQ {
       if (cqProxy == null || !sendRequestToServer || isClosed) {
         // Stat update.
         if (stateBeforeClosing == CqStateImpl.RUNNING) {
-          cqService.stats().decCqsActive();
+          cqService.getStats().decCqsActive();
         } else if (stateBeforeClosing == CqStateImpl.STOPPED) {
-          cqService.stats().decCqsStopped();
+          cqService.getStats().decCqsStopped();
         }
 
         // Set the state to close, and update stats
         this.cqState.setState(CqStateImpl.CLOSED);
-        cqService.stats().incCqsClosed();
-        cqService.stats().decCqsOnClient();
-        if (this.stats != null)
+        cqService.getStats().incCqsClosed();
+        cqService.getStats().decCqsOnClient();
+        if (this.stats != null) {
           this.stats.close();
+        }
       } else {
         if (shutdownInProgress()) {
           return;
@@ -329,7 +331,7 @@ public class ClientCQImpl extends CqQueryImpl implements ClientCQ {
 
                     // Process through the events
                     for (Object cqEvent : eventArray) {
-                      cqService.invokeListeners(cqName, ClientCQImpl.this, (CqEventImpl) cqEvent);
+                      cqService.invokeListeners(cqName, ClientCQImpl.this, (CqEvent) cqEvent);
                       stats.decQueuedCqListenerEvents();
                     }
                   } finally {
@@ -471,8 +473,8 @@ public class ClientCQImpl extends CqQueryImpl implements ClientCQ {
       }
     }
     // Update CQ-base region for book keeping.
-    this.cqService.stats().incCqsActive();
-    this.cqService.stats().decCqsStopped();
+    this.cqService.getStats().incCqsActive();
+    this.cqService.getStats().decCqsStopped();
     return initialResults;
   }
 
@@ -482,8 +484,8 @@ public class ClientCQImpl extends CqQueryImpl implements ClientCQ {
    * @return true if shutdown in progress else false.
    */
   private boolean shutdownInProgress() {
-    InternalCache cache = cqService.getInternalCache();
-    if (cache == null || cache.isClosed()) {
+    InternalCache internalCache = (InternalCache) getCache();
+    if (internalCache == null || internalCache.isClosed()) {
       return true; // bail, things are shutting down
     }
 
@@ -530,8 +532,8 @@ public class ClientCQImpl extends CqQueryImpl implements ClientCQ {
       if (cqProxy == null || isStopped) {
         // Change state and stats on the client side
         this.cqState.setState(CqStateImpl.STOPPED);
-        this.cqService.stats().incCqsStopped();
-        this.cqService.stats().decCqsActive();
+        this.cqService.getStats().incCqsStopped();
+        this.cqService.getStats().decCqsActive();
         if (logger.isDebugEnabled()) {
           logger.debug("Successfully stopped the CQ. {}", cqName);
         }

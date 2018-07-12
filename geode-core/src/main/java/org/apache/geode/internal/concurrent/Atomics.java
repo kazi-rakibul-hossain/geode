@@ -17,13 +17,12 @@ package org.apache.geode.internal.concurrent;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.internal.statistics.LocalStatisticsImpl;
 import org.apache.geode.internal.statistics.StatisticsManager;
-import org.apache.geode.internal.statistics.StatisticsTypeImpl;
 import org.apache.geode.internal.stats50.Atomic50StatisticsImpl;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 public class Atomics {
   private Atomics() {}
@@ -39,7 +38,7 @@ public class Atomics {
   public static Statistics createAtomicStatistics(StatisticsType type, String textId, long nId,
       long uId, StatisticsManager mgr) {
     Statistics result = null;
-    if (((StatisticsTypeImpl) type).getDoubleStatCount() == 0 && !STRIPED_STATS_DISABLED) {
+    if (type.getDoubleStatCount() == 0 && !STRIPED_STATS_DISABLED) {
       result = new Atomic50StatisticsImpl(type, textId, nId, uId, mgr);
     } else {
       result = new LocalStatisticsImpl(type, textId, nId, uId, true, 0, mgr);

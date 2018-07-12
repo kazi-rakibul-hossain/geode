@@ -42,6 +42,7 @@ import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.util.TransformUtils;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 public class BucketPersistenceAdvisor extends PersistenceAdvisorImpl {
 

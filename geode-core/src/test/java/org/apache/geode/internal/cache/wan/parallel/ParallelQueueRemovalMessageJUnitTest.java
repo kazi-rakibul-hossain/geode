@@ -64,15 +64,15 @@ import org.apache.geode.internal.cache.KeyInfo;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.PartitionedRegionDataStore;
 import org.apache.geode.internal.cache.PartitionedRegionHelper;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
 import org.apache.geode.internal.cache.ProxyBucketRegion;
 import org.apache.geode.internal.cache.eviction.AbstractEvictionController;
 import org.apache.geode.internal.cache.eviction.EvictionController;
 import org.apache.geode.internal.cache.partitioned.RegionAdvisor;
 import org.apache.geode.internal.cache.wan.AbstractGatewaySender;
 import org.apache.geode.internal.cache.wan.GatewaySenderEventImpl;
-import org.apache.geode.internal.cache.wan.GatewaySenderStats;
-import org.apache.geode.internal.statistics.DummyStatisticsFactory;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.fake.Fakes;
 
 public class ParallelQueueRemovalMessageJUnitTest {
@@ -113,7 +113,7 @@ public class ParallelQueueRemovalMessageJUnitTest {
     EvictionAttributesImpl ea = (EvictionAttributesImpl) EvictionAttributes
         .createLRUMemoryAttributes(100, null, EvictionAction.OVERFLOW_TO_DISK);
     EvictionController eviction = AbstractEvictionController.create(ea, false,
-        this.cache.getDistributedSystem(), "queueRegion");
+        this.cache.getDistributedSystem().getStatisticsFactory(), "queueRegion");
     when(this.queueRegion.getEvictionController()).thenReturn(eviction);
   }
 
@@ -123,7 +123,7 @@ public class ParallelQueueRemovalMessageJUnitTest {
     when(this.queueRegion.getParallelGatewaySender()).thenReturn(this.sender);
     when(this.sender.getQueues()).thenReturn(null);
     when(this.sender.getDispatcherThreads()).thenReturn(1);
-    stats = new GatewaySenderStats(new DummyStatisticsFactory(), "ln");
+    stats = StatsFactory.createStatsImpl(GatewaySenderStats.class, "ln");
     when(this.sender.getStatistics()).thenReturn(stats);
   }
 

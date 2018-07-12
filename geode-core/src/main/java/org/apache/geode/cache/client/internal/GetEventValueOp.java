@@ -20,6 +20,7 @@ import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Gets (full) value (unlike GetOp, which may get either a full value or a delta depending upon

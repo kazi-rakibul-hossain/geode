@@ -17,7 +17,6 @@ package org.apache.geode.management.internal.cli.functions;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.query.CqQuery;
-import org.apache.geode.cache.query.internal.CqQueryVsdStats;
 import org.apache.geode.cache.query.internal.cq.CqService;
 import org.apache.geode.cache.query.internal.cq.InternalCqQuery;
 import org.apache.geode.internal.cache.execute.InternalFunction;
@@ -26,6 +25,7 @@ import org.apache.geode.internal.cache.tier.sockets.CacheClientProxy;
 import org.apache.geode.management.internal.cli.CliUtil;
 import org.apache.geode.management.internal.cli.domain.SubscriptionQueueSizeResult;
 import org.apache.geode.management.internal.cli.i18n.CliStrings;
+import org.apache.geode.stats.common.cache.query.internal.CqQueryVsdStats;
 
 /***
  * Function to get subscription-queue-size

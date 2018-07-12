@@ -72,6 +72,7 @@ import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.offheap.Releasable;
 import org.apache.geode.internal.offheap.annotations.Released;
 import org.apache.geode.internal.offheap.annotations.Retained;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Implementation for distributed search, load and write operations in the GemFire system. Provides

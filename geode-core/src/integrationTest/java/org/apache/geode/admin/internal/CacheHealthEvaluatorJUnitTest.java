@@ -37,8 +37,8 @@ import org.apache.geode.cache.LoaderHelper;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.RegionAttributes;
 import org.apache.geode.cache.Scope;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Contains simple tests for the {@link CacheHealthEvaluator}

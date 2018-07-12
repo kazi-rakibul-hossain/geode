@@ -14,10 +14,10 @@
  */
 package org.apache.geode.management.internal.beans.stats;
 
-import org.apache.geode.StatisticDescriptor;
 import org.apache.geode.internal.statistics.StatisticId;
 import org.apache.geode.internal.statistics.StatisticNotFoundException;
 import org.apache.geode.internal.statistics.StatisticsNotification;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
 
 public class GCStatsMonitor extends MBeanStatsMonitor {
 

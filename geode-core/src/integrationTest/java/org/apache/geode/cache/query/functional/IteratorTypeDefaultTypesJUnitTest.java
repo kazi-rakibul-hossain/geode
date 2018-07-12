@@ -135,9 +135,9 @@ public class IteratorTypeDefaultTypesJUnitTest {
   public void testIteratorDefBoolean() throws Exception {
     boolean b1 = true;
     boolean b2 = false;
-    HashSet C1 = new HashSet();
-    C1.add(new Boolean(b1));
-    C1.add(new Boolean(b2));
+    HashSet<Boolean> C1 = new HashSet<>();
+    C1.add(b1);
+    C1.add(b2);
     Object params[] = new Object[1];
     params[0] = C1;
     String queries[] = {"SELECT DISTINCT booleanValue from (set<boolean>) $1",

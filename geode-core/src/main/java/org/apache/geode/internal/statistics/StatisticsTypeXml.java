@@ -35,12 +35,12 @@ import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXParseException;
 
 import org.apache.geode.GemFireConfigException;
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.StatisticsType;
-import org.apache.geode.StatisticsTypeFactory;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.ClassPathLoader;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.StatisticsType;
+import org.apache.geode.stats.common.statistics.StatisticsTypeFactory;
 
 // @todo davidw Use a SAX parser instead of DOM
 /**

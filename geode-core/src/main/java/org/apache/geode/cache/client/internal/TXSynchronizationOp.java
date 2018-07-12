@@ -24,6 +24,7 @@ import org.apache.geode.internal.cache.TXManagerImpl;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * TXSynchronizationOp sends JTA beforeCompletion and afterCompletion messages to the server pool.

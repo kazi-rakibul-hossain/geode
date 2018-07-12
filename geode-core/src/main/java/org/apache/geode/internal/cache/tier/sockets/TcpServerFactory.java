@@ -22,11 +22,11 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.distributed.internal.DistributionConfigImpl;
 import org.apache.geode.distributed.internal.InternalLocator;
-import org.apache.geode.distributed.internal.PoolStatHelper;
 import org.apache.geode.distributed.internal.tcpserver.TcpHandler;
 import org.apache.geode.distributed.internal.tcpserver.TcpServer;
 import org.apache.geode.internal.cache.client.protocol.ClientProtocolServiceLoader;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
 
 public class TcpServerFactory {
   private final ClientProtocolServiceLoader clientProtocolServiceLoader;

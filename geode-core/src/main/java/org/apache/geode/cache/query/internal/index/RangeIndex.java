@@ -1469,7 +1469,8 @@ public class RangeIndex extends AbstractIndex {
 
     public RangeIndexStatistics(String indexName) {
 
-      this.vsdStats = new IndexStats(getRegion().getCache().getDistributedSystem(), indexName);
+      this.vsdStats = new IndexStats(
+          getRegion().getCache().getDistributedSystem().getStatisticsFactory(), indexName);
     }
 
     /**

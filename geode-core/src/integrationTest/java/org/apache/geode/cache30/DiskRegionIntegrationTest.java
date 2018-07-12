@@ -50,11 +50,11 @@ import org.apache.geode.cache.RegionShortcut;
 import org.apache.geode.cache.Scope;
 import org.apache.geode.internal.cache.CachedDeserializable;
 import org.apache.geode.internal.cache.DiskRegion;
-import org.apache.geode.internal.cache.DiskRegionStats;
 import org.apache.geode.internal.cache.InternalRegion;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.eviction.CountLRUEviction;
 import org.apache.geode.internal.cache.eviction.EvictionCounters;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 /**
  * Tests the functionality of cache regions whose contents may be written to disk.

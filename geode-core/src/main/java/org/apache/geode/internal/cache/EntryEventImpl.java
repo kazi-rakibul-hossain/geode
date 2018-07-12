@@ -86,6 +86,7 @@ import org.apache.geode.internal.size.Sizeable;
 import org.apache.geode.internal.util.ArrayUtils;
 import org.apache.geode.internal.util.BlobHelper;
 import org.apache.geode.pdx.internal.PeerTypeRegistration;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Implementation of an entry event

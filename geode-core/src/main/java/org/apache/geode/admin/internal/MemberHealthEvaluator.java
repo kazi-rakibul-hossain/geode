@@ -20,15 +20,15 @@ import org.apache.geode.CancelException;
 import org.apache.geode.admin.GemFireHealthConfig;
 import org.apache.geode.admin.MemberHealthConfig;
 import org.apache.geode.cache.CacheFactory;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.internal.OSProcess;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.statistics.GemFireStatSampler;
 import org.apache.geode.internal.statistics.platform.ProcessStats;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Contains the logic for evaluating the health of a GemFire distributed system member according to
@@ -62,7 +62,7 @@ class MemberHealthEvaluator extends AbstractHealthEvaluator {
     this.config = config;
     InternalDistributedSystem system = dm.getSystem();
 
-    GemFireStatSampler sampler = system.getStatSampler();
+    GemFireStatSampler sampler = system.getInternalDistributedSystemStats().getStatSampler();
     if (sampler != null) {
       // Sampling is enabled
       this.processStats = sampler.getProcessStats();

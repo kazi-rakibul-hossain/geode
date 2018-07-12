@@ -40,6 +40,7 @@ import org.apache.geode.internal.logging.InternalLogWriter;
 import org.apache.geode.security.AuthenticationFailedException;
 import org.apache.geode.security.AuthenticationRequiredException;
 import org.apache.geode.security.NotAuthorizedException;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Authenticates this client (or a user) on a server. This op ideally should get executed

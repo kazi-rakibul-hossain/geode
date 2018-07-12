@@ -35,11 +35,11 @@ import org.apache.geode.cache.query.internal.parse.OQLLexerTokenTypes;
 import org.apache.geode.cache.query.internal.types.TypeUtils;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.cache.BucketRegion;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.pdx.internal.PdxString;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * This is used to carry the state of a query or index update operation. A state of a query is a set

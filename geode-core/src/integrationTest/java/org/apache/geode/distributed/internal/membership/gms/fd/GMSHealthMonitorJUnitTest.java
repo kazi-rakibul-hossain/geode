@@ -70,7 +70,6 @@ import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.DistributionConfigImpl;
 import org.apache.geode.distributed.internal.DistributionManager;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.distributed.internal.membership.NetView;
@@ -91,6 +90,8 @@ import org.apache.geode.internal.HeapDataOutputStream;
 import org.apache.geode.internal.Version;
 import org.apache.geode.internal.net.SocketCreator;
 import org.apache.geode.internal.net.SocketCreatorFactory;
+import org.apache.geode.stats.common.distributed.internal.DistributionStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.junit.categories.MembershipTest;
 
 @Category({MembershipTest.class})
@@ -145,7 +146,9 @@ public class GMSHealthMonitorJUnitTest {
     when(services.getJoinLeave()).thenReturn(joinLeave);
     when(services.getCancelCriterion()).thenReturn(stopper);
     when(services.getManager()).thenReturn(manager);
-    when(services.getStatistics()).thenReturn(new DistributionStats(system, statsId));
+    when(services.getStatistics()).thenReturn(StatsFactory
+        .createStatsImpl(DistributionStats.class, system.getStatisticsFactory(),
+            String.valueOf(statsId)));
     when(services.getTimer()).thenReturn(new Timer("Geode Membership Timer", true));
     when(stopper.isCancelInProgress()).thenReturn(false);
 
@@ -373,7 +376,7 @@ public class GMSHealthMonitorJUnitTest {
     recipient.add(mockMembers.get(0));
     ArrayList<SuspectRequest> as = new ArrayList<SuspectRequest>();
     SuspectRequest sr = new SuspectRequest(mockMembers.get(1), "Not Responding");// removing member
-                                                                                 // 1
+    // 1
     as.add(sr);
     SuspectMembersMessage sm = new SuspectMembersMessage(recipient, as);
     sm.setSender(mockMembers.get(0));
@@ -407,7 +410,7 @@ public class GMSHealthMonitorJUnitTest {
     recipient.add(mockMembers.get(0));
     ArrayList<SuspectRequest> as = new ArrayList<SuspectRequest>();
     SuspectRequest sr = new SuspectRequest(mockMembers.get(1), "Not Responding");// removing member
-                                                                                 // 1
+    // 1
     as.add(sr);
     SuspectMembersMessage sm = new SuspectMembersMessage(recipient, as);
     sm.setSender(mockMembers.get(0));
@@ -447,7 +450,7 @@ public class GMSHealthMonitorJUnitTest {
     recipient.add(mockMembers.get(1));
     ArrayList<SuspectRequest> as = new ArrayList<SuspectRequest>();
     SuspectRequest sr = new SuspectRequest(mockMembers.get(0), "Not Responding");// removing
-                                                                                 // coordinator
+    // coordinator
     as.add(sr);
     SuspectMembersMessage sm = new SuspectMembersMessage(recipient, as);
     sm.setSender(mockMembers.get(myAddressIndex + 1));// member 4 sends suspect message
@@ -610,7 +613,6 @@ public class GMSHealthMonitorJUnitTest {
   }
 
 
-
   @Test
   public void testInitiatorRewatchesSuspectAfterSuccessfulFinalCheck() {
     NetView v = installAView();
@@ -727,7 +729,6 @@ public class GMSHealthMonitorJUnitTest {
     testMember.setVmViewId(viewId);
     gmsMember.setBirthViewId(viewId);
 
-
     // Set up the incoming/received bytes. We just wrap output streams and write out the gms member
     // information
     byte[] receivedBytes = writeMemberToBytes(otherMember);
@@ -829,7 +830,8 @@ public class GMSHealthMonitorJUnitTest {
   }
 
   private InternalDistributedMember createInternalDistributedMember(short version, int viewId,
-      long msb, long lsb) throws UnknownHostException {
+      long msb, long lsb)
+      throws UnknownHostException {
     GMSMember gmsMember = createGMSMember(version, viewId, msb, lsb);
     InternalDistributedMember idm =
         new InternalDistributedMember("localhost", 9000, Version.CURRENT, gmsMember);

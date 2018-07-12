@@ -56,12 +56,12 @@ import org.apache.geode.distributed.PoolCancelledException;
 import org.apache.geode.distributed.internal.ServerLocation;
 import org.apache.geode.i18n.StringId;
 import org.apache.geode.internal.cache.PoolManagerImpl;
-import org.apache.geode.internal.cache.PoolStats;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.InternalLogWriter;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.security.GemFireSecurityException;
+import org.apache.geode.stats.common.internal.cache.PoolStats;
 
 /**
  * Manages client to server connections for the connection pool. This class contains all of the

@@ -30,10 +30,11 @@ import org.apache.geode.cache.client.PoolManager;
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.distributed.internal.ServerLocation;
-import org.apache.geode.internal.cache.PoolStats;
 import org.apache.geode.internal.cache.tier.InternalClientMembership;
 import org.apache.geode.internal.logging.LogService;
-import org.apache.geode.internal.statistics.DummyStatisticsFactory;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
+import org.apache.geode.stats.common.internal.cache.PoolStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 public class EndpointManagerImpl implements EndpointManager {
   private static final Logger logger = LogService.getLogger();
@@ -41,7 +42,7 @@ public class EndpointManagerImpl implements EndpointManager {
   private volatile Map<ServerLocation, Endpoint> endpointMap = Collections.emptyMap();
   private final Map/* <ServerLocation, ConnectionStats> */<ServerLocation, ConnectionStats> statMap =
       new HashMap<ServerLocation, ConnectionStats>();
-  private final DistributedSystem ds;
+  private final DistributedSystem distributedSystem;
   private final String poolName;
   private final EndpointListenerBroadcaster listener = new EndpointListenerBroadcaster();
   protected final CancelCriterion cancelCriterion;
@@ -49,7 +50,7 @@ public class EndpointManagerImpl implements EndpointManager {
 
   public EndpointManagerImpl(String poolName, DistributedSystem ds, CancelCriterion cancelCriterion,
       PoolStats poolStats) {
-    this.ds = ds;
+    this.distributedSystem = ds;
     this.poolName = poolName;
     this.cancelCriterion = cancelCriterion;
     this.poolStats = poolStats;
@@ -72,7 +73,7 @@ public class EndpointManagerImpl implements EndpointManager {
           ConnectionStats stats = getStats(server);
           Map<ServerLocation, Endpoint> endpointMapTemp =
               new HashMap<ServerLocation, Endpoint>(endpointMap);
-          endpoint = new Endpoint(this, ds, server, stats, memberId);
+          endpoint = new Endpoint(this, distributedSystem, server, stats, memberId);
           listener.clearPdxRegistry(endpoint);
           endpointMapTemp.put(server, endpoint);
           endpointMap = Collections.unmodifiableMap(endpointMapTemp);
@@ -106,7 +107,9 @@ public class EndpointManagerImpl implements EndpointManager {
     removeEndpoint(endpoint, false);
   }
 
-  /** Used by Endpoint only, when the reference count for this endpoint reaches 0 */
+  /**
+   * Used by Endpoint only, when the reference count for this endpoint reaches 0
+   */
   private void removeEndpoint(Endpoint endpoint, boolean crashed) {
     endpoint.close();
     boolean removedEndpoint = false;
@@ -165,7 +168,6 @@ public class EndpointManagerImpl implements EndpointManager {
   }
 
 
-
   /*
    * (non-Javadoc)
    *
@@ -219,14 +221,11 @@ public class EndpointManagerImpl implements EndpointManager {
       PoolImpl pool = (PoolImpl) PoolManager.find(this.poolName);
       if (pool != null) {
         if (pool.getGatewaySender() != null) {
-          stats = new ConnectionStats(new DummyStatisticsFactory(), statName,
-              this.poolStats/* , this.gatewayStats */);
+          stats = StatsFactory.createConnectionStatsImpl(statName, this.poolStats);
         }
       }
       if (stats == null) {
-        stats = new ConnectionStats(ds, statName, this.poolStats/*
-                                                                 * , this.gatewayStats
-                                                                 */);
+        stats = StatsFactory.createConnectionStatsImpl(statName, this.poolStats);
       }
       statMap.put(location, stats);
     }
@@ -235,7 +234,7 @@ public class EndpointManagerImpl implements EndpointManager {
   }
 
   public synchronized Map<ServerLocation, ConnectionStats> getAllStats() {
-    return new HashMap<ServerLocation, ConnectionStats>(statMap);
+    return new HashMap<>(statMap);
   }
 
   public int getConnectedServerCount() {
@@ -300,7 +299,6 @@ public class EndpointManagerImpl implements EndpointManager {
     }
 
   }
-
 
 
   public class EndpointListenerForBridgeMembership implements EndpointManager.EndpointListener {

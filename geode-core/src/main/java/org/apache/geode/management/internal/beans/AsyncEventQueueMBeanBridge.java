@@ -14,7 +14,6 @@
  */
 package org.apache.geode.management.internal.beans;
 
-import org.apache.geode.Statistics;
 import org.apache.geode.cache.asyncqueue.AsyncEventQueue;
 import org.apache.geode.cache.asyncqueue.internal.AsyncEventQueueImpl;
 import org.apache.geode.cache.asyncqueue.internal.AsyncEventQueueStats;
@@ -24,6 +23,7 @@ import org.apache.geode.management.internal.beans.stats.MBeanStatsMonitor;
 import org.apache.geode.management.internal.beans.stats.StatType;
 import org.apache.geode.management.internal.beans.stats.StatsKey;
 import org.apache.geode.management.internal.beans.stats.StatsRate;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 public class AsyncEventQueueMBeanBridge {
 

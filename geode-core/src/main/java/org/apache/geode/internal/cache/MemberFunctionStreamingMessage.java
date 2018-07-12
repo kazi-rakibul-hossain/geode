@@ -44,11 +44,12 @@ import org.apache.geode.distributed.internal.ReplyMessage;
 import org.apache.geode.distributed.internal.ReplyProcessor21;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.internal.cache.execute.FunctionContextImpl;
-import org.apache.geode.internal.cache.execute.FunctionStats;
+import org.apache.geode.internal.cache.execute.FunctionStatsImpl;
 import org.apache.geode.internal.cache.execute.MemberFunctionResultSender;
 import org.apache.geode.internal.cache.execute.MultiRegionFunctionContextImpl;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.internal.cache.execute.FunctionStats;
 
 public class MemberFunctionStreamingMessage extends DistributionMessage
     implements TransactionMessage, MessageWithReply {
@@ -156,7 +157,7 @@ public class MemberFunctionStreamingMessage extends DistributionMessage
     }
 
     FunctionStats stats =
-        FunctionStats.getFunctionStats(this.functionObject.getId(), dm.getSystem());
+        FunctionStatsImpl.getFunctionStats(this.functionObject.getId(), dm.getSystem());
     TXStateProxy tx = null;
     InternalCache cache = dm.getCache();
 

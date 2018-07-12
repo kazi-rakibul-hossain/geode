@@ -21,6 +21,7 @@ import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.FunctionService;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 import org.apache.geode.cache.persistence.PartitionOfflineException;
+import org.apache.geode.stats.common.cache.query.QueryStatistics;
 
 /**
  * Interface for query objects. Supports execution of queries with optional parameters.

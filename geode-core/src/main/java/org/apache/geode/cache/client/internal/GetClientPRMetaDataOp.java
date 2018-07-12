@@ -27,6 +27,7 @@ import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Retrieves {@link ClientPartitionAdvisor} for the specified PartitionedRegion from one of the

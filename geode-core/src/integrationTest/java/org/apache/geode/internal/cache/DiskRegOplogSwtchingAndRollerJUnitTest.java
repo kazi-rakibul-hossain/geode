@@ -30,6 +30,7 @@ import org.apache.geode.cache.EntryNotFoundException;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.Scope;
 import org.apache.geode.internal.cache.eviction.EvictionCounters;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 /**
  * Miscellaneous disk tests

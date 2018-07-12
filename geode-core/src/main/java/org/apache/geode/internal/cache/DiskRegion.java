@@ -37,6 +37,7 @@ import org.apache.geode.internal.cache.persistence.DiskStoreID;
 import org.apache.geode.internal.cache.versions.RegionVersionVector;
 import org.apache.geode.internal.cache.versions.VersionStamp;
 import org.apache.geode.internal.util.concurrent.StoppableReentrantReadWriteLock;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 /**
  * Represents a (disk-based) persistent store for region data. Used for both persistent recoverable

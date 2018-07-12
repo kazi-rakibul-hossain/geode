@@ -18,9 +18,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * @since GemFire 7.0

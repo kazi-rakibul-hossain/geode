@@ -26,9 +26,6 @@ import java.util.TimerTask;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.CancelException;
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.admin.jmx.internal.StatAlertsAggregator;
 import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
@@ -42,6 +39,9 @@ import org.apache.geode.internal.admin.statalerts.StatisticInfoImpl;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * The alert manager maintains the list of alert definitions (added by client e.g GFMon 2.0).
@@ -276,7 +276,8 @@ public class StatAlertsManager {
         textId = statInfos[ii].getStatisticsTextId();
 
         // TODO If none by TextID, use StatType and getAll.
-        statistics = dm.getSystem().findStatisticsByTextId(textId);
+        statistics =
+            dm.getSystem().getInternalDistributedSystemStats().findStatisticsByTextId(textId);
         if (statistics.length == 0) {
           logger.error(LocalizedMessage.create(
               LocalizedStrings.StatAlertsManager_STATALERTSMANAGER_CREATEMEMBERSTATALERTDEFINITION_STATISTICS_WITH_GIVEN_TEXTID_0_NOT_FOUND,

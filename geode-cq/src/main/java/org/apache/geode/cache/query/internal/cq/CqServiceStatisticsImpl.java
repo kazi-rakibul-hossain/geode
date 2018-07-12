@@ -15,8 +15,8 @@
 package org.apache.geode.cache.query.internal.cq;
 
 import org.apache.geode.cache.query.CqQuery;
-import org.apache.geode.cache.query.CqServiceStatistics;
 import org.apache.geode.cache.query.internal.DefaultQueryService;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
 
 /**
  * Provides statistical information about CqService.

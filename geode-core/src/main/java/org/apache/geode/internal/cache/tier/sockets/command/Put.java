@@ -21,7 +21,6 @@ import org.apache.geode.cache.DynamicRegionFactory;
 import org.apache.geode.cache.RegionDestroyedException;
 import org.apache.geode.cache.ResourceException;
 import org.apache.geode.cache.operations.PutOperationContext;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.i18n.StringId;
 import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.EventIDHolder;
@@ -30,7 +29,6 @@ import org.apache.geode.internal.cache.tier.CachedRegionHelper;
 import org.apache.geode.internal.cache.tier.Command;
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.BaseCommand;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
@@ -41,6 +39,7 @@ import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.security.GemFireSecurityException;
 import org.apache.geode.security.ResourcePermission.Operation;
 import org.apache.geode.security.ResourcePermission.Resource;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 public class Put extends BaseCommand {
 
@@ -65,7 +64,7 @@ public class Put extends BaseCommand {
     serverConnection.setAsTrue(REQUIRES_RESPONSE);
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incReadPutRequestTime(start - oldStart);
     }
     // Retrieve the data from the message parts
@@ -222,7 +221,7 @@ public class Put extends BaseCommand {
       return;
     } finally {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incProcessPutTime(start - oldStart);
     }
 
@@ -235,7 +234,7 @@ public class Put extends BaseCommand {
           serverConnection.getName(), serverConnection.getSocketString(), regionName, key,
           valuePart);
     }
-    stats.incWritePutResponseTime(DistributionStats.getStatTime() - start);
+    stats.incWritePutResponseTime(System.nanoTime() - start);
   }
 
 }

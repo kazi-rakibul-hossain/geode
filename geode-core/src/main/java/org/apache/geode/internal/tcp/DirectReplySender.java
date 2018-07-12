@@ -23,7 +23,6 @@ import java.util.Set;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.InternalGemFireException;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionMessage;
 import org.apache.geode.distributed.internal.LonerDistributionManager.DummyDMStats;
 import org.apache.geode.distributed.internal.ReplySender;
@@ -33,6 +32,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 /**
  * A reply sender which replies back directly to a dedicated socket socket.

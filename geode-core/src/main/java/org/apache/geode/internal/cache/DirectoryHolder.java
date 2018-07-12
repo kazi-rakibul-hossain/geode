@@ -17,7 +17,8 @@ package org.apache.geode.internal.cache;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.geode.StatisticsFactory;
+import org.apache.geode.stats.common.internal.cache.DiskDirectoryStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * A holder for a disk Directory. Used for maintaining the available space and updating disk
@@ -44,11 +45,11 @@ public class DirectoryHolder {
   /** For testing purposes we can set the disk directory size in bytes **/
   static boolean SET_DIRECTORY_SIZE_IN_BYTES_FOR_TESTING_PURPOSES = false;
 
-  DirectoryHolder(StatisticsFactory factory, File dir, long space, int index) {
-    this(dir.getPath(), factory, dir, space, index);
+  DirectoryHolder(File dir, long space, int index) {
+    this(dir.getPath(), dir, space, index);
   }
 
-  DirectoryHolder(String ownersName, StatisticsFactory factory, File dir, long space, int index) {
+  DirectoryHolder(String ownersName, File dir, long space, int index) {
     this.dir = dir;
     if (SET_DIRECTORY_SIZE_IN_BYTES_FOR_TESTING_PURPOSES) {
       this.capacity = space;
@@ -57,7 +58,7 @@ public class DirectoryHolder {
       this.capacity = space * 1024 * 1024;
     }
     this.index = index;
-    this.dirStats = new DiskDirectoryStats(factory, ownersName);
+    this.dirStats = StatsFactory.createStatsImpl(DiskDirectoryStats.class, ownersName);
     this.dirStats.setMaxSpace(this.capacity);
   }
 

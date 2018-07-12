@@ -36,6 +36,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import org.apache.geode.internal.Version;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.MessageStats;
 import org.apache.geode.test.junit.categories.ClientServerTest;
 
 @Category({ClientServerTest.class})

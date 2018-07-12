@@ -14,12 +14,17 @@
  */
 package org.apache.geode.internal.cache.eviction;
 
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.cache.EvictionAction;
 import org.apache.geode.cache.EvictionAlgorithm;
 import org.apache.geode.cache.EvictionAttributes;
 import org.apache.geode.cache.util.ObjectSizer;
 import org.apache.geode.internal.cache.BucketRegion;
+import org.apache.geode.stats.common.internal.cache.eviction.CountLRUEvictionStats;
+import org.apache.geode.stats.common.internal.cache.eviction.EvictionStats;
+import org.apache.geode.stats.common.internal.cache.eviction.HeapLRUEvictionStats;
+import org.apache.geode.stats.common.internal.cache.eviction.MemoryLRUEvictionStats;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Eviction controllers that extend this class evict the least recently used (LRU) entry in the
@@ -65,18 +70,21 @@ public abstract class AbstractEvictionController implements EvictionController {
     EvictionStats evictionStats;
     EvictionCounters evictionCounters;
     if (algorithm == EvictionAlgorithm.LRU_HEAP) {
-      evictionStats = new HeapLRUStatistics(statsFactory, statsName);
+      evictionStats =
+          StatsFactory.createStatsImpl(HeapLRUEvictionStats.class, statsName);
       evictionCounters = new EvictionCountersImpl(evictionStats);
       return new HeapLRUController(evictionCounters, action, sizer, algorithm);
     }
     if (algorithm == EvictionAlgorithm.LRU_MEMORY || algorithm == EvictionAlgorithm.LIFO_MEMORY) {
-      evictionStats = new MemoryLRUStatistics(statsFactory, statsName);
+      evictionStats =
+          StatsFactory.createStatsImpl(CountLRUEvictionStats.class, statsName);
       evictionCounters = new EvictionCountersImpl(evictionStats);
       return new MemoryLRUController(evictionCounters, maximum, sizer, action, isOffHeap,
           algorithm);
     }
     if (algorithm == EvictionAlgorithm.LRU_ENTRY || algorithm == EvictionAlgorithm.LIFO_ENTRY) {
-      evictionStats = new CountLRUStatistics(statsFactory, statsName);
+      evictionStats =
+          StatsFactory.createStatsImpl(MemoryLRUEvictionStats.class, statsName);
       evictionCounters = new EvictionCountersImpl(evictionStats);
       return new CountLRUEviction(evictionCounters, maximum, action, algorithm);
     }
@@ -99,7 +107,6 @@ public abstract class AbstractEvictionController implements EvictionController {
   /**
    * Creates a new {@code AbstractEvictionController} with the given {@linkplain EvictionAction
    * eviction action}.
-   *
    */
   protected AbstractEvictionController(EvictionCounters evictionCounters,
       EvictionAction evictionAction, EvictionAlgorithm algorithm) {
@@ -120,8 +127,8 @@ public abstract class AbstractEvictionController implements EvictionController {
    * Gets the action that is performed on the least recently used entry when it is evicted from the
    * VM.
    *
-   * @return one of the following constants: {@link EvictionAction#LOCAL_DESTROY},
-   *         {@link EvictionAction#OVERFLOW_TO_DISK}
+   * @return one of the following constants: {@link EvictionAction#LOCAL_DESTROY}, {@link
+   *         EvictionAction#OVERFLOW_TO_DISK}
    */
   @Override
   public EvictionAction getEvictionAction() {

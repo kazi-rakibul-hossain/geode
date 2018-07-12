@@ -82,6 +82,7 @@ import org.apache.geode.internal.concurrent.ConcurrentHashSet;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LogMarker;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 /**
  * Does all the IF file work for a DiskStoreImpl.

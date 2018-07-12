@@ -59,9 +59,7 @@ import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.DistributionMessage;
 import org.apache.geode.distributed.internal.DistributionMessageObserver;
 import org.apache.geode.distributed.internal.locks.DLockService;
-import org.apache.geode.distributed.internal.locks.DistributedLockStats;
 import org.apache.geode.internal.AvailablePortHelper;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.DistributedRegion;
 import org.apache.geode.internal.cache.DistributedTombstoneOperation.TombstoneMessage;
 import org.apache.geode.internal.cache.EntryEventImpl;
@@ -76,6 +74,8 @@ import org.apache.geode.internal.cache.partitioned.PRTombstoneMessage;
 import org.apache.geode.internal.cache.tier.sockets.CacheClientNotifier;
 import org.apache.geode.internal.cache.tier.sockets.CacheClientProxy;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 import org.apache.geode.test.dunit.Assert;
 import org.apache.geode.test.dunit.AsyncInvocation;
 import org.apache.geode.test.dunit.Host;
@@ -169,7 +169,7 @@ public class ClientServerCCEDUnitTest extends JUnit4CacheTestCase {
     assertEquals(0, stats.getConflatedEventsCount());
 
     DLockService dLockService = (DLockService) region.getLockService();
-    DistributedLockStats distributedLockStats = dLockService.getStats();
+    DLockStats distributedLockStats = dLockService.getStats();
     assertEquals(numIterations, distributedLockStats.getLockReleasesCompleted());
   }
 

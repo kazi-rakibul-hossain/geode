@@ -37,11 +37,11 @@ import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.internal.NanoTimer;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.management.DistributedSystemMXBean;
 import org.apache.geode.management.ManagementService;
 import org.apache.geode.management.internal.SystemManagementService;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 import org.apache.geode.test.junit.categories.JMXTest;
 
 /**
@@ -75,8 +75,9 @@ public class DistributedSystemStatsJUnitTest {
     props.setProperty(JMX_MANAGER_PORT, "0");
 
     this.system = (InternalDistributedSystem) DistributedSystem.connect(props);
-    assertNotNull(this.system.getStatSampler());
-    assertNotNull(this.system.getStatSampler().waitForSampleCollector(TIMEOUT));
+    assertNotNull(this.system.getInternalDistributedSystemStats().getStatSampler());
+    assertNotNull(this.system.getInternalDistributedSystemStats().getStatSampler()
+        .waitForSampleCollector(TIMEOUT));
 
     this.cache = new CacheFactory().create();
 
@@ -115,12 +116,13 @@ public class DistributedSystemStatsJUnitTest {
   }
 
   protected void waitForNotification() throws InterruptedException {
-    this.system.getStatSampler().waitForSample(TIMEOUT);
+    this.system.getInternalDistributedSystemStats().getStatSampler().waitForSample(TIMEOUT);
     Thread.sleep(SLEEP);
   }
 
   protected void sample() throws InterruptedException {
-    this.system.getStatSampler().getSampleCollector().sample(NanoTimer.getTime());
+    this.system.getInternalDistributedSystemStats().getStatSampler().getSampleCollector()
+        .sample(NanoTimer.getTime());
     Thread.sleep(SLEEP);
   }
 

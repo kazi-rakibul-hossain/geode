@@ -41,7 +41,6 @@ import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.PartitionedRegion.RecoveryLock;
 import org.apache.geode.internal.cache.control.InternalResourceManager;
 import org.apache.geode.internal.cache.control.PartitionRebalanceDetailsImpl;
-import org.apache.geode.internal.cache.control.ResourceManagerStats;
 import org.apache.geode.internal.cache.partitioned.BecomePrimaryBucketMessage.BecomePrimaryBucketResponse;
 import org.apache.geode.internal.cache.partitioned.MoveBucketMessage.MoveBucketResponse;
 import org.apache.geode.internal.cache.partitioned.RemoveBucketMessage.RemoveBucketResponse;
@@ -56,6 +55,7 @@ import org.apache.geode.internal.cache.partitioned.rebalance.model.PartitionedRe
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
+import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats;
 
 /**
  * This class performs a rebalance on a single partitioned region.

@@ -26,6 +26,7 @@ import org.apache.geode.internal.cache.PartitionedRegion.BucketLock;
 import org.apache.geode.internal.cache.persistence.PersistentMemberID;
 import org.apache.geode.internal.cache.persistence.PersistentMemberManager;
 import org.apache.geode.internal.cache.persistence.PersistentMemberView;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 public class BucketPersistenceAdvisorTest {
 

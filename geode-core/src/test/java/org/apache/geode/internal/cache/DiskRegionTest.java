@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.internal.cache.persistence.DiskExceptionHandler;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 public class DiskRegionTest {
 

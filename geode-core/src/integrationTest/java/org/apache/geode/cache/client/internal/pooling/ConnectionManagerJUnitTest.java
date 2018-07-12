@@ -46,7 +46,6 @@ import org.apache.geode.cache.client.NoAvailableServersException;
 import org.apache.geode.cache.client.internal.ClientUpdater;
 import org.apache.geode.cache.client.internal.Connection;
 import org.apache.geode.cache.client.internal.ConnectionFactory;
-import org.apache.geode.cache.client.internal.ConnectionStats;
 import org.apache.geode.cache.client.internal.Endpoint;
 import org.apache.geode.cache.client.internal.EndpointManager;
 import org.apache.geode.cache.client.internal.EndpointManagerImpl;
@@ -57,10 +56,12 @@ import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.distributed.internal.ServerLocation;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
-import org.apache.geode.internal.cache.PoolStats;
 import org.apache.geode.internal.cache.tier.sockets.ServerQueueStatus;
 import org.apache.geode.internal.logging.InternalLogWriter;
 import org.apache.geode.internal.logging.LocalLogWriter;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
+import org.apache.geode.stats.common.internal.cache.PoolStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.dunit.ThreadUtils;
 import org.apache.geode.test.dunit.Wait;
 import org.apache.geode.test.dunit.WaitCriterion;
@@ -76,7 +77,7 @@ public class ConnectionManagerJUnitTest {
   ConnectionManager manager;
   private InternalLogWriter logger;
   protected DummyFactory factory;
-  private DistributedSystem ds;
+  private DistributedSystem distributedSystem;
   private ScheduledExecutorService background;
   protected EndpointManager endpointManager;
   private CancelCriterion cancelCriterion;
@@ -90,10 +91,13 @@ public class ConnectionManagerJUnitTest {
     Properties properties = new Properties();
     properties.put(MCAST_PORT, "0");
     properties.put(LOCATORS, "");
-    ds = DistributedSystem.connect(properties);
+    distributedSystem = DistributedSystem.connect(properties);
     background = Executors.newSingleThreadScheduledExecutor();
-    poolStats = new PoolStats(ds, "connectionManagerJUnitTest");
-    endpointManager = new EndpointManagerImpl("pool", ds, ds.getCancelCriterion(), poolStats);
+    poolStats =
+        StatsFactory.createStatsImpl(PoolStats.class, distributedSystem.getStatisticsFactory(),
+            "connectionManagerJUnitTest");
+    endpointManager = new EndpointManagerImpl("pool", distributedSystem,
+        distributedSystem.getCancelCriterion(), poolStats);
     cancelCriterion = new CancelCriterion() {
 
       public String cancelInProgress() {
@@ -108,7 +112,7 @@ public class ConnectionManagerJUnitTest {
 
   @After
   public void tearDown() throws InterruptedException {
-    ds.disconnect();
+    distributedSystem.disconnect();
     if (manager != null) {
       manager.close(false);
     }
@@ -152,7 +156,7 @@ public class ConnectionManagerJUnitTest {
     Assert.assertEquals(3, factory.creates);
 
     try {
-      conn[4] = manager.borrowConnection(10);
+      conn[3] = manager.borrowConnection(10);
       fail("Should have received an all connections in use exception");
     } catch (AllConnectionsInUseException e) {
       // expected exception

@@ -30,7 +30,7 @@ import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.wan.AbstractGatewaySender;
 import org.apache.geode.internal.cache.wan.AbstractGatewaySenderEventProcessor;
 import org.apache.geode.internal.cache.wan.GatewaySenderEventImpl;
-import org.apache.geode.internal.cache.wan.GatewaySenderStats;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
 import org.apache.geode.test.fake.Fakes;
 
 public class ParallelGatewaySenderEventProcessorJUnitTest {

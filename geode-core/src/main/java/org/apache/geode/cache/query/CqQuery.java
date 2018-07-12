@@ -16,6 +16,8 @@
 package org.apache.geode.cache.query;
 
 
+import org.apache.geode.stats.common.cache.query.CqStatistics;
+
 /**
  * Interface for continuous query. This provides methods for managing a CQ once it is created
  * through the QueryService. The methods allow you to retrieve CQ related information, operate on CQ
@@ -51,6 +53,7 @@ public interface CqQuery {
    * Get statistics information for this CQ.
    *
    * @return CqStatistics CQ statistics object.
+   *         @Deprecated. This feature will be deprecated as of 1.8.0
    */
   CqStatistics getStatistics();
 
@@ -154,5 +157,4 @@ public interface CqQuery {
    * @since GemFire 5.5
    */
   boolean isDurable();
-
 }

@@ -45,12 +45,13 @@ import org.apache.geode.cache.TimeoutException;
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.HasCachePerfStats;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.cache.InternalRegionArguments;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.management.ManagementException;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Manager implementation which manages federated MBeans for the entire DistributedSystem and
@@ -91,7 +92,8 @@ public class FederatingManager extends Manager {
    * @param service SystemManagement Service
    */
   public FederatingManager(MBeanJMXAdapter jmxAdapter, ManagementResourceRepo repo,
-      InternalDistributedSystem system, SystemManagementService service, InternalCache cache) {
+      InternalDistributedSystem system, SystemManagementService service,
+      InternalCache cache) {
     super(repo, system, cache);
     this.service = service;
     this.proxyFactory = new MBeanProxyFactory(jmxAdapter, service);
@@ -373,11 +375,8 @@ public class FederatingManager extends Manager {
             internalArgs.setIsUsedForMetaRegion(true);
 
             // Create anonymous stats holder for Management Regions
-            final HasCachePerfStats monitoringRegionStats = new HasCachePerfStats() {
-              public CachePerfStats getCachePerfStats() {
-                return new CachePerfStats(cache.getDistributedSystem(), "managementRegionStats");
-              }
-            };
+            final HasCachePerfStats monitoringRegionStats =
+                () -> StatsFactory.createStatsImpl(CachePerfStats.class, "managementRegionStats");
 
             internalArgs.setCachePerfStatsHolder(monitoringRegionStats);
 
@@ -510,10 +509,9 @@ public class FederatingManager extends Manager {
   }
 
   /**
-   * Find a particular proxy instance for a {@link javax.management.ObjectName} ,
-   * {@link org.apache.geode.distributed.DistributedMember} and interface class If the proxy
-   * interface does not implement the given interface class a {@link java.lang.ClassCastException}.
-   * will be thrown
+   * Find a particular proxy instance for a {@link javax.management.ObjectName} , {@link
+   * org.apache.geode.distributed.DistributedMember} and interface class If the proxy interface does
+   * not implement the given interface class a {@link java.lang.ClassCastException}. will be thrown
    *
    * @param objectName {@link javax.management.ObjectName} of the MBean
    * @param interfaceClass interface class implemented by proxy

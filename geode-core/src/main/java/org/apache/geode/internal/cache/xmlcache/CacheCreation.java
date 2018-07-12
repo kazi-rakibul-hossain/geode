@@ -71,7 +71,6 @@ import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqExistsException;
 import org.apache.geode.cache.query.CqQuery;
-import org.apache.geode.cache.query.CqServiceStatistics;
 import org.apache.geode.cache.query.Index;
 import org.apache.geode.cache.query.IndexExistsException;
 import org.apache.geode.cache.query.IndexInvalidException;
@@ -106,7 +105,6 @@ import org.apache.geode.i18n.LogWriterI18n;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.SystemTimer;
 import org.apache.geode.internal.cache.CacheConfig;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.CacheServerImpl;
 import org.apache.geode.internal.cache.CacheService;
 import org.apache.geode.internal.cache.DiskStoreAttributes;
@@ -157,6 +155,8 @@ import org.apache.geode.pdx.PdxInstance;
 import org.apache.geode.pdx.PdxInstanceFactory;
 import org.apache.geode.pdx.PdxSerializer;
 import org.apache.geode.pdx.internal.TypeRegistry;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Represents a {@link Cache} that is created declaratively. Notice that it implements the

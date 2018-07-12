@@ -29,15 +29,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.io.MainWithChildrenRollingFileHandler;
 import org.apache.geode.internal.statistics.TestSampleHandler.Info;
 import org.apache.geode.internal.statistics.TestSampleHandler.ResourceInstanceInfo;
 import org.apache.geode.internal.statistics.TestSampleHandler.ResourceTypeInfo;
 import org.apache.geode.internal.statistics.TestSampleHandler.SampledInfo;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * Unit tests for {@link SampleCollector}.

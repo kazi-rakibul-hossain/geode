@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.apache.geode.DataSerializer;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.types.ObjectType;
-import org.apache.geode.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Tests the Serialization of the Query related class.

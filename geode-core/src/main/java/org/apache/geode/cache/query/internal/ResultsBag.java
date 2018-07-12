@@ -26,7 +26,7 @@ import org.apache.geode.cache.query.internal.ObjectIntHashMap.Entry;
 import org.apache.geode.cache.query.types.ObjectType;
 import org.apache.geode.internal.DataSerializableFixedID;
 import org.apache.geode.internal.Version;
-import org.apache.geode.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 public class ResultsBag extends Bag implements DataSerializableFixedID {
 

@@ -88,6 +88,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
 
 /**
  * This class provides the redundancy management for partitioned region. It will provide the
@@ -1040,7 +1041,7 @@ public class PRHARedundancyProvider {
 
   public void finishIncompleteBucketCreation(int bucketId) {
     String partitionName = null;
-    final long startTime = PartitionedRegionStats.startTime();
+    final long startTime = System.nanoTime();
     if (this.prRegion.isFixedPartitionedRegion()) {
       FixedPartitionAttributesImpl fpa =
           PartitionedRegionHelper.getFixedPartitionAttributesForBucket(this.prRegion, bucketId);

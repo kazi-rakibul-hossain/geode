@@ -48,11 +48,11 @@ import org.apache.geode.cache.query.types.ObjectType;
 import org.apache.geode.cache.query.types.StructType;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.cache.BucketRegion;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.partitioned.Bucket;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 public class QueryUtils {
   private static final Logger logger = LogService.getLogger();

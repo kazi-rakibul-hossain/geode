@@ -22,7 +22,7 @@ import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.Pool;
 import org.apache.geode.cache.client.PoolFactory;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
-import org.apache.geode.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 public interface InternalClientCache extends ClientCache {
 

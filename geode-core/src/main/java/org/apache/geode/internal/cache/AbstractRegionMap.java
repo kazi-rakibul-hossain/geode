@@ -80,6 +80,7 @@ import org.apache.geode.internal.sequencelog.EntryLogger;
 import org.apache.geode.internal.size.ReflectionSingleObjectSizer;
 import org.apache.geode.internal.util.concurrent.ConcurrentMapWithReusableEntries;
 import org.apache.geode.internal.util.concurrent.CustomEntryConcurrentHashMap;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Abstract implementation of {@link RegionMap}that has all the common behavior.

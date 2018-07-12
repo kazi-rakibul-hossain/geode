@@ -41,8 +41,6 @@ import javax.management.ObjectName;
 
 import org.apache.logging.log4j.Logger;
 
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.cache.DiskStore;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.FunctionService;
@@ -54,24 +52,17 @@ import org.apache.geode.distributed.ServerLauncher;
 import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.DistributionManager;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.locks.DLockService;
-import org.apache.geode.distributed.internal.locks.DLockStats;
 import org.apache.geode.internal.GemFireVersion;
 import org.apache.geode.internal.PureJavaMode;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.DirectoryHolder;
-import org.apache.geode.internal.cache.DiskDirectoryStats;
 import org.apache.geode.internal.cache.DiskRegion;
 import org.apache.geode.internal.cache.DiskStoreImpl;
-import org.apache.geode.internal.cache.DiskStoreStats;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.cache.InternalRegion;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.PartitionedRegion;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
-import org.apache.geode.internal.cache.control.ResourceManagerStats;
 import org.apache.geode.internal.cache.execute.FunctionServiceStats;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
@@ -81,17 +72,14 @@ import org.apache.geode.internal.logging.log4j.LogWriterAppender;
 import org.apache.geode.internal.logging.log4j.LogWriterAppenders;
 import org.apache.geode.internal.net.SocketCreator;
 import org.apache.geode.internal.offheap.MemoryAllocator;
-import org.apache.geode.internal.offheap.OffHeapMemoryStats;
 import org.apache.geode.internal.process.PidUnavailableException;
 import org.apache.geode.internal.process.ProcessUtils;
 import org.apache.geode.internal.statistics.GemFireStatSampler;
 import org.apache.geode.internal.statistics.HostStatHelper;
-import org.apache.geode.internal.statistics.StatSamplerStats;
-import org.apache.geode.internal.statistics.VMStatsContract;
-import org.apache.geode.internal.statistics.platform.LinuxSystemStats;
+import org.apache.geode.internal.statistics.InternalDistributedSystemStats;
+import org.apache.geode.internal.statistics.StatSamplerStatsImpl;
+import org.apache.geode.internal.statistics.VMStats;
 import org.apache.geode.internal.statistics.platform.ProcessStats;
-import org.apache.geode.internal.statistics.platform.SolarisSystemStats;
-import org.apache.geode.internal.statistics.platform.WindowsSystemStats;
 import org.apache.geode.internal.stats50.VMStats50;
 import org.apache.geode.internal.tcp.ConnectionTable;
 import org.apache.geode.management.GemFireProperties;
@@ -114,6 +102,16 @@ import org.apache.geode.management.internal.cli.CommandResponseBuilder;
 import org.apache.geode.management.internal.cli.remote.OnlineCommandProcessor;
 import org.apache.geode.management.internal.cli.result.CommandResult;
 import org.apache.geode.management.internal.cli.result.model.ResultModel;
+import org.apache.geode.stats.common.distributed.internal.DistributionStats;
+import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.cache.DiskDirectoryStats;
+import org.apache.geode.stats.common.internal.cache.DiskStoreStats;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
+import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats;
+import org.apache.geode.stats.common.internal.offheap.OffHeapStorageStats;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * This class acts as an Bridge between MemberMBean and GemFire Cache and Distributed System
@@ -329,7 +327,7 @@ public class MemberMBeanBridge {
           .getRedundancyZone(cache.getInternalDistributedSystem().getDistributedMember());
     }
 
-    this.sampler = system.getStatSampler();
+    this.sampler = system.getInternalDistributedSystemStats().getStatSampler();
 
     this.config = system.getConfig();
     try {
@@ -421,7 +419,9 @@ public class MemberMBeanBridge {
   public MemberMBeanBridge init() {
     CachePerfStats cachePerfStats = this.cache.getCachePerfStats();
     addCacheStats(cachePerfStats);
-    addFunctionStats(system.getFunctionServiceStats());
+    InternalDistributedSystemStats internalDistributedSystemStats =
+        system.getInternalDistributedSystemStats();
+    addFunctionStats(internalDistributedSystemStats.getFunctionServiceStats());
 
     if (system.getDistributionManager().getStats() instanceof DistributionStats) {
       DistributionStats distributionStats =
@@ -430,26 +430,12 @@ public class MemberMBeanBridge {
     }
 
     if (PureJavaMode.osStatsAreAvailable()) {
-      Statistics[] systemStats = null;
-
-      if (HostStatHelper.isSolaris()) {
-        systemStats = system.findStatisticsByType(SolarisSystemStats.getType());
-      } else if (HostStatHelper.isLinux()) {
-        systemStats = system.findStatisticsByType(LinuxSystemStats.getType());
-      } else if (HostStatHelper.isOSX()) {
-        systemStats = null;// @TODO once OSX stats are implemented
-      } else if (HostStatHelper.isWindows()) {
-        systemStats = system.findStatisticsByType(WindowsSystemStats.getType());
-      }
-
-      if (systemStats != null) {
-        systemStat = systemStats[0];
-      }
+      systemStat = system.getInternalDistributedSystemStats().getStatSampler().getSystemStats();
     }
 
     MemoryAllocator allocator = this.cache.getOffHeapStore();
     if ((null != allocator)) {
-      OffHeapMemoryStats offHeapStats = allocator.getStats();
+      OffHeapStorageStats offHeapStats = allocator.getStats();
 
       if (null != offHeapStats) {
         addOffHeapStats(offHeapStats);
@@ -463,7 +449,7 @@ public class MemberMBeanBridge {
     return this;
   }
 
-  public void addOffHeapStats(OffHeapMemoryStats offHeapStats) {
+  public void addOffHeapStats(OffHeapStorageStats offHeapStats) {
     Statistics offHeapMemoryStatistics = offHeapStats.getStats();
     monitor.addStatisticsToMonitor(offHeapMemoryStatistics);
   }
@@ -573,11 +559,13 @@ public class MemberMBeanBridge {
   }
 
   public void addSystemStats() {
-    GemFireStatSampler sampler = system.getStatSampler();
+    GemFireStatSampler sampler = system.getInternalDistributedSystemStats().getStatSampler();
+    InternalDistributedSystemStats internalDistributedSystemStats =
+        system.getInternalDistributedSystemStats();
 
     ProcessStats processStats = sampler.getProcessStats();
 
-    StatSamplerStats samplerStats = sampler.getStatSamplerStats();
+    StatSamplerStatsImpl samplerStats = sampler.getStatSamplerStats();
     if (processStats != null) {
       systemStatsMonitor.addStatisticsToMonitor(processStats.getStatistics());
     }
@@ -587,8 +575,10 @@ public class MemberMBeanBridge {
   }
 
   public void addVMStats() {
-    VMStatsContract vmStatsContract = system.getStatSampler().getVMStats();
-
+    VMStats vmStatsContract =
+        system.getInternalDistributedSystemStats().getStatSampler().getVMStats();
+    InternalDistributedSystemStats internalDistributedSystemStats =
+        system.getInternalDistributedSystemStats();
     if (vmStatsContract != null && vmStatsContract instanceof VMStats50) {
       VMStats50 vmStats50 = (VMStats50) vmStatsContract;
       Statistics vmStats = vmStats50.getVMStats();
@@ -601,9 +591,9 @@ public class MemberMBeanBridge {
         vmStatsMonitor.addStatisticsToMonitor(vmHeapStats);
       }
 
-      StatisticsType gcType = VMStats50.getGCType();
+      StatisticsType gcType = vmStats50.getGCType();
       if (gcType != null) {
-        Statistics[] gcStats = system.findStatisticsByType(gcType);
+        Statistics[] gcStats = internalDistributedSystemStats.findStatisticsByType(gcType);
         if (gcStats != null && gcStats.length > 0) {
           for (Statistics gcStat : gcStats) {
             if (gcStat != null) {
@@ -1580,7 +1570,7 @@ public class MemberMBeanBridge {
 
   public int getOffHeapObjects() {
     int objects = 0;
-    OffHeapMemoryStats stats = getOffHeapStats();
+    OffHeapStorageStats stats = getOffHeapStats();
 
     if (null != stats) {
       objects = stats.getObjects();
@@ -1607,7 +1597,7 @@ public class MemberMBeanBridge {
 
   public long getOffHeapMaxMemory() {
     long usedSize = 0;
-    OffHeapMemoryStats stats = getOffHeapStats();
+    OffHeapStorageStats stats = getOffHeapStats();
 
     if (null != stats) {
       usedSize = stats.getMaxMemory();
@@ -1618,7 +1608,7 @@ public class MemberMBeanBridge {
 
   public long getOffHeapFreeMemory() {
     long freeSize = 0;
-    OffHeapMemoryStats stats = getOffHeapStats();
+    OffHeapStorageStats stats = getOffHeapStats();
 
     if (null != stats) {
       freeSize = stats.getFreeMemory();
@@ -1629,7 +1619,7 @@ public class MemberMBeanBridge {
 
   public long getOffHeapUsedMemory() {
     long usedSize = 0;
-    OffHeapMemoryStats stats = getOffHeapStats();
+    OffHeapStorageStats stats = getOffHeapStats();
 
     if (null != stats) {
       usedSize = stats.getUsedMemory();
@@ -1640,7 +1630,7 @@ public class MemberMBeanBridge {
 
   public int getOffHeapFragmentation() {
     int fragmentation = 0;
-    OffHeapMemoryStats stats = getOffHeapStats();
+    OffHeapStorageStats stats = getOffHeapStats();
 
     if (null != stats) {
       fragmentation = stats.getFragmentation();
@@ -1651,7 +1641,7 @@ public class MemberMBeanBridge {
 
   public long getOffHeapCompactionTime() {
     long compactionTime = 0;
-    OffHeapMemoryStats stats = getOffHeapStats();
+    OffHeapStorageStats stats = getOffHeapStats();
 
     if (null != stats) {
       compactionTime = stats.getDefragmentationTime();
@@ -1661,10 +1651,10 @@ public class MemberMBeanBridge {
   }
 
   /**
-   * Returns the OffHeapMemoryStats for this VM.
+   * Returns the OffHeapStorageStatsfor this VM.
    */
-  private OffHeapMemoryStats getOffHeapStats() {
-    OffHeapMemoryStats stats = null;
+  private OffHeapStorageStats getOffHeapStats() {
+    OffHeapStorageStats stats = null;
 
     MemoryAllocator offHeap = this.cache.getOffHeapStore();
 

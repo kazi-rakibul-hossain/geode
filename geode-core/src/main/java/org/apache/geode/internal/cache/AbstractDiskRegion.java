@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import joptsimple.internal.Strings;
 import org.apache.logging.log4j.Logger;
 
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.cache.EvictionAction;
 import org.apache.geode.cache.EvictionAlgorithm;
 import org.apache.geode.cache.EvictionAttributes;
@@ -45,6 +44,8 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.util.concurrent.ConcurrentMapWithReusableEntries;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 /**
  * Code shared by both DiskRegion and RecoveredDiskRegion.

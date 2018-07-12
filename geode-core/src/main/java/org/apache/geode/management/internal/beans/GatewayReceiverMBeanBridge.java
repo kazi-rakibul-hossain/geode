@@ -24,11 +24,11 @@ import org.apache.geode.cache.wan.GatewayTransportFilter;
 import org.apache.geode.internal.cache.CacheServerImpl;
 import org.apache.geode.internal.cache.tier.sockets.AcceptorImpl;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
-import org.apache.geode.internal.cache.wan.GatewayReceiverStats;
 import org.apache.geode.management.internal.ManagementConstants;
 import org.apache.geode.management.internal.beans.stats.StatType;
 import org.apache.geode.management.internal.beans.stats.StatsKey;
 import org.apache.geode.management.internal.beans.stats.StatsRate;
+import org.apache.geode.stats.common.internal.cache.wan.GatewayReceiverStats;
 
 public class GatewayReceiverMBeanBridge extends ServerBridge {
 

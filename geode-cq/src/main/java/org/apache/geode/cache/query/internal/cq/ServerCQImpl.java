@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.DataSerializable;
 import org.apache.geode.DataSerializer;
+import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.DataPolicy;
 import org.apache.geode.cache.EvictionAction;
 import org.apache.geode.cache.query.CqAttributes;
@@ -89,10 +90,13 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
   /** identifier assigned to this query for FilterRoutingInfos */
   private Long filterID;
 
-  public ServerCQImpl(CqServiceImpl cqService, String cqName, String queryString, boolean isDurable,
+  private Cache cache = null;
+
+  public ServerCQImpl(CqService cqService, String cqName, String queryString, boolean isDurable,
       String serverCqName) {
-    super(cqService, cqName, queryString, isDurable);
+    super(cqService, cqName, queryString, isDurable, cqService.getCache());
     this.serverCqName = serverCqName; // On Client Side serverCqName and cqName will be same.
+    this.cache = cqService.getCache();
   }
 
   public ServerCQImpl() {
@@ -163,7 +167,7 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
     // Update Regions Book keeping.
     // TODO replace getRegion() with getRegionByPathForProcessing() so this doesn't block
     // if the region is still being initialized
-    this.cqBaseRegion = (LocalRegion) cqService.getCache().getRegion(regionName);
+    this.cqBaseRegion = (LocalRegion) cache.getRegion(regionName);
     if (this.cqBaseRegion == null) {
       throw new RegionNotFoundException(
           LocalizedStrings.CqQueryImpl_REGION__0_SPECIFIED_WITH_CQ_NOT_FOUND_CQNAME_1
@@ -208,7 +212,7 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
     if (clientProxy != null) {
       clientProxy.incCqCount();
       if (clientProxy.hasOneCq()) {
-        cqService.stats().incClientsWithCqs();
+        cqService.getStats().incClientsWithCqs();
       }
       if (isDebugEnabled) {
         logger.debug("Added CQ to the base region: {} With key as: {}", cqBaseRegion.getFullPath(),
@@ -282,8 +286,9 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
    * @return String modified query.
    */
   private Query constructServerSideQuery() throws QueryException {
-    InternalCache cache = cqService.getInternalCache();
-    DefaultQuery locQuery = (DefaultQuery) cache.getLocalQueryService().newQuery(this.queryString);
+    InternalCache internalCache = (InternalCache) this.cache;
+    DefaultQuery locQuery =
+        (DefaultQuery) internalCache.getLocalQueryService().newQuery(this.queryString);
     CompiledSelect select = locQuery.getSimpleSelect();
     CompiledIteratorDef from = (CompiledIteratorDef) select.getIterators().get(0);
     // WARNING: ASSUMES QUERY WAS ALREADY VALIDATED FOR PROPER "FORM" ON CLIENT;
@@ -449,9 +454,9 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
 
       // Stat update.
       if (stateBeforeClosing == CqStateImpl.RUNNING) {
-        cqService.stats().decCqsActive();
+        cqService.getStats().decCqsActive();
       } else if (stateBeforeClosing == CqStateImpl.STOPPED) {
-        cqService.stats().decCqsStopped();
+        cqService.getStats().decCqsStopped();
       }
 
       // Clean-up the CQ Results Cache.
@@ -463,8 +468,8 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
 
       // Set the state to close, and update stats
       this.cqState.setState(CqStateImpl.CLOSED);
-      cqService.stats().incCqsClosed();
-      cqService.stats().decCqsOnClient();
+      cqService.getStats().incCqsClosed();
+      cqService.getStats().decCqsOnClient();
       if (this.stats != null)
         this.stats.close();
     }
@@ -499,7 +504,7 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
         CacheClientProxy clientProxy = ccn.getClientProxy(clientProxyId);
         clientProxy.decCqCount();
         if (clientProxy.hasNoCq()) {
-          cqService.stats().decClientsWithCqs();
+          cqService.getStats().decClientsWithCqs();
         }
       }
     } catch (Exception ex) {
@@ -530,8 +535,8 @@ public class ServerCQImpl extends CqQueryImpl implements DataSerializable, Serve
 
       // Change state and stats on the client side
       this.cqState.setState(CqStateImpl.STOPPED);
-      this.cqService.stats().incCqsStopped();
-      this.cqService.stats().decCqsActive();
+      this.cqService.getStats().incCqsStopped();
+      this.cqService.getStats().decCqsActive();
       if (logger.isDebugEnabled()) {
         logger.debug("Successfully stopped the CQ. {}", cqName);
       }

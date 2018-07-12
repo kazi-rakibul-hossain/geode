@@ -14,11 +14,11 @@
  */
 package org.apache.geode.internal.protocol.protobuf.statistics;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsFactory;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 public class ProtobufClientStatistics implements ClientStatistics {
   public static final String PROTOBUF_CLIENT_STATISTICS = "ProtobufProtocolStats";
@@ -37,7 +37,7 @@ public class ProtobufClientStatistics implements ClientStatistics {
 
   public ProtobufClientStatistics(StatisticsFactory statisticsFactory, String statisticsName) {
     if (statisticsFactory == null) {
-      statisticsFactory = InternalDistributedSystem.getAnyInstance();
+      statisticsFactory = InternalDistributedSystem.getAnyInstance().getStatisticsFactory();
     }
     StatisticDescriptor[] serverStatDescriptors = new StatisticDescriptor[] {
         statisticsFactory.createIntGauge("currentClientConnections",

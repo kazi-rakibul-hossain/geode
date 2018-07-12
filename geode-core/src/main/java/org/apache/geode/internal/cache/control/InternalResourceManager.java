@@ -55,6 +55,8 @@ import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.LoggingThreadGroup;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
+import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Implementation of ResourceManager with additional internal-only methods.
@@ -114,7 +116,8 @@ public class InternalResourceManager implements ResourceManager {
   private InternalResourceManager(InternalCache cache) {
     this.cache = cache;
     this.resourceAdvisor = (ResourceAdvisor) cache.getDistributionAdvisor();
-    this.stats = new ResourceManagerStats(cache.getDistributedSystem());
+    this.stats = StatsFactory
+        .createStatsImpl(ResourceManagerStats.class, "ResourceManager");
 
     // Create a new executor that other classes may use for handling resource
     // related tasks

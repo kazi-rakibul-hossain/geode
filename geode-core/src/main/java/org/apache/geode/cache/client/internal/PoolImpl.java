@@ -35,7 +35,6 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.CancelException;
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.SystemFailure;
 import org.apache.geode.cache.CacheClosedException;
 import org.apache.geode.cache.NoSubscriptionServersAvailableException;
@@ -60,14 +59,14 @@ import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.cache.PoolFactoryImpl;
 import org.apache.geode.internal.cache.PoolManagerImpl;
-import org.apache.geode.internal.cache.PoolStats;
 import org.apache.geode.internal.cache.tier.sockets.ClientProxyMembershipID;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.InternalLogWriter;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
-import org.apache.geode.internal.statistics.DummyStatisticsFactory;
+import org.apache.geode.stats.common.internal.cache.PoolStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Manages the client side of client to server connections and client queues.
@@ -134,7 +133,7 @@ public class PoolImpl implements InternalPool {
   private ScheduledExecutorService backgroundProcessor;
   private final OpExecutorImpl executor;
   private final RegisterInterestTracker riTracker = new RegisterInterestTracker();
-  private final InternalDistributedSystem dsys;
+  private final InternalDistributedSystem internalDistributedSystem;
   private InternalCache cache;
 
   private final ClientProxyMembershipID proxyId;
@@ -220,15 +219,16 @@ public class PoolImpl implements InternalPool {
         ((PoolFactoryImpl.PoolAttributes) attributes).startDisabled || !pm.isNormal();
     this.usedByGateway = ((PoolFactoryImpl.PoolAttributes) attributes).isGateway();
     this.gatewaySender = ((PoolFactoryImpl.PoolAttributes) attributes).getGatewaySender();
-    this.dsys = distributedSystem;
-    if (this.dsys == null) {
+    this.internalDistributedSystem = distributedSystem;
+    if (this.internalDistributedSystem == null) {
       throw new IllegalStateException(
           LocalizedStrings.PoolImpl_DISTRIBUTED_SYSTEM_MUST_BE_CREATED_BEFORE_CREATING_POOL
               .toLocalizedString());
     }
     this.cache = cache;
-    this.securityLogWriter = this.dsys.getSecurityInternalLogWriter();
-    if (!this.dsys.getConfig().getStatisticSamplingEnabled() && this.statisticInterval > 0) {
+    this.securityLogWriter = this.internalDistributedSystem.getSecurityInternalLogWriter();
+    if (!this.internalDistributedSystem.getConfig().getStatisticSamplingEnabled()
+        && this.statisticInterval > 0) {
       logger.info(LocalizedMessage.create(
           LocalizedStrings.PoolImpl_STATISTIC_SAMPLING_MUST_BE_ENABLED_FOR_SAMPLING_RATE_OF_0_TO_TAKE_AFFECT,
           this.statisticInterval));
@@ -236,26 +236,30 @@ public class PoolImpl implements InternalPool {
     this.cancelCriterion = new Stopper();
     if (Boolean.getBoolean(DistributionConfig.GEMFIRE_PREFIX + "SPECIAL_DURABLE")) {
       ClientProxyMembershipID.setPoolName(name);
-      this.proxyId = ClientProxyMembershipID.getNewProxyMembership(this.dsys);
+      this.proxyId = ClientProxyMembershipID.getNewProxyMembership(this.internalDistributedSystem);
       ClientProxyMembershipID.setPoolName(null);
     } else {
-      this.proxyId = ClientProxyMembershipID.getNewProxyMembership(this.dsys);
+      this.proxyId = ClientProxyMembershipID.getNewProxyMembership(this.internalDistributedSystem);
     }
-    StatisticsFactory statFactory = null;
-    if (this.gatewaySender != null) {
-      statFactory = new DummyStatisticsFactory();
-    } else {
-      statFactory = this.dsys;
-    }
-    this.stats = this.startDisabled ? null
-        : new PoolStats(statFactory, getName() + "->"
-            + (isEmpty(serverGroup) ? "[any servers]" : "[" + getServerGroup() + "]"));
+    // StatisticsFactory statFactory = null;
+    // if (this.gatewaySender != null) {
+    // statFactory =
+    // new DummyStatisticsFactory(this.internalDistributedSystem.getStatisticsFactory());
+    // } else {
+    // statFactory = this.internalDistributedSystem.getInternalDistributedSystemStats();
+    // }
+    this.stats =
+        this.startDisabled ? null
+            : StatsFactory.createStatsImpl(PoolStats.class, getName() + "->"
+                + (isEmpty(serverGroup) ? "[any servers]" : "[" + getServerGroup() + "]"));
 
     source = getSourceImpl(((PoolFactoryImpl.PoolAttributes) attributes).locatorCallback);
-    endpointManager = new EndpointManagerImpl(name, this.dsys, this.cancelCriterion, this.stats);
-    connectionFactory = new ConnectionFactoryImpl(source, endpointManager, this.dsys,
-        socketBufferSize, socketConnectTimeout, readTimeout, proxyId, this.cancelCriterion,
-        usedByGateway, gatewaySender, pingInterval, multiuserSecureModeEnabled, this);
+    endpointManager = new EndpointManagerImpl(name, this.internalDistributedSystem,
+        this.cancelCriterion, this.stats);
+    connectionFactory =
+        new ConnectionFactoryImpl(source, endpointManager, this.internalDistributedSystem,
+            socketBufferSize, socketConnectTimeout, readTimeout, proxyId, this.cancelCriterion,
+            usedByGateway, gatewaySender, pingInterval, multiuserSecureModeEnabled, this);
     if (subscriptionEnabled) {
       queueManager = new QueueManagerImpl(this, endpointManager, source, connectionFactory,
           subscriptionRedundancyLevel, pingInterval, securityLogWriter, proxyId);
@@ -356,7 +360,8 @@ public class PoolImpl implements InternalPool {
     }
 
 
-    if (this.statisticInterval > 0 && this.dsys.getConfig().getStatisticSamplingEnabled()) {
+    if (this.statisticInterval > 0
+        && this.internalDistributedSystem.getConfig().getStatisticSamplingEnabled()) {
       backgroundProcessor.scheduleWithFixedDelay(new PublishClientStatsTask(), statisticInterval,
           statisticInterval, TimeUnit.MILLISECONDS);
     }
@@ -516,8 +521,8 @@ public class PoolImpl implements InternalPool {
       if (SPECIAL_DURABLE) {
         synchronized (simpleLock) {
           try {
-            if (cache == null && dsys != null) {
-              cache = dsys.getCache();
+            if (cache == null && internalDistributedSystem != null) {
+              cache = internalDistributedSystem.getCache();
               if (cache == null) {
                 throw new IllegalStateException(
                     LocalizedStrings.PoolImpl_CACHE_MUST_BE_CREATED_BEFORE_CREATING_POOL
@@ -1018,7 +1023,7 @@ public class PoolImpl implements InternalPool {
 
   public boolean isDurableClient() {
     boolean isDurable = false;
-    DistributionConfig config = dsys.getConfig();
+    DistributionConfig config = internalDistributedSystem.getConfig();
     String durableClientId = config.getDurableClientId();
     isDurable = durableClientId != null && durableClientId.length() > 0;
     return isDurable;
@@ -1435,8 +1440,8 @@ public class PoolImpl implements InternalPool {
     for (Entry<Object, Object> entry : properties.entrySet()) {
       props.setProperty((String) entry.getKey(), (String) entry.getValue());
     }
-    if (cache == null && dsys != null) {
-      cache = dsys.getCache();
+    if (cache == null && internalDistributedSystem != null) {
+      cache = internalDistributedSystem.getCache();
       if (cache == null) {
         throw new IllegalStateException(
             LocalizedStrings.PoolImpl_CACHE_MUST_BE_CREATED_BEFORE_CREATING_POOL
@@ -1462,8 +1467,8 @@ public class PoolImpl implements InternalPool {
         return cacheCriterion.generateCancelledException(e);
       }
     } else {
-      if (cache == null && dsys != null) {
-        cache = dsys.getCache();
+      if (cache == null && internalDistributedSystem != null) {
+        cache = internalDistributedSystem.getCache();
         if (cache == null) {
           throw new IllegalStateException(
               LocalizedStrings.PoolImpl_CACHE_MUST_BE_CREATED_BEFORE_CREATING_POOL
@@ -1491,8 +1496,8 @@ public class PoolImpl implements InternalPool {
         }
         return null;
       } else {
-        if (cache == null && dsys != null) {
-          cache = dsys.getCache();
+        if (cache == null && internalDistributedSystem != null) {
+          cache = internalDistributedSystem.getCache();
           if (cache == null) {
             throw new IllegalStateException(
                 LocalizedStrings.PoolImpl_CACHE_MUST_BE_CREATED_BEFORE_CREATING_POOL

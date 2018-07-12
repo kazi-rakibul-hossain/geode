@@ -22,6 +22,7 @@ import org.apache.geode.internal.cache.tier.sockets.ChunkedMessage;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.security.NotAuthorizedException;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Creates a CQ on a server

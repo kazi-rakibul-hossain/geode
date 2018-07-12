@@ -20,7 +20,6 @@ import org.apache.geode.cache.PartitionAttributes;
 import org.apache.geode.cache.Region;
 import org.apache.geode.internal.cache.BucketRegion;
 import org.apache.geode.internal.cache.PartitionedRegion;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
 import org.apache.geode.management.FixedPartitionAttributesData;
 import org.apache.geode.management.PartitionAttributesData;
 import org.apache.geode.management.internal.ManagementConstants;
@@ -30,6 +29,7 @@ import org.apache.geode.management.internal.beans.stats.StatsAverageLatency;
 import org.apache.geode.management.internal.beans.stats.StatsKey;
 import org.apache.geode.management.internal.beans.stats.StatsLatency;
 import org.apache.geode.management.internal.beans.stats.StatsRate;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
 
 public class PartitionedRegionBridge<K, V> extends RegionMBeanBridge<K, V> {
 

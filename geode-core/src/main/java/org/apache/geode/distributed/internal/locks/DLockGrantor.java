@@ -50,6 +50,7 @@ import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.util.concurrent.StoppableCountDownLatch;
 import org.apache.geode.internal.util.concurrent.StoppableReentrantReadWriteLock;
+import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
 
 /**
  * Provides lock grantor authority to a distributed lock service. This is responsible for granting,
@@ -3346,7 +3347,7 @@ public class DLockGrantor {
     public void run() {
       final boolean isDebugEnabled_DLS = logger.isTraceEnabled(LogMarker.DLS_VERBOSE);
 
-      DistributedLockStats stats = this.grantor.dlock.getStats();
+      DLockStats stats = this.grantor.dlock.getStats();
       boolean recalcTimeToWait = false;
       while (!this.shutdown) {
         if (stopper.isCancelInProgress()) {

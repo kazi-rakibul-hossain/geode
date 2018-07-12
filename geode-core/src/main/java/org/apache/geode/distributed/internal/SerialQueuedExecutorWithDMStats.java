@@ -20,6 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.geode.internal.monitoring.ThreadsMonitoring;
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
 
 /**
  * This class is used for the DM's serial executor. The only thing it currently does is increment

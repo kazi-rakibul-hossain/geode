@@ -55,8 +55,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import util.TestException;
 
 import org.apache.geode.CancelCriterion;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.cache.AttributesFactory;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheFactory;
@@ -84,7 +82,6 @@ import org.apache.geode.internal.cache.InternalRegionArguments;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.VMCachedDeserializable;
 import org.apache.geode.internal.cache.tier.sockets.CacheClientNotifier;
-import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.ClientProxyMembershipID;
 import org.apache.geode.internal.cache.tier.sockets.ClientUpdateMessage;
 import org.apache.geode.internal.cache.tier.sockets.ClientUpdateMessageImpl;
@@ -93,6 +90,10 @@ import org.apache.geode.internal.cache.tier.sockets.HAEventWrapper;
 import org.apache.geode.internal.concurrent.ConcurrentHashSet;
 import org.apache.geode.internal.util.BlobHelper;
 import org.apache.geode.internal.util.concurrent.StoppableReentrantReadWriteLock;
+import org.apache.geode.stats.common.internal.cache.ha.HARegionQueueStats;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore({"javax.script.*", "javax.management.*", "org.springframework.shell.event.*",
@@ -151,7 +152,8 @@ public class HARegionQueueIntegrationTest {
 
     doReturn(Mockito.mock(InternalDistributedMember.class)).when(mockInternalDistributedSystem)
         .getDistributedMember();
-    doReturn(Mockito.mock(Statistics.class)).when(mockInternalDistributedSystem)
+    doReturn(Mockito.mock(Statistics.class))
+        .when(mockInternalDistributedSystem.getInternalDistributedSystemStats())
         .createAtomicStatistics(any(StatisticsType.class), any(String.class));
     doReturn(Mockito.mock(DistributionConfig.class)).when(mockDistributionManager).getConfig();
     doReturn(mockDistributionManager).when(mockInternalDistributedSystem).getDistributionManager();

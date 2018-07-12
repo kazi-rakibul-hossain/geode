@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.geode.stats.common.distributed.internal.QueueStatHelper;
+
 /**
  * A LinkedBlockingQueue that supports stats. Named OverflowQueue for historical reasons.
  *

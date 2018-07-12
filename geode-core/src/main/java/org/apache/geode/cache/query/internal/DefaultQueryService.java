@@ -41,7 +41,6 @@ import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqExistsException;
 import org.apache.geode.cache.query.CqQuery;
-import org.apache.geode.cache.query.CqServiceStatistics;
 import org.apache.geode.cache.query.Index;
 import org.apache.geode.cache.query.IndexCreationException;
 import org.apache.geode.cache.query.IndexExistsException;
@@ -76,6 +75,7 @@ import org.apache.geode.internal.cache.control.MemoryThresholds;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
 
 /**
  * @version $Revision: 1.2 $
@@ -87,15 +87,11 @@ public class DefaultQueryService implements InternalQueryService {
    * System property to allow query on region with heterogeneous objects. By default its set to
    * false.
    */
-  public static final boolean QUERY_HETEROGENEOUS_OBJECTS = Boolean
-      .valueOf(System.getProperty(
-          DistributionConfig.GEMFIRE_PREFIX + "QueryService.QueryHeterogeneousObjects", "true"))
-      .booleanValue();
+  public static final boolean QUERY_HETEROGENEOUS_OBJECTS = Boolean.valueOf(System.getProperty(
+      DistributionConfig.GEMFIRE_PREFIX + "QueryService.QueryHeterogeneousObjects", "true"));
 
-  public static boolean COPY_ON_READ_AT_ENTRY_LEVEL = Boolean
-      .valueOf(System.getProperty(
-          DistributionConfig.GEMFIRE_PREFIX + "QueryService.CopyOnReadAtEntryLevel", "false"))
-      .booleanValue();
+  public static boolean COPY_ON_READ_AT_ENTRY_LEVEL = Boolean.valueOf(System.getProperty(
+      DistributionConfig.GEMFIRE_PREFIX + "QueryService.CopyOnReadAtEntryLevel", "false"));
 
   public static boolean ALLOW_UNTRUSTED_METHOD_INVOCATION = Boolean.getBoolean(
       DistributionConfig.GEMFIRE_PREFIX + "QueryService.allowUntrustedMethodInvocation");
@@ -111,7 +107,7 @@ public class DefaultQueryService implements InternalQueryService {
   private InternalPool pool;
 
   private Map<Region, HashSet<IndexCreationData>> indexDefinitions =
-      Collections.synchronizedMap(new HashMap<Region, HashSet<IndexCreationData>>());
+      Collections.synchronizedMap(new HashMap<>());
 
 
   public DefaultQueryService(InternalCache cache) {

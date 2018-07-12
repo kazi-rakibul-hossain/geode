@@ -58,6 +58,8 @@ import org.apache.geode.internal.cache.partitioned.RegionAdvisor;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 public class PartitionedRegionHelper {
   private static final Logger logger = LogService.getLogger();
@@ -259,11 +261,8 @@ public class PartitionedRegionHelper {
 
       RegionAttributes ra = factory.create();
       // Create anonymous stats holder for Partitioned Region meta data
-      final HasCachePerfStats prMetaStatsHolder = new HasCachePerfStats() {
-        public CachePerfStats getCachePerfStats() {
-          return new CachePerfStats(cache.getDistributedSystem(), "partitionMetaData");
-        }
-      };
+      final HasCachePerfStats prMetaStatsHolder =
+          () -> StatsFactory.createStatsImpl(CachePerfStats.class, "partitionMetaData");
 
       try {
         root = (DistributedRegion) cache.createVMRegion(PR_ROOT_REGION_NAME, ra,

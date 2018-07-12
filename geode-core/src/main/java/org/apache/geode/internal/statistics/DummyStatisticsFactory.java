@@ -17,22 +17,24 @@ package org.apache.geode.internal.statistics;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsFactory;
-import org.apache.geode.StatisticsType;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * A StatisticsFactory that creates disconnected statistics
  */
 public class DummyStatisticsFactory implements StatisticsFactory {
 
-  private static final StatisticsTypeFactoryImpl tf =
-      (StatisticsTypeFactoryImpl) StatisticsTypeFactoryImpl.singleton();
+  private final StatisticsFactory factory;
 
   /** Creates a new instance of DummyStatisticsFactory */
-  public DummyStatisticsFactory() {}
+  public DummyStatisticsFactory(StatisticsFactory factory) {
+    this.factory = factory;
+  }
 
   // StatisticsFactory methods
   public Statistics createStatistics(StatisticsType type) {
@@ -48,13 +50,11 @@ public class DummyStatisticsFactory implements StatisticsFactory {
     return result;
   }
 
-  // /** for internal use only. Its called by {@link LocalStatisticsImpl#close}. */
-  // public void destroyStatistics(Statistics stats) {
-  // if (statsList.remove(stats)) {
-  // statsListModCount++;
-  // }
-  // }
-  //
+  @Override
+  public Statistics findStatisticsByUniqueId(long uniqueId) {
+    return null;
+  }
+
   public Statistics createAtomicStatistics(StatisticsType type) {
     return createAtomicStatistics(type, null, 1);
   }
@@ -80,70 +80,80 @@ public class DummyStatisticsFactory implements StatisticsFactory {
     return new Statistics[0];
   }
 
+  @Override
+  public String getType() {
+    return null;
+  }
+
+  @Override
+  public List getStatsList() {
+    return null;
+  }
+
   public StatisticsType createType(String name, String description, StatisticDescriptor[] stats) {
-    return tf.createType(name, description, stats);
+    return factory.createType(name, description, stats);
   }
 
   public StatisticsType findType(String name) {
-    return tf.findType(name);
+    return factory.findType(name);
   }
 
   public StatisticsType[] createTypesFromXml(Reader reader) throws IOException {
-    return tf.createTypesFromXml(reader);
+    return factory.createTypesFromXml(reader);
   }
 
   public StatisticDescriptor createIntCounter(String name, String description, String units) {
-    return tf.createIntCounter(name, description, units);
+    return factory.createIntCounter(name, description, units);
   }
 
   public StatisticDescriptor createLongCounter(String name, String description, String units) {
-    return tf.createLongCounter(name, description, units);
+    return factory.createLongCounter(name, description, units);
   }
 
   public StatisticDescriptor createDoubleCounter(String name, String description, String units) {
-    return tf.createDoubleCounter(name, description, units);
+    return factory.createDoubleCounter(name, description, units);
   }
 
   public StatisticDescriptor createIntGauge(String name, String description, String units) {
-    return tf.createIntGauge(name, description, units);
+    return factory.createIntGauge(name, description, units);
   }
 
   public StatisticDescriptor createLongGauge(String name, String description, String units) {
-    return tf.createLongGauge(name, description, units);
+    return factory.createLongGauge(name, description, units);
   }
 
   public StatisticDescriptor createDoubleGauge(String name, String description, String units) {
-    return tf.createDoubleGauge(name, description, units);
+    return factory.createDoubleGauge(name, description, units);
   }
 
   public StatisticDescriptor createIntCounter(String name, String description, String units,
       boolean largerBetter) {
-    return tf.createIntCounter(name, description, units, largerBetter);
+    return factory.createIntCounter(name, description, units, largerBetter);
   }
 
   public StatisticDescriptor createLongCounter(String name, String description, String units,
       boolean largerBetter) {
-    return tf.createLongCounter(name, description, units, largerBetter);
+    return factory.createLongCounter(name, description, units, largerBetter);
   }
 
   public StatisticDescriptor createDoubleCounter(String name, String description, String units,
       boolean largerBetter) {
-    return tf.createDoubleCounter(name, description, units, largerBetter);
+    return factory.createDoubleCounter(name, description, units, largerBetter);
   }
 
   public StatisticDescriptor createIntGauge(String name, String description, String units,
       boolean largerBetter) {
-    return tf.createIntGauge(name, description, units, largerBetter);
+    return factory.createIntGauge(name, description, units, largerBetter);
   }
 
   public StatisticDescriptor createLongGauge(String name, String description, String units,
       boolean largerBetter) {
-    return tf.createLongGauge(name, description, units, largerBetter);
+    return factory.createLongGauge(name, description, units, largerBetter);
   }
 
   public StatisticDescriptor createDoubleGauge(String name, String description, String units,
       boolean largerBetter) {
-    return tf.createDoubleGauge(name, description, units, largerBetter);
+    return factory.createDoubleGauge(name, description, units, largerBetter);
   }
 
 }

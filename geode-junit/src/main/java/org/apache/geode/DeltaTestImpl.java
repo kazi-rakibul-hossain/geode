@@ -48,7 +48,7 @@ public class DeltaTestImpl implements DataSerializable, Delta {
   private static long toDeltaFailure;
   private static long fromDeltaFailure;
   private static long timesConstructed = 0;
-  public static boolean NEED_TO_RESET_T0_DELTA = true;
+  public static final boolean NEED_TO_RESET_T0_DELTA = true;
   /** *********************************************************************** */
 
   // Actual data fields of this instance.

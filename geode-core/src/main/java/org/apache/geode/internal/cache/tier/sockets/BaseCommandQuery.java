@@ -34,7 +34,6 @@ import org.apache.geode.cache.query.internal.types.CollectionTypeImpl;
 import org.apache.geode.cache.query.internal.types.StructTypeImpl;
 import org.apache.geode.cache.query.types.CollectionType;
 import org.apache.geode.distributed.DistributedSystemDisconnectedException;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.internal.Version;
 import org.apache.geode.internal.cache.CachedDeserializable;
 import org.apache.geode.internal.cache.tier.CachedRegionHelper;
@@ -45,6 +44,7 @@ import org.apache.geode.internal.security.AuthorizeRequestPP;
 import org.apache.geode.internal.security.SecurityService;
 import org.apache.geode.security.ResourcePermission.Operation;
 import org.apache.geode.security.ResourcePermission.Resource;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 public abstract class BaseCommandQuery extends BaseCommand {
 
@@ -76,7 +76,7 @@ public abstract class BaseCommandQuery extends BaseCommand {
 
     {
       long oldStart = start;
-      start = DistributionStats.getStatTime();
+      start = System.nanoTime();
       stats.incReadQueryRequestTime(start - oldStart);
     }
 
@@ -187,7 +187,7 @@ public abstract class BaseCommandQuery extends BaseCommand {
         }
 
         long oldStart = start;
-        start = DistributionStats.getStatTime();
+        start = System.nanoTime();
         stats.incProcessQueryTime(start - oldStart);
 
         if (sendResults) {
@@ -284,7 +284,7 @@ public abstract class BaseCommandQuery extends BaseCommand {
       logger.debug("{}: Sent query response for query {}", servConn.getName(), queryString);
     }
 
-    stats.incWriteQueryResponseTime(DistributionStats.getStatTime() - start);
+    stats.incWriteQueryResponseTime(System.nanoTime() - start);
     return true;
   }
 

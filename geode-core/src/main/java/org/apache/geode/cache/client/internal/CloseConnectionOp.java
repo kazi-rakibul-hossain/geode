@@ -18,6 +18,7 @@ import java.io.EOFException;
 
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Tell a server that a connection is being closed

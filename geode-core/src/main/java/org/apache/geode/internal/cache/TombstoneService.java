@@ -48,6 +48,7 @@ import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.size.ReflectionSingleObjectSizer;
 import org.apache.geode.internal.util.concurrent.StoppableReentrantLock;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Tombstones are region entries that have been destroyed but are held for future concurrency

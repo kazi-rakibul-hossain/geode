@@ -24,11 +24,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.geode.InternalGemFireException;
 import org.apache.geode.cache.client.internal.Connection;
 import org.apache.geode.cache.client.internal.ConnectionImpl;
-import org.apache.geode.cache.client.internal.ConnectionStats;
 import org.apache.geode.cache.client.internal.Endpoint;
 import org.apache.geode.cache.client.internal.Op;
 import org.apache.geode.distributed.internal.ServerLocation;
 import org.apache.geode.internal.cache.tier.sockets.ServerQueueStatus;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * A connection managed by the connection manager. Keeps track of the current state of the

@@ -39,6 +39,7 @@ import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.internal.cache.control.InternalResourceManager.ResourceType;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats;
 
 public class MemoryMonitorOffHeapJUnitTest {
   private static final Logger logger = LogService.getLogger();

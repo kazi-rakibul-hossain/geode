@@ -55,7 +55,6 @@ import org.apache.geode.distributed.internal.AtomicLongWithTerminalState;
 import org.apache.geode.distributed.internal.DirectReplyProcessor;
 import org.apache.geode.distributed.internal.DistributionAdvisor.Profile;
 import org.apache.geode.distributed.internal.DistributionConfig;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.HeapDataOutputStream;
@@ -94,6 +93,7 @@ import org.apache.geode.internal.logging.log4j.LogMarker;
 import org.apache.geode.internal.offheap.annotations.Released;
 import org.apache.geode.internal.offheap.annotations.Retained;
 import org.apache.geode.internal.offheap.annotations.Unretained;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 
 /**
@@ -1824,7 +1824,7 @@ public class BucketRegion extends DistributedRegion implements Bucket {
           && ((org.apache.geode.Delta) instance).hasDelta()) {
         try {
           HeapDataOutputStream hdos = new HeapDataOutputStream(Version.CURRENT);
-          long start = DistributionStats.getStatTime();
+          long start = System.nanoTime();
           ((org.apache.geode.Delta) instance).toDelta(hdos);
           event.setDeltaBytes(hdos.toByteArray());
           this.partitionedRegion.getCachePerfStats().endDeltaPrepared(start);

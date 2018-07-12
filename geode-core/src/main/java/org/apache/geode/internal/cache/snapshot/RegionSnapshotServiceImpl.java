@@ -49,7 +49,6 @@ import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.internal.DSCODE;
 import org.apache.geode.internal.InternalEntity;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.CachedDeserializable;
 import org.apache.geode.internal.cache.CachedDeserializableFactory;
 import org.apache.geode.internal.cache.InternalCache;
@@ -61,6 +60,7 @@ import org.apache.geode.internal.cache.snapshot.GFSnapshot.GFSnapshotImporter;
 import org.apache.geode.internal.cache.snapshot.GFSnapshot.SnapshotWriter;
 import org.apache.geode.internal.cache.snapshot.SnapshotPacket.SnapshotRecord;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * Provides an implementation for region snapshots.

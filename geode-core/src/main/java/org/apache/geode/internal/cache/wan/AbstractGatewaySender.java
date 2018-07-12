@@ -53,7 +53,6 @@ import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.ResourceEvent;
 import org.apache.geode.distributed.internal.ServerLocation;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.cache.EntryEventImpl;
 import org.apache.geode.internal.cache.EnumListenerEvent;
 import org.apache.geode.internal.cache.HasCachePerfStats;
@@ -77,6 +76,9 @@ import org.apache.geode.internal.offheap.Releasable;
 import org.apache.geode.internal.offheap.annotations.Released;
 import org.apache.geode.internal.offheap.annotations.Retained;
 import org.apache.geode.internal.offheap.annotations.Unretained;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Abstract implementation of both Serial and Parallel GatewaySender. It handles common
@@ -266,7 +268,8 @@ public abstract class AbstractGatewaySender implements InternalGatewaySender, Di
       this.stopper = new Stopper(cache.getCancelCriterion());
       this.senderAdvisor = GatewaySenderAdvisor.createGatewaySenderAdvisor(this);
       if (!this.isForInternalUse()) {
-        this.statistics = new GatewaySenderStats(cache.getDistributedSystem(), id);
+        this.statistics = StatsFactory
+            .createStatsImpl(GatewaySenderStats.class, id);
       }
       initializeEventIdIndex();
     }
@@ -824,7 +827,6 @@ public abstract class AbstractGatewaySender implements InternalGatewaySender, Di
         }
         this.eventProcessor.resumeDispatching();
 
-
         InternalDistributedSystem system =
             (InternalDistributedSystem) this.cache.getDistributedSystem();
         system.handleResourceEvent(ResourceEvent.GATEWAYSENDER_RESUME, this);
@@ -1108,7 +1110,6 @@ public abstract class AbstractGatewaySender implements InternalGatewaySender, Di
   /**
    * Removes the EntryEventImpl, whose tailKey matches with the provided tailKey, from
    * tmpQueueEvents.
-   *
    */
   public boolean removeFromTempQueueEvents(Object tailKey) {
     synchronized (this.queuedEventsSync) {
@@ -1252,7 +1253,7 @@ public abstract class AbstractGatewaySender implements InternalGatewaySender, Di
       final HasCachePerfStats statsHolder = new HasCachePerfStats() {
         @Override
         public CachePerfStats getCachePerfStats() {
-          return new CachePerfStats(cache.getDistributedSystem(), META_DATA_REGION_NAME);
+          return StatsFactory.createStatsImpl(CachePerfStats.class, META_DATA_REGION_NAME);
         }
       };
 

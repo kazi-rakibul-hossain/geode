@@ -66,6 +66,7 @@ import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.offheap.annotations.Released;
 import org.apache.geode.internal.offheap.annotations.Retained;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * TXState is the entity that tracks the transaction state on a per thread basis, noting changes to
@@ -354,7 +355,7 @@ public class TXState implements TXStateInterface {
     this.locks.obtain(getCache().getInternalDistributedSystem());
     // for now check account the dlock service time
     // later this stat end should be moved to a finally block
-    if (CachePerfStats.enableClockStats)
+    if (CachePerfStatsImpl.enableClockStats)
       this.proxy.getTxMgr().getCachePerfStats()
           .incTxConflictCheckTime(CachePerfStats.getStatTime() - conflictStart);
     if (this.internalAfterReservation != null) {
@@ -892,7 +893,7 @@ public class TXState implements TXStateInterface {
         } catch (IllegalArgumentException e) {
           iae = e;
         }
-        if (CachePerfStats.enableClockStats)
+        if (CachePerfStatsImpl.enableClockStats)
           this.proxy.getTxMgr().getCachePerfStats()
               .incTxConflictCheckTime(CachePerfStats.getStatTime() - conflictStart);
       }

@@ -48,11 +48,11 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 
-import org.apache.geode.StatisticDescriptor;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.statistics.StatArchiveReader.StatValue;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 import org.apache.geode.test.junit.categories.StatisticsTest;
 import org.apache.geode.util.test.TestUtil;
 
@@ -91,7 +91,6 @@ public class StatArchiveWriterReaderIntegrationTest {
   public void tearDown() throws Exception {
     this.statisticTypes = null;
     this.allStatistics = null;
-    StatisticsTypeFactoryImpl.clear();
   }
 
   @Test
@@ -1597,6 +1596,21 @@ public class StatArchiveWriterReaderIntegrationTest {
       @Override
       public StatisticDescriptor nameToDescriptor(String name) {
         return null;
+      }
+
+      @Override
+      public int getIntStatCount() {
+        return 0;
+      }
+
+      @Override
+      public int getLongStatCount() {
+        return 0;
+      }
+
+      @Override
+      public int getDoubleStatCount() {
+        return 0;
       }
     };
   }

@@ -27,7 +27,6 @@ import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.DirectReplyProcessor;
 import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.distributed.internal.DistributionMessage;
-import org.apache.geode.distributed.internal.DistributionStats;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.distributed.internal.ReplyMessage;
 import org.apache.geode.distributed.internal.ReplyProcessor21;
@@ -199,7 +198,7 @@ public class RemoteContainsKeyValueMessage extends RemoteOperationMessageWithDir
       }
       processor.process(this);
 
-      dm.getStats().incReplyMessageTime(DistributionStats.getStatTime() - startTime);
+      dm.getStats().incReplyMessageTime(System.nanoTime() - startTime);
     }
 
     @Override

@@ -32,9 +32,9 @@ import org.apache.geode.cache.util.ObjectSizer;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.cache.DiskRegion;
-import org.apache.geode.internal.cache.DiskRegionStats;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.eviction.EvictionCounters;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 
 /**
  * A little test program for testing (and debugging) disk regions.

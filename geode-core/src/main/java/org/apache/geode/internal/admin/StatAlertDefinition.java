@@ -15,8 +15,8 @@
 package org.apache.geode.internal.admin;
 
 import org.apache.geode.DataSerializable;
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.internal.admin.statalerts.StatisticInfo;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 /**
  * Base interface that supports a StatAlertDefinition

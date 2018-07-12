@@ -30,13 +30,13 @@ import org.apache.geode.cache.asyncqueue.AsyncEventListener;
 import org.apache.geode.cache.asyncqueue.AsyncEventQueue;
 import org.apache.geode.cache.asyncqueue.internal.AsyncEventQueueImpl;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
-import org.apache.geode.internal.cache.DiskRegionStats;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.RegionQueue;
 import org.apache.geode.internal.cache.wan.parallel.ParallelGatewaySenderQueue;
 import org.apache.geode.management.AsyncEventQueueMXBean;
 import org.apache.geode.management.ManagementService;
+import org.apache.geode.stats.common.internal.cache.DiskRegionStats;
 import org.apache.geode.test.junit.categories.WanTest;
 
 @Category({WanTest.class})
@@ -203,9 +203,12 @@ public class AsyncEventQueueOverflowMBeanAttributesDistributedTest extends Async
 
   private void waitForSamplerToSample(int numTimesToSample) throws Exception {
     InternalDistributedSystem ids = (InternalDistributedSystem) cache.getDistributedSystem();
-    assertThat(ids.getStatSampler().waitForSampleCollector(60000)).isNotNull();
+    assertThat(
+        ids.getInternalDistributedSystemStats().getStatSampler().waitForSampleCollector(60000))
+            .isNotNull();
     for (int i = 0; i < numTimesToSample; i++) {
-      assertThat(ids.getStatSampler().waitForSample((60000))).isTrue();
+      assertThat(ids.getInternalDistributedSystemStats().getStatSampler().waitForSample((60000)))
+          .isTrue();
     }
   }
 

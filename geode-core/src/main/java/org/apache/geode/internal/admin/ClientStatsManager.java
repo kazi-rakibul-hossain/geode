@@ -20,8 +20,6 @@ import java.util.Map;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.Logger;
 
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.cache.CacheWriterException;
 import org.apache.geode.cache.client.internal.PoolImpl;
 import org.apache.geode.cache.client.internal.ServerRegionProxy;
@@ -35,6 +33,9 @@ import org.apache.geode.internal.cache.InternalCache;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.offheap.annotations.Released;
+import org.apache.geode.internal.statistics.InternalDistributedSystemStats;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * This class publishes the client statistics using the admin region.
@@ -127,7 +128,10 @@ public class ClientStatsManager {
       return false;
     }
 
-    InternalDistributedSystem ds = (InternalDistributedSystem) currentCache.getDistributedSystem();
+    InternalDistributedSystem distributedSystem =
+        (InternalDistributedSystem) currentCache.getDistributedSystem();
+    InternalDistributedSystemStats internalDistributedSystemStats =
+        distributedSystem.getInternalDistributedSystemStats();
     if (currentCache.isClosed()) {
       return false;
     }
@@ -145,9 +149,9 @@ public class ClientStatsManager {
     }
 
     if (cachePerfStats == null) {
-      StatisticsType type = ds.findType("CachePerfStats");
+      StatisticsType type = internalDistributedSystemStats.findType("CachePerfStats");
       if (type != null) {
-        Statistics[] statistics = ds.findStatisticsByType(type);
+        Statistics[] statistics = internalDistributedSystemStats.findStatisticsByType(type);
         if (statistics != null && statistics.length > 0) {
           cachePerfStats = statistics[0];
         }
@@ -155,9 +159,9 @@ public class ClientStatsManager {
     }
 
     if (vmStats == null) {
-      StatisticsType type = ds.findType("VMStats");
+      StatisticsType type = internalDistributedSystemStats.findType("VMStats");
       if (type != null) {
-        Statistics[] statistics = ds.findStatisticsByType(type);
+        Statistics[] statistics = internalDistributedSystemStats.findStatisticsByType(type);
         if (statistics != null && statistics.length > 0) {
           vmStats = statistics[0];
         }

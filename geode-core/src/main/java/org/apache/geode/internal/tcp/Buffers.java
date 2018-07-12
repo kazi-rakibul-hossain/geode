@@ -20,8 +20,8 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.internal.Assert;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 
 public class Buffers {
   /**

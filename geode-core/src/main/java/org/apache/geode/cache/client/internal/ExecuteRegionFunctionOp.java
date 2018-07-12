@@ -34,7 +34,7 @@ import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.internal.Version;
 import org.apache.geode.internal.cache.execute.AbstractExecution;
 import org.apache.geode.internal.cache.execute.BucketMovedException;
-import org.apache.geode.internal.cache.execute.FunctionStats;
+import org.apache.geode.internal.cache.execute.FunctionStatsImpl;
 import org.apache.geode.internal.cache.execute.InternalFunctionException;
 import org.apache.geode.internal.cache.execute.InternalFunctionInvocationTargetException;
 import org.apache.geode.internal.cache.execute.MemberMappedArgument;
@@ -44,6 +44,7 @@ import org.apache.geode.internal.cache.tier.sockets.ChunkedMessage;
 import org.apache.geode.internal.cache.tier.sockets.Message;
 import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Does a Execution of function on server region.<br>
@@ -518,7 +519,7 @@ public class ExecuteRegionFunctionOp {
                   DistributedMember memberID =
                       (DistributedMember) ((ArrayList) resultResponse).get(1);
                   this.resultCollector.addResult(memberID, cause);
-                  FunctionStats
+                  FunctionStatsImpl
                       .getFunctionStats(this.functionId, this.executor.getRegion().getSystem())
                       .incResultsReceived();
                   continue;
@@ -573,7 +574,7 @@ public class ExecuteRegionFunctionOp {
                 DistributedMember memberID =
                     (DistributedMember) ((ArrayList) resultResponse).get(1);
                 this.resultCollector.addResult(memberID, result);
-                FunctionStats
+                FunctionStatsImpl
                     .getFunctionStats(this.functionId, this.executor.getRegion().getSystem())
                     .incResultsReceived();
               }

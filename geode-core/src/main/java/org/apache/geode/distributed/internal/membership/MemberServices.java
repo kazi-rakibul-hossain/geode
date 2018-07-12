@@ -16,12 +16,12 @@ package org.apache.geode.distributed.internal.membership;
 
 import java.net.InetAddress;
 
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionConfig;
-import org.apache.geode.distributed.internal.LocatorStats;
 import org.apache.geode.distributed.internal.membership.gms.NetLocator;
 import org.apache.geode.internal.admin.remote.RemoteTransportConfig;
 import org.apache.geode.internal.security.SecurityService;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
+import org.apache.geode.stats.common.distributed.internal.LocatorStats;
 
 /**
  * This is the SPI for a provider of membership services.

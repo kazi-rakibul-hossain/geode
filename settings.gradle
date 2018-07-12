@@ -21,6 +21,7 @@ rootProject.name = 'geode'
 
 include 'geode-old-versions'
 include 'geode-common'
+include 'geode-stats-common'
 include 'geode-json'
 include 'geode-junit'
 include 'geode-dunit'
@@ -51,6 +52,8 @@ include 'geode-experimental-driver'
 include 'geode-protobuf-messages'
 include 'extensions:session-testing-war'
 include 'geode-concurrency-test'
+include 'geode-micrometer-stats'
+
 
 
 if (GradleVersion.current() < GradleVersion.version(minimumGradleVersion)) {
@@ -64,4 +67,3 @@ buildCache {
     enabled = true
   }
 }
-

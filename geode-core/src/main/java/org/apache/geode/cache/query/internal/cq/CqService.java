@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.CacheEvent;
 import org.apache.geode.cache.client.Pool;
 import org.apache.geode.cache.client.internal.InternalPool;
@@ -26,10 +27,10 @@ import org.apache.geode.cache.client.internal.QueueManager;
 import org.apache.geode.cache.client.internal.UserAttributes;
 import org.apache.geode.cache.query.CqAttributes;
 import org.apache.geode.cache.query.CqClosedException;
+import org.apache.geode.cache.query.CqEvent;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqExistsException;
 import org.apache.geode.cache.query.CqQuery;
-import org.apache.geode.cache.query.CqServiceStatistics;
 import org.apache.geode.cache.query.QueryInvalidException;
 import org.apache.geode.cache.query.RegionNotFoundException;
 import org.apache.geode.distributed.internal.DistributionAdvisor.Profile;
@@ -37,6 +38,8 @@ import org.apache.geode.internal.cache.EventID;
 import org.apache.geode.internal.cache.FilterRoutingInfo;
 import org.apache.geode.internal.cache.tier.sockets.CacheClientNotifier;
 import org.apache.geode.internal.cache.tier.sockets.ClientProxyMembershipID;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
+import org.apache.geode.stats.common.cache.query.internal.cq.CqServiceVsdStats;
 
 public interface CqService {
 
@@ -56,10 +59,12 @@ public interface CqService {
    * @throws QueryInvalidException if there is a syntax error in the query
    * @throws CqException if failed to create cq, failure during creating managing cq metadata info.
    *         E.g.: Query string should refer only one region, join not supported. The query must be
-   *         a SELECT statement. DISTINCT queries are not supported. Projections are not supported.
-   *         Only one iterator in the FROM clause is supported, and it must be a region path. Bind
-   *         parameters in the query are not supported for the initial release.
-   *
+   *         a SELECT
+   *         statement. DISTINCT queries are not supported. Projections are not supported. Only one
+   *         iterator
+   *         in the FROM clause is supported, and it must be a region path. Bind parameters in the
+   *         query are
+   *         not supported for the initial release.
    */
   ClientCQ newCq(String cqName, String queryString, CqAttributes cqAttributes, InternalPool pool,
       boolean isDurable) throws QueryInvalidException, CqExistsException, CqException;
@@ -85,7 +90,6 @@ public interface CqService {
 
   /**
    * Retruns all the cqs on a given region.
-   *
    */
   Collection<? extends InternalCqQuery> getAllCqs(String regionName) throws CqException;
 
@@ -126,7 +130,6 @@ public interface CqService {
 
   /**
    * Called directly on server side.
-   *
    */
   void closeCq(String cqName, ClientProxyMembershipID clientProxyId) throws CqException;
 
@@ -144,7 +147,6 @@ public interface CqService {
 
   /**
    * Server side method.
-   *
    */
   void closeClientCqs(ClientProxyMembershipID clientProxyId) throws CqException;
 
@@ -195,7 +197,6 @@ public interface CqService {
 
   /**
    * Called directly on server side.
-   *
    */
   void stopCq(String cqName, ClientProxyMembershipID clientId) throws CqException;
 
@@ -221,15 +222,31 @@ public interface CqService {
    * @throws IllegalStateException if this is called at client side.
    */
   ServerCQ executeCq(String cqName, String queryString, int cqState,
-      ClientProxyMembershipID clientProxyId, CacheClientNotifier ccn, boolean isDurable,
+      ClientProxyMembershipID clientProxyId, CacheClientNotifier ccn,
+      boolean isDurable,
       boolean manageEmptyRegions, int regionDataPolicy, Map emptyRegionsMap)
       throws CqException, RegionNotFoundException, CqClosedException;
 
   /**
    * Server side method. Closes non-durable CQs for the given client proxy id.
-   *
    */
   void closeNonDurableClientCqs(ClientProxyMembershipID clientProxyId) throws CqException;
 
   List<String> getAllDurableCqsFromServer(InternalPool pool);
+
+  void removeCq(String serverCqName);
+
+  CqServiceVsdStats getStats();
+
+  void addToCqMap(InternalCqQuery cqQuery) throws CqExistsException, CqException;
+
+  void addToMatchingCqMap(InternalCqQuery cqQuery);
+
+  Cache getCache();
+
+  boolean isServer();
+
+  void invokeListeners(String cqName, ClientCQ clientCQ, CqEvent cqEvent);
+
+  void removeFromBaseRegionToCqNameMap(String regionName, String serverCqName);
 }

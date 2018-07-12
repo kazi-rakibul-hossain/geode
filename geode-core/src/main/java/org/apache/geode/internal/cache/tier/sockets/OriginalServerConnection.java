@@ -24,6 +24,7 @@ import org.apache.geode.internal.cache.tier.CachedRegionHelper;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.internal.security.SecurityService;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 
 /**
  * Handles everything but the new client protocol.

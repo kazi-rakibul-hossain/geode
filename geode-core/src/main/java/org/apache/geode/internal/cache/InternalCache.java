@@ -67,6 +67,7 @@ import org.apache.geode.management.internal.JmxManagerAdvisor;
 import org.apache.geode.management.internal.RestAgent;
 import org.apache.geode.pdx.PdxInstanceFactory;
 import org.apache.geode.pdx.internal.TypeRegistry;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * The InternalCache interface is contract for implementing classes for defining internal cache

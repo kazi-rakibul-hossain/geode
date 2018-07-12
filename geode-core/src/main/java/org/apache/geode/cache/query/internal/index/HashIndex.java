@@ -838,7 +838,8 @@ public class HashIndex extends AbstractIndex {
     private IndexStats vsdStats;
 
     public RangeIndexStatistics(String indexName) {
-      this.vsdStats = new IndexStats(getRegion().getCache().getDistributedSystem(), indexName);
+      this.vsdStats = new IndexStats(
+          getRegion().getCache().getDistributedSystem().getStatisticsFactory(), indexName);
     }
 
     /**

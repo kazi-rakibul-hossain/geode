@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.query.internal.Undefined;
+import org.apache.geode.stats.common.cache.query.CqServiceStatistics;
 
 /**
  * Interface for the query service, which is used for instantiating queries, creating and destroying

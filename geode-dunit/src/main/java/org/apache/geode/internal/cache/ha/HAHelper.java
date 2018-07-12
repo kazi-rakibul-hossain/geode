@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.apache.geode.internal.cache.HARegion;
 import org.apache.geode.internal.cache.ha.HARegionQueue.MapWrapper;
+import org.apache.geode.stats.common.internal.cache.ha.HARegionQueueStats;
 
 /**
  * Helper class to access the required functions of this package from outside the package.

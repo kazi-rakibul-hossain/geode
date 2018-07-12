@@ -33,8 +33,8 @@ import it.unimi.dsi.fastutil.HashCommon;
 import org.apache.geode.cache.query.TypeMismatchException;
 import org.apache.geode.cache.query.internal.parse.OQLLexerTokenTypes;
 import org.apache.geode.cache.query.internal.types.TypeUtils;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.pdx.internal.PdxString;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 /**
  * An implementation of the <tt>Set</tt> interface for the HashIndex Not exactly a set as the hash
@@ -310,7 +310,7 @@ public class HashIndexSet implements Set {
 
     long start = -1L;
     if (this.cacheStats != null) {
-      start = this.cacheStats.getStatTime();
+      start = System.nanoTime();
       this.cacheStats.incQueryResultsHashCollisions();
     }
     try {

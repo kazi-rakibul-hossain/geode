@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.apache.geode.internal.cache.tier.MessageType;
 import org.apache.geode.internal.cache.tier.sockets.Message;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Send the primary server acknowledgement on the events this client has received and processed from

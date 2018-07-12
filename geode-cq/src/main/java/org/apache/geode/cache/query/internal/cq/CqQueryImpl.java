@@ -20,18 +20,16 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
-import org.apache.geode.StatisticsFactory;
+import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.query.CqClosedException;
 import org.apache.geode.cache.query.CqEvent;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqState;
-import org.apache.geode.cache.query.CqStatistics;
 import org.apache.geode.cache.query.Query;
 import org.apache.geode.cache.query.internal.CompiledIteratorDef;
 import org.apache.geode.cache.query.internal.CompiledRegion;
 import org.apache.geode.cache.query.internal.CompiledSelect;
 import org.apache.geode.cache.query.internal.CompiledValue;
-import org.apache.geode.cache.query.internal.CqQueryVsdStats;
 import org.apache.geode.cache.query.internal.CqStateImpl;
 import org.apache.geode.cache.query.internal.DefaultQuery;
 import org.apache.geode.cache.query.internal.ExecutionContext;
@@ -42,6 +40,9 @@ import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.InternalLogWriter;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.cache.query.CqStatistics;
+import org.apache.geode.stats.common.cache.query.internal.CqQueryVsdStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Represents the CqQuery object. Implements CqQuery API and CqAttributeMutator.
@@ -64,18 +65,22 @@ public abstract class CqQueryImpl implements InternalCqQuery {
 
   InternalLogWriter securityLogWriter;
 
-  protected CqServiceImpl cqService;
+  protected CqService cqService;
 
   protected String regionName;
 
   protected boolean isDurable = false;
 
-  /** Stats counters */
-  private CqStatisticsImpl cqStats;
+  /**
+   * Stats counters
+   */
+  private CqStatistics cqStats;
 
   protected CqQueryVsdStats stats;
 
   protected final CqStateImpl cqState = new CqStateImpl();
+
+  private Cache cache = null;
 
   private ExecutionContext queryExecutionContext = null;
 
@@ -86,13 +91,18 @@ public abstract class CqQueryImpl implements InternalCqQuery {
    */
   public CqQueryImpl() {}
 
-  public CqQueryImpl(CqServiceImpl cqService, String cqName, String queryString,
-      boolean isDurable) {
+  public CqQueryImpl(CqService cqService, String cqName, String queryString,
+      boolean isDurable, Cache cache) {
     this.cqName = cqName;
     this.queryString = queryString;
-    this.securityLogWriter = (InternalLogWriter) cqService.getCache().getSecurityLoggerI18n();
+    this.securityLogWriter = (InternalLogWriter) cache.getSecurityLogger();
     this.cqService = cqService;
     this.isDurable = isDurable;
+    this.cache = cache;
+  }
+
+  protected Cache getCache() {
+    return cache;
   }
 
   /**
@@ -110,7 +120,7 @@ public abstract class CqQueryImpl implements InternalCqQuery {
 
   @Override
   public void setCqService(CqService cqService) {
-    this.cqService = (CqServiceImpl) cqService;
+    this.cqService = cqService;
   }
 
   /**
@@ -123,22 +133,24 @@ public abstract class CqQueryImpl implements InternalCqQuery {
 
   void updateCqCreateStats() {
     // Initialize the VSD statistics
-    StatisticsFactory factory = cqService.getCache().getDistributedSystem();
-    this.stats = new CqQueryVsdStats(factory, getServerCqName());
+    this.stats = StatsFactory.createStatsImpl(CqQueryVsdStats.class, getServerCqName());
+    // This will not converted to a Micrometer impl. This is due to this merely being a wrapper
+    // around a real statsImpl
     this.cqStats = new CqStatisticsImpl(this);
 
     // Update statistics with CQ creation.
-    this.cqService.stats().incCqsStopped();
-    this.cqService.stats().incCqsCreated();
-    this.cqService.stats().incCqsOnClient();
+    this.cqService.getStats().incCqsStopped();
+    this.cqService.getStats().incCqsCreated();
+    this.cqService.getStats().incCqsOnClient();
   }
 
   /**
    * Validates the CQ. Checks for cq constraints. Also sets the base region name.
    */
   void validateCq() {
-    InternalCache cache = cqService.getInternalCache();
-    DefaultQuery locQuery = (DefaultQuery) cache.getLocalQueryService().newQuery(this.queryString);
+    InternalCache internalCache = (InternalCache) cache;
+    DefaultQuery locQuery =
+        (DefaultQuery) internalCache.getLocalQueryService().newQuery(this.queryString);
     this.query = locQuery;
     // assert locQuery != null;
 
@@ -216,7 +228,7 @@ public abstract class CqQueryImpl implements InternalCqQuery {
 
     // Set Query ExecutionContext, that will be used in later execution.
     this.setQueryExecutionContext(
-        new QueryExecutionContext(null, (InternalCache) this.cqService.getCache()));
+        new QueryExecutionContext(null, (InternalCache) cache));
   }
 
   /**
@@ -299,12 +311,12 @@ public abstract class CqQueryImpl implements InternalCqQuery {
     synchronized (cqState) {
       if (state == CqStateImpl.RUNNING) {
         this.cqState.setState(CqStateImpl.RUNNING);
-        this.cqService.stats().incCqsActive();
-        this.cqService.stats().decCqsStopped();
+        this.cqService.getStats().incCqsActive();
+        this.cqService.getStats().decCqsStopped();
       } else if (state == CqStateImpl.STOPPED) {
         this.cqState.setState(CqStateImpl.STOPPED);
-        this.cqService.stats().incCqsStopped();
-        this.cqService.stats().decCqsActive();
+        this.cqService.getStats().incCqsStopped();
+        this.cqService.getStats().decCqsActive();
       } else if (state == CqStateImpl.CLOSING) {
         this.cqState.setState(state);
       }
@@ -317,7 +329,18 @@ public abstract class CqQueryImpl implements InternalCqQuery {
    * @param cqEvent object
    */
   void updateStats(CqEvent cqEvent) {
-    this.stats.updateStats(cqEvent); // Stats for VSD
+    if (cqEvent.getQueryOperation() == null) {
+      return;
+    }
+    if (cqEvent.getQueryOperation().isCreate()) {
+      this.stats.incNumInserts();
+    }
+    if (cqEvent.getQueryOperation().isUpdate()) {
+      this.stats.incNumUpdates();
+    }
+    if (cqEvent.getQueryOperation().isDestroy()) {
+      this.stats.incNumDeletes();
+    }
   }
 
   /**
@@ -387,7 +410,9 @@ public abstract class CqQueryImpl implements InternalCqQuery {
     this.queryExecutionContext = queryExecutionContext;
   }
 
-  /** Test Hook */
+  /**
+   * Test Hook
+   */
   public interface TestHook {
     void pauseUntilReady();
 

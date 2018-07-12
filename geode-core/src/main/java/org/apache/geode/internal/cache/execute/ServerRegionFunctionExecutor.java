@@ -34,6 +34,7 @@ import org.apache.geode.internal.cache.TXStateProxyImpl;
 import org.apache.geode.internal.cache.execute.util.SynchronizedResultCollector;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.internal.cache.execute.FunctionStats;
 
 /**
  * Executes Function with FunctionService#onRegion(Region region) in client server mode.
@@ -192,7 +193,8 @@ public class ServerRegionFunctionExecutor extends AbstractExecution {
   private ResultCollector executeOnServer(Function function, ResultCollector collector,
       byte hasResult) throws FunctionException {
     ServerRegionProxy srp = getServerRegionProxy();
-    FunctionStats stats = FunctionStats.getFunctionStats(function.getId(), this.region.getSystem());
+    FunctionStats stats =
+        FunctionStatsImpl.getFunctionStats(function.getId(), this.region.getSystem());
     try {
       validateExecution(function, null);
       long start = stats.startTime();
@@ -213,7 +215,7 @@ public class ServerRegionFunctionExecutor extends AbstractExecution {
       byte hasResult, boolean isHA, boolean optimizeForWrite) throws FunctionException {
 
     ServerRegionProxy srp = getServerRegionProxy();
-    FunctionStats stats = FunctionStats.getFunctionStats(functionId, this.region.getSystem());
+    FunctionStats stats = FunctionStatsImpl.getFunctionStats(functionId, this.region.getSystem());
     try {
       validateExecution(null, null);
       long start = stats.startTime();
@@ -234,7 +236,8 @@ public class ServerRegionFunctionExecutor extends AbstractExecution {
 
   private void executeOnServerNoAck(Function function, byte hasResult) throws FunctionException {
     ServerRegionProxy srp = getServerRegionProxy();
-    FunctionStats stats = FunctionStats.getFunctionStats(function.getId(), this.region.getSystem());
+    FunctionStats stats =
+        FunctionStatsImpl.getFunctionStats(function.getId(), this.region.getSystem());
     try {
       validateExecution(function, null);
       long start = stats.startTime();
@@ -253,7 +256,7 @@ public class ServerRegionFunctionExecutor extends AbstractExecution {
   private void executeOnServerNoAck(String functionId, byte hasResult, boolean isHA,
       boolean optimizeForWrite) throws FunctionException {
     ServerRegionProxy srp = getServerRegionProxy();
-    FunctionStats stats = FunctionStats.getFunctionStats(functionId, this.region.getSystem());
+    FunctionStats stats = FunctionStatsImpl.getFunctionStats(functionId, this.region.getSystem());
     try {
       validateExecution(null, null);
       long start = stats.startTime();

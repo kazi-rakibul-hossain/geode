@@ -19,7 +19,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.cache.client.Pool;
-import org.apache.geode.internal.cache.PoolStats;
+import org.apache.geode.stats.common.internal.cache.PoolStats;
 
 /**
  * The contract between a connection source and a connection pool. Provides methods for the

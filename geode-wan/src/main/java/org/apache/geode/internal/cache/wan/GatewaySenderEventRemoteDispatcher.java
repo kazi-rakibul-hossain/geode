@@ -40,6 +40,7 @@ import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.internal.logging.log4j.LocalizedMessage;
 import org.apache.geode.pdx.PdxRegistryMismatchException;
 import org.apache.geode.security.GemFireSecurityException;
+import org.apache.geode.stats.common.internal.cache.wan.GatewaySenderStats;
 
 /**
  * @since GemFire 7.0
@@ -537,7 +538,7 @@ public class GatewaySenderEventRemoteDispatcher implements GatewaySenderEventDis
     }
 
     /**
-     * @return the numEvents
+     * @return the getNumEvents
      */
     public int getNumEvents() {
       return numEvents;

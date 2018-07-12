@@ -65,6 +65,7 @@ import org.apache.geode.internal.cache.versions.VersionStamp;
 import org.apache.geode.internal.cache.versions.VersionTag;
 import org.apache.geode.internal.util.concurrent.ConcurrentMapWithReusableEntries;
 import org.apache.geode.internal.util.concurrent.CustomEntryConcurrentHashMap;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 public class AbstractRegionMapTest {
 

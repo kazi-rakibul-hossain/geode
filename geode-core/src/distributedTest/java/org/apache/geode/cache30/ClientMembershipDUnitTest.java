@@ -44,8 +44,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import org.apache.geode.InternalGemFireException;
-import org.apache.geode.Statistics;
-import org.apache.geode.StatisticsType;
 import org.apache.geode.cache.AttributesFactory;
 import org.apache.geode.cache.CacheException;
 import org.apache.geode.cache.Region;
@@ -64,6 +62,8 @@ import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
 import org.apache.geode.management.membership.ClientMembership;
 import org.apache.geode.management.membership.ClientMembershipEvent;
 import org.apache.geode.management.membership.ClientMembershipListener;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 import org.apache.geode.test.dunit.Assert;
 import org.apache.geode.test.dunit.Host;
 import org.apache.geode.test.dunit.IgnoredException;
@@ -117,8 +117,8 @@ public class ClientMembershipDUnitTest extends ClientServerTestCase {
 
   protected int getAcceptsInProgress() {
     DistributedSystem distributedSystem = getCache().getDistributedSystem();
-    StatisticsType st = distributedSystem.findType("CacheServerStats");
-    Statistics[] s = distributedSystem.findStatisticsByType(st);
+    StatisticsType st = distributedSystem.getStatisticsFactory().findType("CacheServerStats");
+    Statistics[] s = distributedSystem.getStatisticsFactory().findStatisticsByType(st);
     return s[0].getInt("acceptsInProgress");
   }
 

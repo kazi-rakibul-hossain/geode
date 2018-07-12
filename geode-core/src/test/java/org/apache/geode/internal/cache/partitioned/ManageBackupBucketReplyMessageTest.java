@@ -33,7 +33,7 @@ import org.apache.geode.distributed.internal.ReplyProcessor21;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.PartitionedRegionDataStore;
-import org.apache.geode.internal.cache.PartitionedRegionStats;
+import org.apache.geode.stats.common.internal.cache.PartitionedRegionStats;
 
 public class ManageBackupBucketReplyMessageTest {
   @Mock

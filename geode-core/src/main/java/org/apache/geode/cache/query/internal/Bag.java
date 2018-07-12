@@ -33,8 +33,8 @@ import org.apache.geode.cache.query.internal.types.CollectionTypeImpl;
 import org.apache.geode.cache.query.types.CollectionType;
 import org.apache.geode.cache.query.types.ObjectType;
 import org.apache.geode.cache.query.types.StructType;
-import org.apache.geode.internal.cache.CachePerfStats;
 import org.apache.geode.internal.i18n.LocalizedStrings;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 // @todo probably should assert element type when elements added
 // @todo support generics when no longer support Java 1.4

@@ -29,9 +29,9 @@ import org.junit.experimental.categories.Category;
 
 import org.apache.geode.CancelCriterion;
 import org.apache.geode.distributed.DistributedMember;
-import org.apache.geode.distributed.internal.DMStats;
 import org.apache.geode.distributed.internal.DistributionManager;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
+import org.apache.geode.stats.common.distributed.internal.DMStats;
 import org.apache.geode.test.junit.categories.MembershipTest;
 
 

@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.CancelCriterion;
-import org.apache.geode.Statistics;
 import org.apache.geode.SystemFailure;
 import org.apache.geode.internal.logging.LogService;
+import org.apache.geode.stats.common.statistics.Statistics;
 
 public class CallbackSampler {
   private static final Logger logger = LogService.getLogger();
@@ -31,10 +31,10 @@ public class CallbackSampler {
   private final CancelCriterion cancelCriterion;
   private long sampleIntervalNanos;
   private ScheduledExecutorService executor;
-  private final StatSamplerStats statSamplerStats;
+  private final StatSamplerStatsImpl statSamplerStats;
 
   public CallbackSampler(final CancelCriterion cancelCriterion,
-      final StatSamplerStats statSamplerStats) {
+      final StatSamplerStatsImpl statSamplerStats) {
     this.cancelCriterion = cancelCriterion;
     this.statSamplerStats = statSamplerStats;
   }

@@ -80,6 +80,9 @@ import org.apache.geode.management.internal.configuration.domain.SharedConfigura
 import org.apache.geode.management.internal.configuration.handlers.SharedConfigurationStatusRequestHandler;
 import org.apache.geode.management.internal.configuration.messages.SharedConfigurationStatusRequest;
 import org.apache.geode.management.internal.configuration.messages.SharedConfigurationStatusResponse;
+import org.apache.geode.stats.common.distributed.internal.LocatorStats;
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Provides the implementation of a distribution {@code Locator} as well as internal-only
@@ -251,8 +254,10 @@ public class InternalLocator extends Locator implements ConnectListener {
    * @param startDistributedSystem if true then this locator will also start its own ds
    */
   public static InternalLocator createLocator(int port, File logFile, InternalLogWriter logger,
-      InternalLogWriter securityLogger, InetAddress bindAddress, String hostnameForClients,
-      Properties distributedSystemProperties, boolean startDistributedSystem) {
+      InternalLogWriter securityLogger,
+      InetAddress bindAddress, String hostnameForClients,
+      Properties distributedSystemProperties,
+      boolean startDistributedSystem) {
     synchronized (locatorLock) {
       if (hasLocator()) {
         throw new IllegalStateException(
@@ -291,8 +296,11 @@ public class InternalLocator extends Locator implements ConnectListener {
    * @param hostnameForClients the name to give to clients for connecting to this locator
    */
   public static InternalLocator startLocator(int port, File logFile, InternalLogWriter logger,
-      InternalLogWriter securityLogger, InetAddress bindAddress, boolean startDistributedSystem,
-      Properties dsProperties, String hostnameForClients) throws IOException {
+      InternalLogWriter securityLogger,
+      InetAddress bindAddress,
+      boolean startDistributedSystem,
+      Properties dsProperties, String hostnameForClients)
+      throws IOException {
 
     System.setProperty(FORCE_LOCATOR_DM_TYPE, "true");
     InternalLocator newLocator = null;
@@ -336,6 +344,8 @@ public class InternalLocator extends Locator implements ConnectListener {
 
       newLocator.endStartLocator(null);
       startedLocator = true;
+
+
       return newLocator;
 
     } finally {
@@ -346,6 +356,7 @@ public class InternalLocator extends Locator implements ConnectListener {
       }
     }
   }
+
 
   /***
    * Determines if this VM is a locator which must ignore a shutdown.
@@ -385,12 +396,9 @@ public class InternalLocator extends Locator implements ConnectListener {
    * @param startDistributedSystem if true locator will start its own distributed system
    */
   private InternalLocator(int port, File logF, InternalLogWriter logWriter,
-      // LOG: 3 non-null sources: GemFireDistributionLocator, InternalDistributedSystem,
-      // LocatorLauncher
       InternalLogWriter securityLogWriter,
-      // LOG: 1 non-null source: GemFireDistributionLocator(same instance as logWriter),
-      // InternalDistributedSystem
-      InetAddress bindAddress, String hostnameForClients, Properties distributedSystemProperties,
+      InetAddress bindAddress, String hostnameForClients,
+      Properties distributedSystemProperties,
       DistributionConfigImpl cfg, boolean startDistributedSystem) {
 
     // TODO: the following three assignments are already done in superclass
@@ -476,7 +484,8 @@ public class InternalLocator extends Locator implements ConnectListener {
     this.handler = new PrimaryHandler(this, locatorListener);
 
     ThreadGroup group = LoggingThreadGroup.createThreadGroup("Distribution locators", logger);
-    this.stats = new LocatorStats();
+    this.stats =
+        StatsFactory.createStatsImpl(LocatorStats.class, (hostnameForClients + port));
 
     this.server = new TcpServerFactory().makeTcpServer(port, this.bindAddress, null, this.config,
         this.handler, new DelayedPoolStatHelper(), group, this.toString(), this);
@@ -566,8 +575,10 @@ public class InternalLocator extends Locator implements ConnectListener {
    */
   @Deprecated
   public static InternalLocator startLocator(int locatorPort, File logFile,
-      InternalLogWriter logger, InternalLogWriter logger1, InetAddress addr,
-      Properties dsProperties, boolean peerLocator, boolean serverLocator, String s, boolean b1)
+      InternalLogWriter logger, InternalLogWriter logger1,
+      InetAddress addr,
+      Properties dsProperties, boolean peerLocator,
+      boolean serverLocator, String s, boolean b1)
       throws IOException {
     return startLocator(locatorPort, logFile, logger, logger1, addr, true, dsProperties, s);
   }
@@ -596,7 +607,6 @@ public class InternalLocator extends Locator implements ConnectListener {
       }
       sb.append('[').append(getPort()).append(']');
       String thisLocator = sb.toString();
-
 
       if (this.peerLocator) {
         // append this locator to the locators list from the config properties
@@ -675,7 +685,6 @@ public class InternalLocator extends Locator implements ConnectListener {
    * and distributed system are started.
    *
    * @param distributedSystem The distributed system to use for the statistics.
-   *
    * @since GemFire 5.7
    */
   void endStartLocator(InternalDistributedSystem distributedSystem) {
@@ -702,7 +711,6 @@ public class InternalLocator extends Locator implements ConnectListener {
    *
    * @param distributedSystem The distributed system which the server location services should use.
    *        If null, the method will try to find an already connected distributed system.
-   *
    * @since GemFire 5.7
    */
   void startServerLocation(InternalDistributedSystem distributedSystem) throws IOException {
@@ -1267,7 +1275,7 @@ public class InternalLocator extends Locator implements ConnectListener {
   @Override
   public void onConnect(InternalDistributedSystem sys) {
     try {
-      this.stats.hookupStats(sys,
+      this.stats.hookupStats(sys.getStatisticsFactory(),
           SocketCreator.getLocalHost().getCanonicalHostName() + '-' + this.server.getBindAddress());
     } catch (UnknownHostException e) {
       logger.warn(e);
@@ -1304,7 +1312,6 @@ public class InternalLocator extends Locator implements ConnectListener {
     @Override
     public void startJob() {
       stats.incRequestInProgress(1);
-
     }
 
     @Override

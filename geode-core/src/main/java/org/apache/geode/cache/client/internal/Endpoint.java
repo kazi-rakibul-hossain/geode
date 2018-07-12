@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.geode.distributed.DistributedMember;
 import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.distributed.internal.ServerLocation;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 
 /**
  * Represents a server. Keeps track of information about the specific server

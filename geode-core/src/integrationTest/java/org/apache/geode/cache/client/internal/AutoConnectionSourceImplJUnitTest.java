@@ -69,18 +69,20 @@ import org.apache.geode.distributed.DistributedSystem;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.InternalConfigurationPersistenceService;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
-import org.apache.geode.distributed.internal.PoolStatHelper;
 import org.apache.geode.distributed.internal.ServerLocation;
 import org.apache.geode.distributed.internal.membership.gms.membership.HostAddress;
 import org.apache.geode.distributed.internal.tcpserver.TcpClient;
 import org.apache.geode.distributed.internal.tcpserver.TcpHandler;
 import org.apache.geode.distributed.internal.tcpserver.TcpServer;
 import org.apache.geode.internal.AvailablePortHelper;
-import org.apache.geode.internal.cache.PoolStats;
 import org.apache.geode.internal.cache.tier.InternalClientMembership;
 import org.apache.geode.internal.cache.tier.sockets.TcpServerFactory;
 import org.apache.geode.management.membership.ClientMembershipEvent;
 import org.apache.geode.management.membership.ClientMembershipListener;
+import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
+import org.apache.geode.stats.common.internal.cache.PoolStats;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.dunit.NetworkUtils;
 import org.apache.geode.test.junit.categories.ClientServerTest;
 
@@ -106,9 +108,10 @@ public class AutoConnectionSourceImplJUnitTest {
     props.setProperty(MCAST_PORT, "0");
     props.setProperty(LOCATORS, "");
 
-    DistributedSystem ds = DistributedSystem.connect(props);
-    cache = CacheFactory.create(ds);
-    poolStats = new PoolStats(ds, "pool");
+    DistributedSystem distributedSystem = DistributedSystem.connect(props);
+    cache = CacheFactory.create(distributedSystem);
+    poolStats =
+        StatsFactory.createStatsImpl(PoolStats.class, "pool");
     port = AvailablePortHelper.getRandomAvailableTCPPort();
 
     handler = new FakeHandler();
@@ -216,14 +219,12 @@ public class AutoConnectionSourceImplJUnitTest {
     la.add(new HostAddress(floc2, floc2.getHostName()));
     AutoConnectionSourceImpl src = new AutoConnectionSourceImpl(locators, la, "", 60 * 1000);
 
-
     InetSocketAddress b1 = new InetSocketAddress("fakeLocalHost1", port);
     InetSocketAddress b2 = new InetSocketAddress("fakeLocalHost3", port);
 
     Set<HostAddress> bla = new HashSet<>();
     bla.add(new HostAddress(b1, b1.getHostName()));
     bla.add(new HostAddress(b2, b2.getHostName()));
-
 
     src.addbadLocators(la, bla);
 
@@ -320,7 +321,6 @@ public class AutoConnectionSourceImplJUnitTest {
 
   /**
    * This tests that discovery works even after one of two locators was shut down
-   *
    */
   @Test
   public void test_DiscoverLocators_whenOneLocatorWasShutdown() throws Exception {

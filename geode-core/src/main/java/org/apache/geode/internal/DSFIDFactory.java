@@ -946,7 +946,7 @@ public class DSFIDFactory implements DataSerializableFixedID {
   public static Object create(int dsfid, DataInput in) throws IOException, ClassNotFoundException {
     switch (dsfid) {
       case REGION:
-        return (DataSerializableFixedID) DataSerializer.readRegion(in);
+        return DataSerializer.readRegion(in);
       case END_OF_STREAM_TOKEN:
         return Token.END_OF_STREAM;
       case DLOCK_REMOTE_TOKEN:
@@ -989,10 +989,8 @@ public class DSFIDFactory implements DataSerializableFixedID {
             Object ds = cons.newInstance((Object[]) null);
             InternalDataSerializer.invokeFromData(ds, in);
             return ds;
-          } catch (InstantiationException ie) {
+          } catch (InstantiationException | IllegalAccessException ie) {
             throw new IOException(ie.getMessage(), ie);
-          } catch (IllegalAccessException iae) {
-            throw new IOException(iae.getMessage(), iae);
           } catch (InvocationTargetException ite) {
             Throwable targetEx = ite.getTargetException();
             if (targetEx instanceof IOException) {

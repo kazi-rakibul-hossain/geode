@@ -53,6 +53,7 @@ import org.apache.geode.internal.cache.tier.sockets.ClientProxyMembershipID;
 import org.apache.geode.internal.cache.versions.VersionStamp;
 import org.apache.geode.internal.cache.versions.VersionTag;
 import org.apache.geode.internal.util.concurrent.ConcurrentMapWithReusableEntries;
+import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 
 @SuppressWarnings("unchecked")
 public class AbstractRegionMapTxApplyDestroyTest {

@@ -14,19 +14,24 @@
  */
 package org.apache.geode.internal.statistics;
 
-import org.apache.geode.StatisticsFactory;
 import org.apache.geode.SystemFailure;
 import org.apache.geode.internal.stats50.VMStats50;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
+import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 
 /**
  * Factory used to produce an instance of VMStatsContract.
  */
 public class VMStatsContractFactory {
+  private VMStatsContractFactory() {
+    // private so no instances allowed. static methods only
+  }
+
   /**
    * Create and return a VMStatsContract.
    */
-  public static VMStatsContract create(StatisticsFactory f, long id) {
-    VMStatsContract result;
+  public static VMStats create(StatisticsFactory f, long id) {
+    VMStats result;
     try {
       result = new VMStats50(f, id);
     } catch (VirtualMachineError err) {
@@ -46,12 +51,8 @@ public class VMStatsContractFactory {
       SystemFailure.checkFailure();
       // log.warning("Could not create 5.0 VMStats", ignore);
       // couldn't create the 1.5 version so create the old 1.4 version
-      result = new VMStats(f, id);
+      result = StatsFactory.createStatsImpl(VMStatsImpl.class, String.valueOf(id));
     }
     return result;
-  }
-
-  private VMStatsContractFactory() {
-    // private so no instances allowed. static methods only
   }
 }
