@@ -23,6 +23,7 @@ import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
  * GemFire statistics about a {@link DiskStoreImpl}.
+ *
  * @since GemFire prPersistSprint2
  */
 public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
@@ -93,8 +94,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
     String statName = "DiskStoreStatistics";
     String statDescription = "Statistics about a Region's use of the disk";
 
-    final String
-        writesDesc =
+    final String writesDesc =
         "The total number of region entries that have been written to disk. A write is done every time an entry is created on disk or every time its value is modified on disk.";
     final String writeTimeDesc = "The total amount of time spent writing to disk";
     final String bytesWrittenDesc = "The total number of bytes that have been written to disk";
@@ -124,7 +124,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
         "The number of backups of this disk store that have been taking while this VM was alive";
 
     type = factory.createType(statName, statDescription,
-        new StatisticDescriptor[]{factory.createLongCounter("writes", writesDesc, "ops"),
+        new StatisticDescriptor[] {factory.createLongCounter("writes", writesDesc, "ops"),
             factory.createLongCounter("writeTime", writeTimeDesc, "nanoseconds"),
             factory.createLongCounter("writtenBytes", bytesWrittenDesc, "bytes"),
             factory.createLongCounter("flushes", flushesDesc, "ops"),
@@ -345,6 +345,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked before data is written to disk.
+   *
    * @return The timestamp that marks the start of the operation
    * @see DiskRegion#put
    */
@@ -367,6 +368,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked after data has been written to disk
+   *
    * @param start The time at which the write operation started
    */
   @Override
@@ -393,6 +395,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked before data is read from disk.
+   *
    * @return The timestamp that marks the start of the operation
    * @see DiskRegion#get
    */
@@ -403,6 +406,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked after data has been read from disk
+   *
    * @param start The time at which the read operation started
    * @param bytesRead The number of bytes that were read
    */
@@ -417,6 +421,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked before data is recovered from disk.
+   *
    * @return The timestamp that marks the start of the operation
    */
   @Override
@@ -438,6 +443,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked after data has been recovered from disk
+   *
    * @param start The time at which the recovery operation started
    * @param bytesRead The number of bytes that were recovered
    */
@@ -492,6 +498,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked before data is removed from disk.
+   *
    * @return The timestamp that marks the start of the operation
    * @see DiskRegion#remove
    */
@@ -502,6 +509,7 @@ public class DiskStoreStatsImpl implements DiskStoreStats, GFSStatsImplementer {
 
   /**
    * Invoked after data has been removed from disk
+   *
    * @param start The time at which the read operation started
    */
   @Override

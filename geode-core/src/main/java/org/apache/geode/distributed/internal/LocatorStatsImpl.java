@@ -110,14 +110,14 @@ public class LocatorStatsImpl implements LocatorStats, GFSStatsImplementer {
    */
   @Override
   public void hookupStats(String name) {
-//    if (this._stats == null) {
-//      this._stats = f.createAtomicStatistics(type, name);
-//      setLocatorCount(known_locators.get());
-//      setServerCount(endpoints_known.get());
-//      setLocatorRequests(requests_to_locator.get());
-//      setLocatorResponses(responses_from_locator.get());
-//      setServerLoadUpdates(serverLoadUpdates.get());
-//    }
+    // if (this._stats == null) {
+    // this._stats = f.createAtomicStatistics(type, name);
+    // setLocatorCount(known_locators.get());
+    // setServerCount(endpoints_known.get());
+    // setLocatorRequests(requests_to_locator.get());
+    // setLocatorResponses(responses_from_locator.get());
+    // setServerLoadUpdates(serverLoadUpdates.get());
+    // }
   }
 
 

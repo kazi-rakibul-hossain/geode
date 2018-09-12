@@ -1110,7 +1110,7 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
   }
 
   private void calculateEndTimeMetrics(long start, int deltaTimeId,
-                                       int inProgressId, int completedId) {
+      int inProgressId, int completedId) {
     if (enableClockStats) {
       stats.incLong(deltaTimeId, NanoTimer.getTime() - start);
     }
@@ -1132,7 +1132,8 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
    */
   @Override
   public void endCacheWriterCall(long start) {
-    calculateEndTimeMetrics(start,cacheWriterCallTimeId,cacheWriterCallsInProgressId,cacheWriterCallsCompletedId);
+    calculateEndTimeMetrics(start, cacheWriterCallTimeId, cacheWriterCallsInProgressId,
+        cacheWriterCallsCompletedId);
   }
 
   /**
@@ -1151,7 +1152,8 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
    */
   @Override
   public void endCacheListenerCall(long start) {
-    calculateEndTimeMetrics(start,cacheListenerCallTimeId,cacheListenerCallsInProgressId,cacheListenerCallsCompletedId);
+    calculateEndTimeMetrics(start, cacheListenerCallTimeId, cacheListenerCallsInProgressId,
+        cacheListenerCallsCompletedId);
   }
 
   /**
@@ -1168,7 +1170,8 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
    */
   @Override
   public void endGetInitialImage(long start) {
-    calculateEndTimeMetrics(start,getInitialImageTimeId,getInitialImagesInProgressId,getInitialImagesCompletedId);
+    calculateEndTimeMetrics(start, getInitialImageTimeId, getInitialImagesInProgressId,
+        getInitialImagesCompletedId);
   }
 
   /**

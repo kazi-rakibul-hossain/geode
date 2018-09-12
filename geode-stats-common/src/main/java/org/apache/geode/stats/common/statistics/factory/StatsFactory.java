@@ -51,7 +51,7 @@ public class StatsFactory {
   private final StatisticsFactory statisticsFactory;
 
   private StatsFactory(Class<? extends StatsImplementer> selectedStatsImplementor,
-                       StatisticsFactory statisticsFactory) {
+      StatisticsFactory statisticsFactory) {
     List<ClassLoader> classLoadersList = new LinkedList<>();
     classLoadersList.add(ClasspathHelper.contextClassLoader());
     classLoadersList.add(ClasspathHelper.staticClassLoader());
@@ -72,7 +72,7 @@ public class StatsFactory {
     try {
       return isExperimentalEnabled
           ? (Class<? extends StatsImplementer>) Class
-          .forName("org.apache.geode.statistics.micrometer.MicrometerStatsImplementer")
+              .forName("org.apache.geode.statistics.micrometer.MicrometerStatsImplementer")
           : GFSStatsImplementer.class;
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
@@ -96,7 +96,7 @@ public class StatsFactory {
   }
 
   public static <V extends StatsImplementer> V createStatsImpl(Class<?> interfaceClazz,
-                                                               String identifier) {
+      String identifier) {
     return (V) resolveInstanceFromClass(interfaceClazz, identifier);
   }
 
@@ -118,13 +118,13 @@ public class StatsFactory {
   }
 
   private static StatsImplementer resolveConnectionStatInstanceFromClass(String name,
-                                                                         PoolStats poolStats) {
+      PoolStats poolStats) {
     return singletonStatsFactory.createConnectionStatInstanceFromClass(name, poolStats);
   }
 
   public static RegionPerfStats createRegionPerfStatsImplFromClass(Class<?> interfaceClazz,
-                                                                   CachePerfStats cachePerfStats,
-                                                                   String regionName) {
+      CachePerfStats cachePerfStats,
+      String regionName) {
     try {
       Class<? extends StatsImplementer> resolvedLocatorClassImpl =
           singletonStatsFactory.resolvedStatsImplForClass.get(interfaceClazz);
@@ -165,7 +165,7 @@ public class StatsFactory {
     reflections.getSubTypesOf(CachePerfStats.class).stream()
         .filter(clazz -> selectedStatsImplementor.isAssignableFrom(clazz)
             && !RegionPerfStats.class.isAssignableFrom(clazz) && !clazz.getName()
-            .contains("DummyCachePerfStats"))
+                .contains("DummyCachePerfStats"))
         .forEach(aClass -> resolvedStatsImplForClass
             .put(CachePerfStats.class, (Class<? extends StatsImplementer>) aClass));
 
@@ -177,7 +177,7 @@ public class StatsFactory {
   }
 
   private StatsImplementer createConnectionStatInstanceFromClass(String locatorName,
-                                                                 PoolStats poolStats) {
+      PoolStats poolStats) {
     try {
       Class<? extends StatsImplementer> resolvedLocatorClassImpl =
           resolveImplementationForClass(ConnectionStats.class);

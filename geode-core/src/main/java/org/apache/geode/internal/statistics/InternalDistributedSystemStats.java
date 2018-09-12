@@ -47,8 +47,7 @@ public class InternalDistributedSystemStats {
 
   private StatisticsFactory statisticsFactory = StatsFactory.getStatisticsFactory();
 
-  private InternalDistributedSystemStats() {
-  }
+  private InternalDistributedSystemStats() {}
 
   public static InternalDistributedSystemStats createInstance(boolean statsDisabled) {
 
@@ -59,9 +58,9 @@ public class InternalDistributedSystemStats {
   }
 
   private static void startGemFireStatSampler(boolean statsDisabled,
-                                              DistributionConfig distributionConfig,
-                                              InternalDistributedSystem distributedSystem,
-                                              InternalDistributedSystemStats internalDistributedSystemStats) {
+      DistributionConfig distributionConfig,
+      InternalDistributedSystem distributedSystem,
+      InternalDistributedSystemStats internalDistributedSystemStats) {
     if (!statsDisabled && StatsFactory.isLegacyGeodeStats()) {
       internalDistributedSystemStats.sampler =
           new GemFireStatSampler(distributedSystem.getId(), distributionConfig,
@@ -73,8 +72,8 @@ public class InternalDistributedSystemStats {
   }
 
   public void startGemFireStatSampler(boolean statsDisabled,
-                                              DistributionConfig distributionConfig,
-                                              InternalDistributedSystem distributedSystem) {
+      DistributionConfig distributionConfig,
+      InternalDistributedSystem distributedSystem) {
     startGemFireStatSampler(statsDisabled, distributionConfig, distributedSystem, this);
   }
 

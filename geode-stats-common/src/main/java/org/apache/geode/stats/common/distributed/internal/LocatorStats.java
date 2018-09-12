@@ -15,7 +15,6 @@
 package org.apache.geode.stats.common.distributed.internal;
 
 import org.apache.geode.stats.common.Stats;
-import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 public interface LocatorStats extends Stats {
 

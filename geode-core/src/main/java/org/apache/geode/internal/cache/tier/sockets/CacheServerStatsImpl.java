@@ -14,7 +14,6 @@
  */
 package org.apache.geode.internal.cache.tier.sockets;
 
-import org.apache.geode.distributed.internal.InternalDistributedSystem;
 import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
 import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.stats.common.statistics.GFSStatsImplementer;
