@@ -64,10 +64,8 @@ import org.apache.geode.test.dunit.ThreadUtils;
  */
 public class OplogJUnitTest extends DiskRegionTestingBase {
 
-  private boolean proceed = false;
-
   private final DiskRegionProperties diskProps = new DiskRegionProperties();
-
+  private boolean proceed = false;
   private long delta;
 
   private volatile boolean assertDone = false;
@@ -196,7 +194,7 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
       StatisticsFactory factory = cache.getDistributedSystem().getStatisticsFactory();
       Oplog newOplog =
-          new Oplog(id, dr.getOplogSet(), new DirectoryHolder(factory, dirs[0], 1000, 0));
+          new Oplog(id, dr.getOplogSet(), new DirectoryHolder(dirs[0], 1000, 0));
       dr.getOplogSet().setChild(newOplog);
       closeDown();
     }
@@ -217,7 +215,7 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
       oplog.close();
       StatisticsFactory factory = cache.getDistributedSystem().getStatisticsFactory();
       Oplog newOplog =
-          new Oplog(id, dr.getOplogSet(), new DirectoryHolder(factory, dirs[0], 1000, 2));
+          new Oplog(id, dr.getOplogSet(), new DirectoryHolder(dirs[0], 1000, 2));
       dr.setChild(newOplog);
       closeDown();
     }
@@ -339,7 +337,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
   /**
    * Tests whether the data is written in the right format on the disk
-   *
    */
   @Test
   public void testFaultInOfValuesFromDisk() {
@@ -389,7 +386,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
   /**
    * Tests the original ByteBufferPool gets transferred to the new Oplog for synch mode
-   *
    */
   @Test
   public void testByteBufferPoolTransferForSynchMode() {
@@ -429,7 +425,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
    * Tests the bug which arises in case of asynch mode during oplog switching caused by conflation
    * of create/destroy operation.The bug occurs if a create operation is followed by destroy but
    * before destroy proceeds some other operation causes oplog switching
-   *
    */
   @Test
   public void testBug34615() {
@@ -544,7 +539,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
   /**
    * This tests the retrieval of empty byte array when present in asynch buffers
-   *
    */
   @Test
   public void testGetEmptyByteArrayInAsynchBuffer() {
@@ -572,7 +566,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
   /**
    * This tests the retrieval of empty byte array in synch mode
-   *
    */
   @Test
   public void testGetEmptyByteArrayInSynchMode() {
@@ -603,7 +596,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
    * is Token.Removed This bug can occur if a remove operation causes oplog switching & hence roller
    * thread gets notified, & the roller thread obtains the iterator of the concurrent region map
    * before the remove
-   *
    */
   @Test
   public void testBug34702() {
@@ -690,7 +682,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
    * such case, when the roller will try to roll the entries referencing the current oplog , it will
    * not be able to acquire the lock on the entry as the switching thread has already taken a lock
    * on it.
-   *
    */
   @Test
   public void testRollingDeadlockSituation() {
@@ -721,7 +712,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
    * operation & hence the 4 bytes field for recording the value length is absent & also since the
    * value length is zero no byte for it should also get added. Similary during recover from HTree
    * as well as Oplog , the empty byte array should be read correctly
-   *
    */
   @Test
   public void testEmptyByteArrayPutAndRecovery() {
@@ -787,7 +777,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
    * switching of Oplog if it happens just after the remove operation has destroyed the in memory
    * entry & is about to acquire the readlock in DiskRegion to record the same. If the Oplog has
    * switched during that duration , the bug would appear
-   *
    */
 
   @Test
@@ -832,7 +821,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
   /**
    * Tests if buffer size & time are not set , the asynch writer gets awakened on time basis of
    * default 1 second
-   *
    */
   @Test
   public void testAsynchWriterAttribBehaviour1() throws Exception {
@@ -936,7 +924,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
   /**
    * Tests if buffer size & time interval are explicitly set to zero then the flush will occur due
    * to asynchForceFlush or due to switching of Oplog
-   *
    */
   @Test
   public void testAsynchWriterAttribBehaviour3() throws Exception {
@@ -978,7 +965,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
     Thread.sleep(1000);
     assertTrue(LocalRegion.ISSUE_CALLBACKS_TO_CACHE_OBSERVER);
 
-
     ((LocalRegion) region).getDiskRegion().forceRolling();
     synchronized (this) {
       if (LocalRegion.ISSUE_CALLBACKS_TO_CACHE_OBSERVER) {
@@ -992,7 +978,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
   /**
    * Tests if the byte buffer pool in asynch mode tries to contain the pool size
-   *
    */
   @Test
   public void testByteBufferPoolContainment() throws Exception {
@@ -1071,7 +1056,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
   /**
    * Tests delayed creation of DiskID in overflow only mode
-   *
    */
   @Test
   public void testDelayedDiskIdCreationInOverflowOnlyMode() {
@@ -1098,7 +1082,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
 
   /**
    * Tests immediate creation of DiskID in overflow With Persistence mode
-   *
    */
   @Test
   public void testImmediateDiskIdCreationInOverflowWithPersistMode() {
@@ -1124,8 +1107,8 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
   }
 
   /**
-   * An entry which is evicted to disk will have the flag already written to disk, appropriately set
-   *
+   * An entry which is evicted to disk will have the flag already written to disk, appropriately
+   * set
    */
   @Test
   public void testEntryAlreadyWrittenIsCorrectlyUnmarkedForOverflowOnly() throws Exception {
@@ -1185,7 +1168,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
   /**
    * An persistent or overflow with persistence entry which is evicted to disk, will have the flag
    * already written to disk, appropriately set
-   *
    */
   @Test
   public void testEntryAlreadyWrittenIsCorrectlyUnmarkedForOverflowWithPersistence() {
@@ -1383,7 +1365,6 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
    * re-'put'), the entry will actually become a create in the VM The new Oplog should record it as
    * a create even though the Htree ref in ThreadLocal will not match with the current Htree Ref.
    * But the operation is valid & should get recorded in Oplog
-   *
    */
   @Test
   public void testPutClearCreate() throws Exception {
@@ -1942,10 +1923,10 @@ public class OplogJUnitTest extends DiskRegionTestingBase {
     private final int tombstoneKey1;
     private final int tombstoneKey2;
     private final AtomicBoolean exceptionOccurred = new AtomicBoolean(true);
-    private volatile long spaceUsageBefore = -1;
-    private DirectoryHolder dh;
     private final AtomicLong oplogsSize = new AtomicLong();
     private final CountDownLatch putsCompleted;
+    private volatile long spaceUsageBefore = -1;
+    private DirectoryHolder dh;
 
     StatSizeTestCacheObserverAdapter(DiskRegion dr, int key3Size, int tombstoneKey1,
         int tombstoneKey2, CountDownLatch putsCompleted) {

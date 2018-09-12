@@ -147,8 +147,7 @@ public class GMSHealthMonitorJUnitTest {
     when(services.getCancelCriterion()).thenReturn(stopper);
     when(services.getManager()).thenReturn(manager);
     when(services.getStatistics()).thenReturn(StatsFactory
-        .createStatsImpl(DistributionStats.class, system.getStatisticsFactory(),
-            String.valueOf(statsId)));
+        .createStatsImpl(DistributionStats.class, String.valueOf(statsId)));
     when(services.getTimer()).thenReturn(new Timer("Geode Membership Timer", true));
     when(stopper.isCancelInProgress()).thenReturn(false);
 

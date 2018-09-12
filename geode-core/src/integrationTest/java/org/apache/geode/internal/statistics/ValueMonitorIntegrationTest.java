@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.awaitility.Awaitility;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,6 +37,9 @@ import org.junit.rules.TestName;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.io.MainWithChildrenRollingFileHandler;
 import org.apache.geode.internal.statistics.StatisticsNotification.Type;
+import org.apache.geode.stats.common.statistics.StatisticDescriptor;
+import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsType;
 import org.apache.geode.test.junit.categories.StatisticsTest;
 
 /**
@@ -226,36 +230,47 @@ public class ValueMonitorIntegrationTest {
     assertThat(statCount).isEqualTo(3);
 
     // validate no notification occurs when no stats are updated
-    timeStamp += NanoTimer.millisToNanos(1000);
-    sampleCollector.sample(timeStamp);
-    Awaitility.await().atMost(2, TimeUnit.SECONDS).pollInterval(10, TimeUnit.MILLISECONDS)
-        .until(() -> notifications.size() == 0);
-    assertThat(notifications.isEmpty()).isTrue();
+    timeStamp = validateTimeStamp(sampleCollector, notifications, timeStamp);
 
     // validate no notification occurs when only other stats are updated
     st1_2.incDouble("double_counter_1", 3.3);
     st1_2.incInt("int_counter_2", 1);
     st1_2.incLong("long_counter_3", 2);
-    timeStamp += NanoTimer.millisToNanos(1000);
-    sampleCollector.sample(timeStamp);
-    Awaitility.await().atMost(2, TimeUnit.SECONDS).pollInterval(10, TimeUnit.MILLISECONDS)
-        .until(() -> notifications.size() == 0);
-    assertThat(notifications.isEmpty()).isTrue();
+    timeStamp = validateTimeStamp(sampleCollector, notifications, timeStamp);
 
     // validate notification only contains stats added to monitor
     st1_1.incInt("int_counter_2", 100);
     st1_2.incInt("int_counter_2", 200);
     assertThat(sampleCollector.currentHandlersForTesting().size()).isEqualTo(2);
+    notification = validateTimeStamp2(sampleCollector, notifications, timeStamp);
+    expectedValues = new HashMap<>();
+    expectedValues.put("int_counter_2", 104);
+    statCount = assertStatisticsNotification(notification, expectedValues);
+    assertThat(statCount).isEqualTo(1);
+  }
+
+  @NotNull
+  private StatisticsNotification validateTimeStamp2(SampleCollector sampleCollector,
+      List<StatisticsNotification> notifications,
+      long timeStamp) {
+    StatisticsNotification notification;
     timeStamp += NanoTimer.millisToNanos(1000);
     sampleCollector.sample(timeStamp);
     Awaitility.await().atMost(2, TimeUnit.SECONDS).pollInterval(10, TimeUnit.MILLISECONDS)
         .until(() -> notifications.size() > 0);
     assertThat(notifications.size()).isEqualTo(1);
     notification = notifications.remove(0);
-    assertThat(notification.getType()).isEqualTo(StatisticsNotification.Type.VALUE_CHANGED);
-    expectedValues = new HashMap<>();
-    expectedValues.put("int_counter_2", 104);
-    statCount = assertStatisticsNotification(notification, expectedValues);
-    assertThat(statCount).isEqualTo(1);
+    assertThat(notification.getType()).isEqualTo(Type.VALUE_CHANGED);
+    return notification;
+  }
+
+  private long validateTimeStamp(SampleCollector sampleCollector,
+      List<StatisticsNotification> notifications, long timeStamp) {
+    timeStamp += NanoTimer.millisToNanos(1000);
+    sampleCollector.sample(timeStamp);
+    Awaitility.await().atMost(2, TimeUnit.SECONDS).pollInterval(10, TimeUnit.MILLISECONDS)
+        .until(() -> notifications.size() == 0);
+    assertThat(notifications.isEmpty()).isTrue();
+    return timeStamp;
   }
 }

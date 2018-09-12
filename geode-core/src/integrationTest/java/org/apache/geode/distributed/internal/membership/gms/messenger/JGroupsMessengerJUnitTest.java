@@ -170,8 +170,7 @@ public class JGroupsMessengerJUnitTest {
     InternalDistributedSystem system =
         InternalDistributedSystem.newInstanceForTesting(dm, nonDefault);
     when(services.getStatistics()).thenReturn(StatsFactory
-        .createStatsImpl(DistributionStats.class, system.getStatisticsFactory(),
-            String.valueOf(statsId)));
+        .createStatsImpl(DistributionStats.class, String.valueOf(statsId)));
 
     messenger = new JGroupsMessenger();
     messenger.init(services);

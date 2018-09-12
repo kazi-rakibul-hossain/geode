@@ -532,11 +532,13 @@ public class GemFireStatSamplerIntegrationTest extends StatSamplerTestCase {
 
   @Override
   protected StatisticsManager getStatisticsManager() {
-    return ((InternalDistributedSystem) this.distributedSystem).getInternalDistributedSystemStats();
+    return ((InternalDistributedSystem) this.distributedSystem).getInternalDistributedSystemStats()
+        .getStatisticsManager();
   }
 
   protected OsStatisticsFactory getOsStatisticsFactory() {
-    return ((InternalDistributedSystem) this.distributedSystem).getInternalDistributedSystemStats();
+    return ((InternalDistributedSystem) this.distributedSystem).getInternalDistributedSystemStats()
+        .getOSStatisticsFactory();
   }
 
   private GemFireStatSampler getGemFireStatSampler() {

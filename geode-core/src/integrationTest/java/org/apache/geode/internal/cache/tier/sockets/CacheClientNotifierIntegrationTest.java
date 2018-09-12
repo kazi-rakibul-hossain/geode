@@ -270,6 +270,7 @@ public class CacheClientNotifierIntegrationTest {
         .getDistributedMember();
     doReturn(mock(Statistics.class))
         .when(mockInternalDistributedSystem.getInternalDistributedSystemStats())
+        .getStatisticsFactory()
         .createAtomicStatistics(any(StatisticsType.class), any(String.class));
     doReturn(mock(DistributionConfig.class)).when(mockDistributionManager).getConfig();
     doReturn(mockDistributionManager).when(mockInternalDistributedSystem).getDistributionManager();

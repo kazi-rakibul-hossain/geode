@@ -90,7 +90,6 @@ import org.apache.geode.internal.sequencelog.MembershipLogger;
 import org.apache.geode.internal.tcp.Connection;
 import org.apache.geode.internal.tcp.ConnectionTable;
 import org.apache.geode.internal.tcp.ReenteredConnectException;
-import org.apache.geode.internal.util.concurrent.StoppableReentrantLock;
 import org.apache.geode.stats.common.distributed.internal.DMStats;
 import org.apache.geode.stats.common.distributed.internal.DistributionStats;
 import org.apache.geode.stats.common.statistics.factory.StatsFactory;

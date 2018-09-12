@@ -284,7 +284,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
         LogWriterUtils.getLogWriter().info("Calling FunctionStats for  TEST_FUNCTION2 :");
         FunctionStats functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                internalDistributedSystem.getStatisticsFactory(),
                 TestFunction.TEST_FUNCTION2);
         LogWriterUtils.getLogWriter().info("Called FunctionStats for  TEST_FUNCTION2 :");
         assertEquals(noOfExecutionCalls_TESTFUNCTION2, functionStats.getFunctionExecutionCalls());
@@ -294,7 +293,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
         functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                internalDistributedSystem.getStatisticsFactory(),
                 TestFunction.TEST_FUNCTION3);
         assertEquals(noOfExecutionCalls_TESTFUNCTION3, functionStats.getFunctionExecutionCalls());
         assertEquals(noOfExecutionsCompleted_TESTFUNCTION3,
@@ -531,7 +529,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
         FunctionStats functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                internalDistributedSystem.getStatisticsFactory(),
                 TestFunction.TEST_FUNCTION2);
         assertEquals(noOfExecutionCalls_TESTFUNCTION2, functionStats.getFunctionExecutionCalls());
         assertEquals(noOfExecutionsCompleted_TESTFUNCTION2,
@@ -627,7 +624,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
         FunctionStats functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                internalDistributedSystem.getStatisticsFactory(),
                 TestFunction.TEST_FUNCTION1);
         assertEquals(noOfExecutionCalls_TESTFUNCTION1, functionStats.getFunctionExecutionCalls());
         assertEquals(noOfExecutionsCompleted_TESTFUNCTION1,
@@ -636,7 +632,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
         functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                internalDistributedSystem.getStatisticsFactory(),
                 TestFunction.TEST_FUNCTION5);
         assertEquals(noOfExecutionCalls_TESTFUNCTION5, functionStats.getFunctionExecutionCalls());
         assertEquals(noOfExecutionsCompleted_TESTFUNCTION5,
@@ -684,7 +679,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
         FunctionStats functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                internalDistributedSystem.getStatisticsFactory(),
                 TestFunction.TEST_FUNCTION1);
         // TEST_FUNCTION1 is executed once
         noOfExecutionCalls_TESTFUNCTION1 += 1;
@@ -845,7 +839,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
         FunctionStats functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                internalDistributedSystem.getStatisticsFactory(),
                 TestFunction.TEST_FUNCTION2);
         assertEquals(noOfExecutionCalls_TESTFUNCTION2, functionStats.getFunctionExecutionCalls());
         assertEquals(noOfExecutionsCompleted_TESTFUNCTION2,
@@ -885,7 +878,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
             FunctionStats functionStats =
                 StatsFactory
                     .createStatsImpl(FunctionStats.class,
-                        internalDistributedSystem.getStatisticsFactory(),
                         TestFunction.TEST_FUNCTION2);
             // TEST_FUNCTION2 is executed twice
             noOfExecutionCalls_TESTFUNCTION2 += 2;
@@ -1142,7 +1134,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
         FunctionStats functionStats =
             StatsFactory.createStatsImpl(FunctionStats.class,
-                distributedSystem.getStatisticsFactory(),
                 inlineFunction.getId());
         assertEquals(noOfExecutionCalls_Inline, functionStats.getFunctionExecutionCalls());
         assertEquals(noOfExecutionsCompleted_Inline,
@@ -1169,7 +1160,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
             FunctionStats functionStats =
                 StatsFactory.createStatsImpl(FunctionStats.class,
-                    distributedSystem.getStatisticsFactory(),
                     inlineFunction.getId());
             // noOfExecutionCalls_Inline++;
             // noOfExecutionsCompleted_Inline++;
@@ -1295,7 +1285,6 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
           public Object call() throws Exception {
             FunctionStats functionStats =
                 StatsFactory.createStatsImpl(FunctionStats.class,
-                    getSystem().getStatisticsFactory(),
                     "TestFunctionException");
             noOfExecutionCalls_TestFunctionException++;
             noOfExecutionExceptions_TestFunctionException++;

@@ -289,12 +289,6 @@ public class StatisticsDistributedTest extends JUnit4CacheTestCase {
               Statistics[] statsArray = getSystem().getInternalDistributedSystemStats()
                   .findStatisticsByType(statSamplerType);
               assertEquals(1, statsArray.length);
-
-              Statistics statSamplerStats = statsArray[0];
-              int initialSampleCount = statSamplerStats.getInt(StatSamplerStatsImpl.SAMPLE_COUNT);
-
-              await("awaiting sampleCount >= 2").atMost(30, SECONDS).until(() -> statSamplerStats
-                  .getInt(StatSamplerStatsImpl.SAMPLE_COUNT) >= initialSampleCount + 2);
             });
       }
 
@@ -313,13 +307,6 @@ public class StatisticsDistributedTest extends JUnit4CacheTestCase {
       Statistics[] statsArray =
           getSystem().getInternalDistributedSystemStats().findStatisticsByType(statSamplerType);
       assertEquals(1, statsArray.length);
-
-      Statistics statSamplerStats = statsArray[0];
-      int initialSampleCount = statSamplerStats.getInt(StatSamplerStatsImpl.SAMPLE_COUNT);
-
-      await("awaiting sampleCount >= 2").atMost(30, SECONDS).until(
-          () -> statSamplerStats.getInt(StatSamplerStatsImpl.SAMPLE_COUNT) >= initialSampleCount
-              + 2);
 
       // now post total updateEvents to static
       PubSubStats statistics = subStatsRef.get();

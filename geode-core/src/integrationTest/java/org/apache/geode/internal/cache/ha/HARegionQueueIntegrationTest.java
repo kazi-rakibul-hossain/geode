@@ -153,7 +153,8 @@ public class HARegionQueueIntegrationTest {
     doReturn(Mockito.mock(InternalDistributedMember.class)).when(mockInternalDistributedSystem)
         .getDistributedMember();
     doReturn(Mockito.mock(Statistics.class))
-        .when(mockInternalDistributedSystem.getInternalDistributedSystemStats())
+        .when(mockInternalDistributedSystem.getInternalDistributedSystemStats()
+            .getStatisticsFactory())
         .createAtomicStatistics(any(StatisticsType.class), any(String.class));
     doReturn(Mockito.mock(DistributionConfig.class)).when(mockDistributionManager).getConfig();
     doReturn(mockDistributionManager).when(mockInternalDistributedSystem).getDistributionManager();

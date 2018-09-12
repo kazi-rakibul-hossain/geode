@@ -20,7 +20,6 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import org.apache.geode.cache.Scope;
-import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 /**
  * Unit testing for ComplexDiskRegion API's
@@ -52,10 +51,9 @@ public class ComplexDiskRegionJUnitTest extends DiskRegionTestingBase {
     diskProps.setAllowForceCompaction(true);
     region = DiskRegionHelperFactory.getSyncPersistOnlyRegion(cache, diskProps, Scope.LOCAL);
     DiskRegion dr = ((LocalRegion) region).getDiskRegion();
-    StatisticsFactory factory = region.getCache().getDistributedSystem().getStatisticsFactory();
-    Oplog oplog1 = new Oplog(11, dr.getOplogSet(), new DirectoryHolder(factory, dirs[1], 1000, 0));
-    Oplog oplog2 = new Oplog(12, dr.getOplogSet(), new DirectoryHolder(factory, dirs[2], 1000, 1));
-    Oplog oplog3 = new Oplog(13, dr.getOplogSet(), new DirectoryHolder(factory, dirs[3], 1000, 2));
+    Oplog oplog1 = new Oplog(11, dr.getOplogSet(), new DirectoryHolder(dirs[1], 1000, 0));
+    Oplog oplog2 = new Oplog(12, dr.getOplogSet(), new DirectoryHolder(dirs[2], 1000, 1));
+    Oplog oplog3 = new Oplog(13, dr.getOplogSet(), new DirectoryHolder(dirs[3], 1000, 2));
     // give these Oplogs some fake "live" entries
     oplog1.incTotalCount();
     oplog1.incLiveCount();
@@ -109,10 +107,9 @@ public class ComplexDiskRegionJUnitTest extends DiskRegionTestingBase {
     diskProps.setRolling(false);
     region = DiskRegionHelperFactory.getSyncPersistOnlyRegion(cache, diskProps, Scope.LOCAL);
     DiskRegion dr = ((LocalRegion) region).getDiskRegion();
-    StatisticsFactory factory = region.getCache().getDistributedSystem().getStatisticsFactory();
-    Oplog oplog1 = new Oplog(11, dr.getOplogSet(), new DirectoryHolder(factory, dirs[1], 1000, 0));
-    Oplog oplog2 = new Oplog(12, dr.getOplogSet(), new DirectoryHolder(factory, dirs[2], 1000, 1));
-    Oplog oplog3 = new Oplog(13, dr.getOplogSet(), new DirectoryHolder(factory, dirs[3], 1000, 2));
+    Oplog oplog1 = new Oplog(11, dr.getOplogSet(), new DirectoryHolder(dirs[1], 1000, 0));
+    Oplog oplog2 = new Oplog(12, dr.getOplogSet(), new DirectoryHolder(dirs[2], 1000, 1));
+    Oplog oplog3 = new Oplog(13, dr.getOplogSet(), new DirectoryHolder(dirs[3], 1000, 2));
     // give these Oplogs some fake "live" entries
     oplog1.incTotalCount();
     oplog1.incLiveCount();

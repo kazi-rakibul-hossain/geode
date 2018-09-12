@@ -85,8 +85,7 @@ public class QueueManagerJUnitTest {
     properties.put(MCAST_PORT, "0");
     properties.put(LOCATORS, "");
     distributedSystem = DistributedSystem.connect(properties);
-    stats = StatsFactory.createStatsImpl(PoolStats.class, distributedSystem.getStatisticsFactory(),
-        "QueueManagerJUnitTest");
+    stats = StatsFactory.createStatsImpl(PoolStats.class, "QueueManagerJUnitTest");
     pool = new DummyPool();
     endpoints = new EndpointManagerImpl("pool", distributedSystem,
         distributedSystem.getCancelCriterion(), pool.getStats());

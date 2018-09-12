@@ -94,8 +94,7 @@ public class ConnectionManagerJUnitTest {
     distributedSystem = DistributedSystem.connect(properties);
     background = Executors.newSingleThreadScheduledExecutor();
     poolStats =
-        StatsFactory.createStatsImpl(PoolStats.class, distributedSystem.getStatisticsFactory(),
-            "connectionManagerJUnitTest");
+        StatsFactory.createStatsImpl(PoolStats.class, "connectionManagerJUnitTest");
     endpointManager = new EndpointManagerImpl("pool", distributedSystem,
         distributedSystem.getCancelCriterion(), poolStats);
     cancelCriterion = new CancelCriterion() {

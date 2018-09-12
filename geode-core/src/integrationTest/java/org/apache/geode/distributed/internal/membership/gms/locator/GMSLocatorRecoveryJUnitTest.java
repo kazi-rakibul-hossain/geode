@@ -51,10 +51,8 @@ import org.apache.geode.internal.Version;
 import org.apache.geode.internal.admin.remote.RemoteTransportConfig;
 import org.apache.geode.internal.net.SocketCreator;
 import org.apache.geode.internal.security.SecurityServiceFactory;
-import org.apache.geode.internal.statistics.StatisticsTypeFactoryImpl;
 import org.apache.geode.stats.common.distributed.internal.DMStats;
 import org.apache.geode.stats.common.distributed.internal.LocatorStats;
-import org.apache.geode.stats.common.statistics.StatisticsFactory;
 import org.apache.geode.stats.common.statistics.factory.StatsFactory;
 import org.apache.geode.test.junit.categories.MembershipTest;
 
@@ -71,8 +69,7 @@ public class GMSLocatorRecoveryJUnitTest {
       this.tempStateFile.delete();
     }
     this.locator = new GMSLocator(null, null, false, false,
-        StatsFactory.createStatsImpl(LocatorStats.class,
-            (StatisticsFactory) new StatisticsTypeFactoryImpl(), "testLocator"),
+        StatsFactory.createStatsImpl(LocatorStats.class, "testLocator"),
         "");
     locator.setViewFile(tempStateFile);
     // System.out.println("temp state file: " + tempStateFile);
@@ -184,8 +181,7 @@ public class GMSLocatorRecoveryJUnitTest {
 
       GMSLocator l2 = new GMSLocator(SocketCreator.getLocalHost(),
           m1.getLocalMember().getHost() + "[" + port + "]", true, true,
-          StatsFactory.createStatsImpl(LocatorStats.class,
-              (StatisticsFactory) new StatisticsTypeFactoryImpl(), "testLocator"),
+          StatsFactory.createStatsImpl(LocatorStats.class, "testLocator"),
           "");
       l2.setViewFile(new File("l2.dat"));
       l2.init(null);
