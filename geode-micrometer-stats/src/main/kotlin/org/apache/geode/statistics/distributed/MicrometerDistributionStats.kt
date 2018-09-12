@@ -23,7 +23,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.util.NOW_NANOS
 import org.apache.geode.stats.common.distributed.internal.*
 
-class MicrometerDistributionStats(statisticsFactory: StatisticsFactory?, private val processID: String) :
+class MicrometerDistributionStats(statisticsFactory: StatisticsFactory, private val processID: String) :
         MicrometerMeterGroup(statisticsFactory,"DistributionStats-$processID"), DistributionStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("processID", processID.toString())

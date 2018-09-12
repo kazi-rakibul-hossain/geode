@@ -18,7 +18,7 @@ import org.apache.geode.stats.common.internal.cache.eviction.CountLRUEvictionSta
 import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 
-class MicrometerCountLRUStatistics(statisticsFactory: StatisticsFactory?, private val name: String) :
+class MicrometerCountLRUStatistics(statisticsFactory: StatisticsFactory, private val name: String) :
         MicrometerEvictionStatsImpl(statisticsFactory, name, "CountLRUStats-$name"), CountLRUEvictionStats {
 
     private val countEvictionEntriesAllowedCount = GaugeStatisticMeter("eviction.count.lru.entries.allowed.count", "Number of entries allowed in this region.")

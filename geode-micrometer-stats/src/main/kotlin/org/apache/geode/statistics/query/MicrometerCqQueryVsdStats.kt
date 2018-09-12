@@ -20,7 +20,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 
-class MicrometerCqQueryVsdStats(statisticsFactory: StatisticsFactory?, private val cqName: String) :
+class MicrometerCqQueryVsdStats(statisticsFactory: StatisticsFactory, private val cqName: String) :
         MicrometerMeterGroup(statisticsFactory,"CqQueryStats-$cqName"), CqQueryVsdStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("cqName", cqName)

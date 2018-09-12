@@ -26,7 +26,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerDLockStats(statisticsFactory: StatisticsFactory?, private val statMeter: String) :
+class MicrometerDLockStats(statisticsFactory: StatisticsFactory, private val statMeter: String) :
         MicrometerMeterGroup(statisticsFactory,"DLockStats-$statMeter"), DLockStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("statsMeter", statMeter)

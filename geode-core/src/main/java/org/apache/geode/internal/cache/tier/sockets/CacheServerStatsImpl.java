@@ -225,8 +225,8 @@ public class CacheServerStatsImpl implements CacheServerStats, GFSStatsImplement
 
   protected StatisticsType statType;
 
-  public CacheServerStatsImpl(String ownerName) {
-    this(InternalDistributedSystem.getAnyInstance().getStatisticsFactory(), ownerName, typeName,
+  public CacheServerStatsImpl(StatisticsFactory statisticsFactory, String ownerName) {
+    this(statisticsFactory, ownerName, typeName,
         null);
   }
 

@@ -23,7 +23,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerDiskStoreStats(statisticsFactory: StatisticsFactory?, private val diskStoreName: String) :
+class MicrometerDiskStoreStats(statisticsFactory: StatisticsFactory, private val diskStoreName: String) :
         MicrometerMeterGroup(statisticsFactory,"DiskStoreStats-$diskStoreName"), DiskStoreStats {
 
 

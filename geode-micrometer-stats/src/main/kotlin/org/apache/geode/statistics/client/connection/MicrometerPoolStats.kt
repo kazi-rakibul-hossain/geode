@@ -21,7 +21,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerPoolStats(statisticsFactory: StatisticsFactory?, val poolName: String) :
+class MicrometerPoolStats(statisticsFactory: StatisticsFactory, val poolName: String) :
         MicrometerMeterGroup(statisticsFactory,"PoolStats-$poolName"), PoolStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("poolName", poolName)

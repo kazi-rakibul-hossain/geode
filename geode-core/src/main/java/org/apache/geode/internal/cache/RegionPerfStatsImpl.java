@@ -22,7 +22,7 @@ import org.apache.geode.stats.common.statistics.StatisticsFactory;
 public class RegionPerfStatsImpl extends CachePerfStatsImpl implements RegionPerfStats {
   CachePerfStats cachePerfStats;
 
-  RegionPerfStatsImpl(StatisticsFactory statisticsFactory, CachePerfStats superStats,
+  public RegionPerfStatsImpl(StatisticsFactory statisticsFactory, CachePerfStats superStats,
       String regionName) {
     super(statisticsFactory, regionName);
     this.cachePerfStats = superStats;

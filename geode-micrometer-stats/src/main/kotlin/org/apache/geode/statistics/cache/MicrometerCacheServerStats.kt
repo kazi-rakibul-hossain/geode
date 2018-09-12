@@ -23,7 +23,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 
-open class MicrometerCacheServerStats @JvmOverloads constructor(statisticsFactory: StatisticsFactory?, private val ownerName: String, typeName: String = "CacheServerStats-$ownerName") :
+open class MicrometerCacheServerStats @JvmOverloads constructor(statisticsFactory: StatisticsFactory, private val ownerName: String, typeName: String = "CacheServerStats-$ownerName") :
         MicrometerMeterGroup(statisticsFactory,"$typeName-$ownerName"), CacheServerStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("owner", ownerName)

@@ -23,7 +23,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.micrometer.MicrometerStatsImplementer
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerLocatorStats(statisticsFactory: StatisticsFactory?, private val locatorName: String) :
+class MicrometerLocatorStats(statisticsFactory: StatisticsFactory, private val locatorName: String) :
         MicrometerMeterGroup(statisticsFactory,"LocatorStats-$locatorName"), LocatorStats, MicrometerStatsImplementer {
 
     override fun getGroupTags(): Array<String> = arrayOf("locatorName", locatorName)
@@ -48,7 +48,7 @@ class MicrometerLocatorStats(statisticsFactory: StatisticsFactory?, private val 
     private val locatorClientResponseTimer = TimerStatisticMeter("locator.response.time", "Time spent sending location responses to clients", meterUnit = "nanoseconds")
     private val locatorServerLoadUpdateMeter = CounterStatisticMeter("locator.server.load.update.count", "Total number of times a server load update has been received.")
 
-    override fun hookupStats(f: StatisticsFactory?, name: String?) {
+    override fun hookupStats(name: String?) {
         //noop
     }
 

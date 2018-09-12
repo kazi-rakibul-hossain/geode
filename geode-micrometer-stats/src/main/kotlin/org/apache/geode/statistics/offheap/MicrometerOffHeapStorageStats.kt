@@ -22,7 +22,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerOffHeapStorageStats(statisticsFactory: StatisticsFactory?, private val name: String) :
+class MicrometerOffHeapStorageStats(statisticsFactory: StatisticsFactory, private val name: String) :
         MicrometerMeterGroup(statisticsFactory, "OffHeapMemoryStats-$name"), OffHeapStorageStats {
     override fun getGroupTags(): Array<String> = arrayOf("offheap", name)
 

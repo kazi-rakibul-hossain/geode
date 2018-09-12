@@ -19,7 +19,7 @@ import org.apache.geode.stats.common.internal.cache.RegionPerfStats
 import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.statistics.cache.MicrometerCachePerfStats
 
-class MicrometerRegionPerfStats(statisticsFactory: StatisticsFactory?, private var cachePerfStats: CachePerfStats, private val regionName: String) :
+class MicrometerRegionPerfStats(statisticsFactory: StatisticsFactory, private var cachePerfStats: CachePerfStats, private val regionName: String) :
         MicrometerCachePerfStats(statisticsFactory, regionName), RegionPerfStats {
 
     override fun incReliableQueuedOps(inc: Int) {

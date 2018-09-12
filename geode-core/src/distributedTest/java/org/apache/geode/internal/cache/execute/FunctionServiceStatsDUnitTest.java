@@ -169,7 +169,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
    * functions this is true, however, at this point the function stats may not have been updated yet
    * thus any code which checks stats after calling getResult() may get wrong data.
    */
-  private void waitNoFunctionsRunning(FunctionServiceStats stats) {
+  private void waitNoFunctionsRunning(FunctionServiceStatsImpl stats) {
     int count = 100;
     while (stats.getFunctionExecutionsRunning() > 0 && count > 0) {
       count--;
@@ -271,7 +271,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
         // checks for the aggregate stats
         InternalDistributedSystem internalDistributedSystem =
             (InternalDistributedSystem) cache.getDistributedSystem();
-        FunctionServiceStats functionServiceStats =
+        FunctionServiceStatsImpl functionServiceStats =
             internalDistributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
         waitNoFunctionsRunning(functionServiceStats);
 
@@ -310,7 +310,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
         // checks for the aggregate stats
         InternalDistributedSystem internalDistributedSystem =
             (InternalDistributedSystem) cache.getDistributedSystem();
-        FunctionServiceStats functionServiceStats =
+        FunctionServiceStatsImpl functionServiceStats =
             internalDistributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
         waitNoFunctionsRunning(functionServiceStats);
 
@@ -517,7 +517,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
         // checks for the aggregate stats
         InternalDistributedSystem internalDistributedSystem =
             (InternalDistributedSystem) cache.getDistributedSystem();
-        FunctionServiceStats functionServiceStats =
+        FunctionServiceStatsImpl functionServiceStats =
             internalDistributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
         waitNoFunctionsRunning(functionServiceStats);
 
@@ -612,7 +612,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
         // checks for the aggregate stats
         InternalDistributedSystem internalDistributedSystem =
             (InternalDistributedSystem) cache.getDistributedSystem();
-        FunctionServiceStats functionServiceStats =
+        FunctionServiceStatsImpl functionServiceStats =
             internalDistributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
         waitNoFunctionsRunning(functionServiceStats);
 
@@ -649,7 +649,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
         // checks for the aggregate stats
         InternalDistributedSystem internalDistributedSystem =
             (InternalDistributedSystem) cache.getDistributedSystem();
-        FunctionServiceStats functionServiceStats =
+        FunctionServiceStatsImpl functionServiceStats =
             internalDistributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
         waitNoFunctionsRunning(functionServiceStats);
 
@@ -827,7 +827,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
       public Object call() throws Exception {
         InternalDistributedSystem internalDistributedSystem =
             ((InternalDistributedSystem) getCache().getDistributedSystem());
-        FunctionServiceStats functionServiceStats =
+        FunctionServiceStatsImpl functionServiceStats =
             internalDistributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
         waitNoFunctionsRunning(functionServiceStats);
 
@@ -863,7 +863,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
             InternalDistributedSystem internalDistributedSystem =
                 ((InternalDistributedSystem) getCache().getDistributedSystem());
             // 3 Function Executions took place
-            FunctionServiceStats functionServiceStats =
+            FunctionServiceStatsImpl functionServiceStats =
                 internalDistributedSystem.getInternalDistributedSystemStats()
                     .getFunctionServiceStats();
             waitNoFunctionsRunning(functionServiceStats);
@@ -1122,7 +1122,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
     member1.invoke(new SerializableCallable("checkFunctionExecutionStatsForMember1") {
       public Object call() throws Exception {
-        FunctionServiceStats functionServiceStats =
+        FunctionServiceStatsImpl functionServiceStats =
             distributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
         waitNoFunctionsRunning(functionServiceStats);
 
@@ -1146,7 +1146,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
     SerializableCallable checkFunctionExecutionStatsForOtherMember =
         new SerializableCallable("checkFunctionExecutionStatsForOtherMember") {
           public Object call() throws Exception {
-            FunctionServiceStats functionServiceStats =
+            FunctionServiceStatsImpl functionServiceStats =
                 distributedSystem.getInternalDistributedSystemStats().getFunctionServiceStats();
             waitNoFunctionsRunning(functionServiceStats);
 
@@ -1297,7 +1297,7 @@ public class FunctionServiceStatsDUnitTest extends PRClientServerTestBase {
 
             noOfExecutionCalls_Aggregate++;
             noOfExecutionExceptions_Aggregate++;
-            FunctionServiceStats functionServiceStats =
+            FunctionServiceStatsImpl functionServiceStats =
                 ((InternalDistributedSystem) getCache().getDistributedSystem())
                     .getInternalDistributedSystemStats()
                     .getFunctionServiceStats();

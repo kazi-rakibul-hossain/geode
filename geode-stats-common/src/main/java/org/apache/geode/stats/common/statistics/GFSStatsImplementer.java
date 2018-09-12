@@ -29,4 +29,9 @@ public interface GFSStatsImplementer extends StatsImplementer {
 
   @Override
   default void registerStatsImplementer(StatisticsFactory factory) {}
+
+  @Override
+  default void postConstruct(StatisticsFactory factory) {
+    initializeImplementer(factory);
+  }
 }

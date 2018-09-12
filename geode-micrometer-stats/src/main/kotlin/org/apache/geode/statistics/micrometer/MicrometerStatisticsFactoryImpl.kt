@@ -16,13 +16,14 @@ package org.apache.geode.statistics.micrometer
 
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
+import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMeter
+import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
+import org.apache.geode.statistics.internal.micrometer.impl.MicrometerStatisticsManager
 import org.apache.geode.stats.common.statistics.StatisticDescriptor
 import org.apache.geode.stats.common.statistics.Statistics
 import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.stats.common.statistics.StatisticsType
-import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMeter
-import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
-import org.apache.geode.statistics.internal.micrometer.impl.MicrometerStatisticsManager
+import org.apache.geode.stats.common.statistics.factory.StatsFactory
 import java.io.Reader
 
 class MicrometerStatisticsFactoryImpl(vararg meterRegistries: MeterRegistry = arrayOf(SimpleMeterRegistry())) : StatisticsFactory {
@@ -33,7 +34,7 @@ class MicrometerStatisticsFactoryImpl(vararg meterRegistries: MeterRegistry = ar
     override fun getType(): String = "Micrometer"
 
 
-    override fun createOsStatistics(type: StatisticsType?, textId: String, numericId: Long, osStatFlags: Int): Statistics =
+    override fun createOsStatistics(type: StatisticsType, textId: String, numericId: Long, osStatFlags: Int): Statistics =
             MicrometerStatisticsImpl(0, type as MicrometerStatisticsType, textId, numericId)
 
     override fun createStatistics(type: StatisticsType): Statistics {
@@ -95,7 +96,7 @@ class MicrometerStatisticsFactoryImpl(vararg meterRegistries: MeterRegistry = ar
     override fun createDoubleGauge(name: String, description: String, units: String, largerBetter: Boolean) = createIntGauge(name, description, units)
 
     override fun createType(name: String, description: String, stats: Array<StatisticDescriptor>): StatisticsType {
-        val micrometerStatisticsType = MicrometerStatisticsType(name, description, stats)
+        val micrometerStatisticsType = MicrometerStatisticsType(name, description, stats, StatsFactory.getStatisticsFactory())
         micrometerStatisticsManager.registerMeterGroup(name, micrometerStatisticsType)
         meterGroupMap[name] = micrometerStatisticsType
         return micrometerStatisticsType

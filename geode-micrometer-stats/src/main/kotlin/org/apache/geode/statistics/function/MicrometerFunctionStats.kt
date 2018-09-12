@@ -20,9 +20,10 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.util.NOW_NANOS
+import org.apache.geode.stats.common.statistics.factory.StatsFactory
 import java.util.concurrent.ConcurrentHashMap
 
-class MicrometerFunctionStats(statisticsFactory: StatisticsFactory?, private val functionName: String) :
+class MicrometerFunctionStats(statisticsFactory: StatisticsFactory, private val functionName: String) :
         MicrometerMeterGroup(statisticsFactory, "FunctionStats-$functionName"), FunctionStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("functionId", functionName)
@@ -47,7 +48,7 @@ class MicrometerFunctionStats(statisticsFactory: StatisticsFactory?, private val
         @JvmStatic
         fun getFunctionStats(textId: String): MicrometerFunctionStats =
                 functionExecutionStatsMap[textId] ?: run {
-                    val functionStats = MicrometerFunctionStats(statisticsFactory = null,functionName = textId)
+                    val functionStats = StatsFactory.createStatsImpl<MicrometerFunctionStats>(FunctionStats::class.java, textId)
                     functionExecutionStatsMap[textId] = functionStats
                     functionStats
                 }

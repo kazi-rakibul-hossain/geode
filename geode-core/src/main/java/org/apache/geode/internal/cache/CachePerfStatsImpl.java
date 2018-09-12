@@ -35,129 +35,129 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
 
   private StatisticsType type;
 
-  protected int loadsInProgressId;
-  protected int loadsCompletedId;
-  protected int loadTimeId;
-  protected int netloadsInProgressId;
-  protected int netloadsCompletedId;
-  protected int netloadTimeId;
-  protected int netsearchesInProgressId;
-  protected int netsearchesCompletedId;
-  protected int netsearchTimeId;
-  protected int cacheWriterCallsInProgressId;
-  protected int cacheWriterCallsCompletedId;
-  protected int cacheWriterCallTimeId;
-  protected int cacheListenerCallsInProgressId;
-  protected int cacheListenerCallsCompletedId;
-  protected int cacheListenerCallTimeId;
-  protected int getInitialImagesInProgressId;
-  protected int getInitialImagesCompletedId;
-  protected int deltaGetInitialImagesCompletedId;
-  protected int getInitialImageTimeId;
-  protected int getInitialImageKeysReceivedId;
-  protected int regionsId;
-  protected int partitionedRegionsId;
-  protected int destroysId;
-  protected int createsId;
-  protected int putsId;
-  protected int putTimeId;
-  protected int putallsId;
-  protected int putallTimeId;
-  protected int removeAllsId;
-  protected int removeAllTimeId;
-  protected int updatesId;
-  protected int updateTimeId;
-  protected int invalidatesId;
-  protected int getsId;
-  protected int getTimeId;
-  protected int eventQueueSizeId;
-  protected int eventQueueThrottleTimeId;
-  protected int eventQueueThrottleCountId;
-  protected int eventThreadsId;
-  protected int missesId;
-  protected int queryExecutionsId;
-  protected int queryExecutionTimeId;
-  protected int queryResultsHashCollisionsId;
-  protected int queryResultsHashCollisionProbeTimeId;
-  protected int partitionedRegionQueryRetriesId;
+  int loadsInProgressId;
+  int loadsCompletedId;
+  int loadTimeId;
+  int netloadsInProgressId;
+  int netloadsCompletedId;
+  int netloadTimeId;
+  int netsearchesInProgressId;
+  int netsearchesCompletedId;
+  int netsearchTimeId;
+  int cacheWriterCallsInProgressId;
+  int cacheWriterCallsCompletedId;
+  int cacheWriterCallTimeId;
+  int cacheListenerCallsInProgressId;
+  int cacheListenerCallsCompletedId;
+  int cacheListenerCallTimeId;
+  int getInitialImagesInProgressId;
+  int getInitialImagesCompletedId;
+  private int deltaGetInitialImagesCompletedId;
+  int getInitialImageTimeId;
+  int getInitialImageKeysReceivedId;
+  int regionsId;
+  int partitionedRegionsId;
+  int destroysId;
+  int createsId;
+  int putsId;
+  int putTimeId;
+  int putallsId;
+  int putallTimeId;
+  private int removeAllsId;
+  private int removeAllTimeId;
+  int updatesId;
+  int updateTimeId;
+  int invalidatesId;
+  int getsId;
+  int getTimeId;
+  int eventQueueSizeId;
+  int eventQueueThrottleTimeId;
+  int eventQueueThrottleCountId;
+  int eventThreadsId;
+  int missesId;
+  int queryExecutionsId;
+  int queryExecutionTimeId;
+  int queryResultsHashCollisionsId;
+  int queryResultsHashCollisionProbeTimeId;
+  int partitionedRegionQueryRetriesId;
 
-  protected int txSuccessLifeTimeId;
-  protected int txFailedLifeTimeId;
-  protected int txRollbackLifeTimeId;
-  protected int txCommitsId;
-  protected int txFailuresId;
-  protected int txRollbacksId;
-  protected int txCommitTimeId;
-  protected int txFailureTimeId;
-  protected int txRollbackTimeId;
-  protected int txCommitChangesId;
-  protected int txFailureChangesId;
-  protected int txRollbackChangesId;
-  protected int txConflictCheckTimeId;
+  int txSuccessLifeTimeId;
+  int txFailedLifeTimeId;
+  int txRollbackLifeTimeId;
+  int txCommitsId;
+  int txFailuresId;
+  int txRollbacksId;
+  int txCommitTimeId;
+  int txFailureTimeId;
+  int txRollbackTimeId;
+  int txCommitChangesId;
+  int txFailureChangesId;
+  int txRollbackChangesId;
+  int txConflictCheckTimeId;
 
-  protected int reliableQueuedOpsId;
-  protected int reliableQueueSizeId;
-  protected int reliableQueueMaxId;
-  protected int reliableRegionsId;
-  protected int reliableRegionsMissingId;
-  protected int reliableRegionsQueuingId;
-  protected int reliableRegionsMissingFullAccessId;
-  protected int reliableRegionsMissingLimitedAccessId;
-  protected int reliableRegionsMissingNoAccessId;
-  protected int entryCountId;
-  protected int eventsQueuedId;
-  protected int retriesId;
+  int reliableQueuedOpsId;
+  int reliableQueueSizeId;
+  int reliableQueueMaxId;
+  int reliableRegionsId;
+  int reliableRegionsMissingId;
+  int reliableRegionsQueuingId;
+  int reliableRegionsMissingFullAccessId;
+  int reliableRegionsMissingLimitedAccessId;
+  int reliableRegionsMissingNoAccessId;
+  int entryCountId;
+  int eventsQueuedId;
+  int retriesId;
 
-  protected int diskTasksWaitingId;
-  protected int evictorJobsStartedId;
-  protected int evictorJobsCompletedId;
-  protected int evictorQueueSizeId;
+  int diskTasksWaitingId;
+  int evictorJobsStartedId;
+  int evictorJobsCompletedId;
+  int evictorQueueSizeId;
 
-  protected int evictWorkTimeId;
+  int evictWorkTimeId;
 
 
-  protected int indexUpdateInProgressId;
-  protected int indexUpdateCompletedId;
-  protected int indexUpdateTimeId;
-  protected int clearsId;
-  protected int indexInitializationInProgressId;
-  protected int indexInitializationCompletedId;
-  protected int indexInitializationTimeId;
+  int indexUpdateInProgressId;
+  int indexUpdateCompletedId;
+  int indexUpdateTimeId;
+  int clearsId;
+  private int indexInitializationInProgressId;
+  private int indexInitializationCompletedId;
+  private int indexInitializationTimeId;
 
   /**
    * Id of the meta data refresh statistic
    */
-  protected int metaDataRefreshCountId;
+  int metaDataRefreshCountId;
 
-  protected int conflatedEventsId;
-  protected int tombstoneCountId;
-  protected int tombstoneGCCountId;
-  protected int tombstoneOverhead1Id;
-  protected int tombstoneOverhead2Id;
-  protected int clearTimeoutsId;
+  int conflatedEventsId;
+  int tombstoneCountId;
+  int tombstoneGCCountId;
+  private int tombstoneOverhead1Id;
+  private int tombstoneOverhead2Id;
+  int clearTimeoutsId;
 
-  protected int deltaUpdatesId;
-  protected int deltaUpdatesTimeId;
-  protected int deltaFailedUpdatesId;
+  private int deltaUpdatesId;
+  private int deltaUpdatesTimeId;
+  private int deltaFailedUpdatesId;
 
-  protected int deltasPreparedId;
-  protected int deltasPreparedTimeId;
-  protected int deltasSentId;
+  private int deltasPreparedId;
+  private int deltasPreparedTimeId;
+  private int deltasSentId;
 
-  protected int deltaFullValuesSentId;
-  protected int deltaFullValuesRequestedId;
+  private int deltaFullValuesSentId;
+  private int deltaFullValuesRequestedId;
 
-  protected int importedEntriesCountId;
-  protected int importTimeId;
-  protected int exportedEntriesCountId;
-  protected int exportTimeId;
+  int importedEntriesCountId;
+  int importTimeId;
+  int exportedEntriesCountId;
+  int exportTimeId;
 
-  protected int compressionCompressTimeId;
-  protected int compressionDecompressTimeId;
-  protected int compressionCompressionsId;
-  protected int compressionDecompressionsId;
-  protected int compressionPreCompressedBytesId;
-  protected int compressionPostCompressedBytesId;
+  private int compressionCompressTimeId;
+  private int compressionDecompressTimeId;
+  private int compressionCompressionsId;
+  private int compressionDecompressionsId;
+  int compressionPreCompressedBytesId;
+  int compressionPostCompressedBytesId;
 
   /**
    * The Statistics object that we delegate most behavior to
@@ -1064,10 +1064,8 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
   public void endLoad(long start) {
     // note that load times are used in health checks and
     // should not be disabled by enableClockStats==false
-    long ts = NanoTimer.getTime(); // don't use getStatTime so always enabled
-    stats.incLong(loadTimeId, ts - start);
-    stats.incInt(loadsInProgressId, -1);
-    stats.incInt(loadsCompletedId, 1);
+    calculateEndTimeMetrics(start, loadTimeId, loadsInProgressId,
+        loadsCompletedId);
   }
 
   /**
@@ -1107,10 +1105,17 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
   public void endNetsearch(long start) {
     // note that netsearch is used in health checks and timings should
     // not be disabled by enableClockStats==false
-    long ts = NanoTimer.getTime(); // don't use getStatTime so always enabled
-    stats.incLong(netsearchTimeId, ts - start);
-    stats.incInt(netsearchesInProgressId, -1);
-    stats.incInt(netsearchesCompletedId, 1);
+    calculateEndTimeMetrics(start, netsearchTimeId, netsearchesInProgressId,
+        netsearchesCompletedId);
+  }
+
+  private void calculateEndTimeMetrics(long start, int deltaTimeId,
+                                       int inProgressId, int completedId) {
+    if (enableClockStats) {
+      stats.incLong(deltaTimeId, NanoTimer.getTime() - start);
+    }
+    stats.incInt(inProgressId, -1);
+    stats.incInt(completedId, 1);
   }
 
   /**
@@ -1127,11 +1132,7 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
    */
   @Override
   public void endCacheWriterCall(long start) {
-    if (enableClockStats) {
-      stats.incLong(cacheWriterCallTimeId, CachePerfStats.getStatTime() - start);
-    }
-    stats.incInt(cacheWriterCallsInProgressId, -1);
-    stats.incInt(cacheWriterCallsCompletedId, 1);
+    calculateEndTimeMetrics(start,cacheWriterCallTimeId,cacheWriterCallsInProgressId,cacheWriterCallsCompletedId);
   }
 
   /**
@@ -1150,11 +1151,7 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
    */
   @Override
   public void endCacheListenerCall(long start) {
-    if (enableClockStats) {
-      stats.incLong(cacheListenerCallTimeId, CachePerfStats.getStatTime() - start);
-    }
-    stats.incInt(cacheListenerCallsInProgressId, -1);
-    stats.incInt(cacheListenerCallsCompletedId, 1);
+    calculateEndTimeMetrics(start,cacheListenerCallTimeId,cacheListenerCallsInProgressId,cacheListenerCallsCompletedId);
   }
 
   /**
@@ -1171,11 +1168,7 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
    */
   @Override
   public void endGetInitialImage(long start) {
-    if (enableClockStats) {
-      stats.incLong(getInitialImageTimeId, CachePerfStats.getStatTime() - start);
-    }
-    stats.incInt(getInitialImagesInProgressId, -1);
-    stats.incInt(getInitialImagesCompletedId, 1);
+    calculateEndTimeMetrics(start,getInitialImageTimeId,getInitialImagesInProgressId,getInitialImagesCompletedId);
   }
 
   /**
@@ -1207,10 +1200,8 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
 
   @Override
   public void endIndexUpdate(long start) {
-    long ts = CachePerfStats.getStatTime();
-    stats.incLong(indexUpdateTimeId, ts - start);
-    stats.incInt(indexUpdateInProgressId, -1);
-    stats.incInt(indexUpdateCompletedId, 1);
+    calculateEndTimeMetrics(start, indexUpdateTimeId,
+        indexUpdateInProgressId, indexUpdateCompletedId);
   }
 
   @Override
@@ -1221,10 +1212,8 @@ public class CachePerfStatsImpl implements CachePerfStats, GFSStatsImplementer {
 
   @Override
   public void endIndexInitialization(long start) {
-    long ts = CachePerfStats.getStatTime();
-    stats.incLong(indexInitializationTimeId, ts - start);
-    stats.incInt(indexInitializationInProgressId, -1);
-    stats.incInt(indexInitializationCompletedId, 1);
+    calculateEndTimeMetrics(start, indexInitializationTimeId,
+        indexInitializationInProgressId, indexInitializationCompletedId);
   }
 
   @Override

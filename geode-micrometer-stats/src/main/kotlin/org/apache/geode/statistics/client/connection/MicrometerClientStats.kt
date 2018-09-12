@@ -19,7 +19,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 
-class MicrometerClientStats(statisticsFactory: StatisticsFactory?, private val poolName:String) :
+class MicrometerClientStats(statisticsFactory: StatisticsFactory, private val poolName:String) :
         MicrometerMeterGroup(statisticsFactory,"ClientConnectionStats-$poolName") {
 
     override fun getGroupTags(): Array<String> = arrayOf("poolName", poolName)

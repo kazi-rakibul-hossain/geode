@@ -21,7 +21,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 
-class MicrometerDiskDirectoryStats(statisticsFactory: StatisticsFactory?, private val owner: String) :
+class MicrometerDiskDirectoryStats(statisticsFactory: StatisticsFactory, private val owner: String) :
         MicrometerMeterGroup(statisticsFactory,"DiskDirectoryStats-$owner"), DiskDirectoryStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("directoryOwner", owner)

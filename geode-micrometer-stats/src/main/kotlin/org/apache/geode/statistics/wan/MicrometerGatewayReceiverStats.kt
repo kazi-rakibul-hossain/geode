@@ -20,7 +20,7 @@ import org.apache.geode.statistics.cache.MicrometerCacheServerStats
 import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMeter
 
 //By inheritence this is a MicrometerMeterGroup
-class MicrometerGatewayReceiverStats(statisticsFactory: StatisticsFactory?, private val owner: String) :
+class MicrometerGatewayReceiverStats(statisticsFactory: StatisticsFactory, private val owner: String) :
         MicrometerCacheServerStats(statisticsFactory, owner, "GatewayReceiverStats-$owner"), GatewayReceiverStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("owner", owner)

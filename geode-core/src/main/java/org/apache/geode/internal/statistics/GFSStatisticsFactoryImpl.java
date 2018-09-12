@@ -26,6 +26,8 @@ public class GFSStatisticsFactoryImpl implements StatisticsFactory, StatisticsMa
   // StatisticsTypeFactory methods
   private StatisticsTypeFactory statisticsTypeFactory = new StatisticsTypeFactoryImpl();
 
+  public GFSStatisticsFactoryImpl() {}
+
   @Override
   public int getStatListModCount() {
     return this.statsListModCount;
@@ -177,7 +179,7 @@ public class GFSStatisticsFactoryImpl implements StatisticsFactory, StatisticsMa
 
   @Override
   public Statistics createStatistics(StatisticsType type, String textId) {
-    return statisticsTypeFactory.createOsStatistics(type, textId, 0, 0);
+    return createOsStatistics(type, textId, 0, 0);
   }
 
   @Override

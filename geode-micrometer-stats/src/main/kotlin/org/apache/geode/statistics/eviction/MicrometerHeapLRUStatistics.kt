@@ -18,7 +18,7 @@ import org.apache.geode.stats.common.internal.cache.eviction.HeapLRUEvictionStat
 import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 
-class MicrometerHeapLRUStatistics(statisticsFactory: StatisticsFactory?, private val name: String) :
+class MicrometerHeapLRUStatistics(statisticsFactory: StatisticsFactory, private val name: String) :
         MicrometerEvictionStatsImpl(statisticsFactory, name, "HeapLRUStatistics-$name"), HeapLRUEvictionStats {
 
     private val heapEvictionEntryBytesMeter = GaugeStatisticMeter("eviction.heap.lru.entries.bytes", "The amount of memory currently used by regions configured for eviction.", meterUnit = "bytes")

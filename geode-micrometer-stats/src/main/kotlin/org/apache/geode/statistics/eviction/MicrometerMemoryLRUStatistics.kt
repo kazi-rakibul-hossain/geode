@@ -18,7 +18,7 @@ import org.apache.geode.stats.common.internal.cache.eviction.MemoryLRUEvictionSt
 import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 
-class MicrometerMemoryLRUStatistics(statisticsFactory: StatisticsFactory?, private val name: String) :
+class MicrometerMemoryLRUStatistics(statisticsFactory: StatisticsFactory, private val name: String) :
         MicrometerEvictionStatsImpl(statisticsFactory,name, "MemLRUStatistics-$name"), MemoryLRUEvictionStats {
 
     override fun initializeStaticMeters() {

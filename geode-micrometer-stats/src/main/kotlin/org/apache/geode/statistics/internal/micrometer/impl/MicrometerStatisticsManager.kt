@@ -93,13 +93,13 @@ object MicrometerStatisticsManager : StatisticsManager {
         if (meterGroup is MicrometerMeterGroup) {
             registeredMeterGroups.putIfAbsent(groupName, meterGroup)
                     ?.run { println("MeterGroup: $groupName was already registered") }
-            if (!enableStats) {
-                meterRegistry.config().meterFilter(object : MeterFilter {
-                    override fun accept(id: Meter.Id): MeterFilterReply {
-                        return MeterFilterReply.DENY
-                    }
-                })
-            }
+//            if (!enableStats) {
+//                meterRegistry.config().meterFilter(object : MeterFilter {
+//                    override fun accept(id: Meter.Id): MeterFilterReply {
+//                        return MeterFilterReply.DENY
+//                    }
+//                })
+//            }
             meterGroup.bindTo(meterRegistry)
         } else {
             TODO("Register Non-MircometerMeterGrouops, this feature is not yet supported. Most likely never will be")
@@ -115,7 +115,7 @@ object MicrometerStatisticsManager : StatisticsManager {
         val compositeMeterRegistry = CompositeMeterRegistry(Clock.SYSTEM)
 //        compositeMeterRegistry.add(createInfluxDB())
 //        compositeMeterRegistry.add(createPrometheus())
-//        compositeMeterRegistry.add(createJMX())
+        compositeMeterRegistry.add(createJMX())
         return compositeMeterRegistry
     }
 

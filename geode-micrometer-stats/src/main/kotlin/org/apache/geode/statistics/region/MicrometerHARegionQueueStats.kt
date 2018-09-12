@@ -19,7 +19,7 @@ import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 
-class MicrometerHARegionQueueStats(statisticsFactory: StatisticsFactory?, private val queueName: String) :
+class MicrometerHARegionQueueStats(statisticsFactory: StatisticsFactory, private val queueName: String) :
         MicrometerMeterGroup(statisticsFactory,"ClientSubscriptionStats-$queueName"), HARegionQueueStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("queueName", queueName)

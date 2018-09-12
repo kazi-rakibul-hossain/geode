@@ -14,22 +14,24 @@
  */
 package org.apache.geode.statistics.micrometer
 
-import org.apache.geode.stats.common.statistics.StatisticDescriptor
-import org.apache.geode.stats.common.statistics.StatisticsType
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerStatisticMeter
+import org.apache.geode.stats.common.statistics.StatisticDescriptor
+import org.apache.geode.stats.common.statistics.StatisticsFactory
+import org.apache.geode.stats.common.statistics.StatisticsType
 
 class MicrometerStatisticsType(private val name: String,
                                private val description: String,
-                               private val statistics: Array<StatisticDescriptor>) :
-        StatisticsType, MicrometerMeterGroup(statisticsFactory = null,groupName = name) {
+                               private val statistics: Array<StatisticDescriptor>,
+                               private val statisticsFactory: StatisticsFactory) :
+        StatisticsType, MicrometerMeterGroup(statisticsFactory = statisticsFactory, groupName = name) {
 
     override fun initializeStaticMeters() {
         //noop
     }
 
     private val statsArray: Array<StatisticDescriptor> = statistics
-//    private val statsIdToNameMap = hashMapOf<Int, String>()
+    //    private val statsIdToNameMap = hashMapOf<Int, String>()
     private val statsNameToIdMap = hashMapOf<String, Int>()
 
     init {
@@ -37,7 +39,6 @@ class MicrometerStatisticsType(private val name: String,
             run {
                 statisticDescriptor as MicrometerStatisticMeter
                 statisticDescriptor.meterId = index
-//                statsIdToNameMap[index] = statisticDescriptor.name
                 statsNameToIdMap[statisticDescriptor.name] = index
                 registerMeter(statisticDescriptor)
             }

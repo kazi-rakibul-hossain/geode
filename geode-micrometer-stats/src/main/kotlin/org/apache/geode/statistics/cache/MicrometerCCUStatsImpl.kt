@@ -20,7 +20,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 
-class MicrometerCCUStatsImpl internal constructor(statisticsFactory: StatisticsFactory?, private val serverLocation: String) :
+class MicrometerCCUStatsImpl internal constructor(statisticsFactory: StatisticsFactory, private val serverLocation: String) :
         CCUStats, MicrometerMeterGroup(statisticsFactory, "CacheClientUpdaterStats-$serverLocation") {
 
     override fun getGroupTags(): Array<String> = arrayOf("serverLocation", serverLocation)

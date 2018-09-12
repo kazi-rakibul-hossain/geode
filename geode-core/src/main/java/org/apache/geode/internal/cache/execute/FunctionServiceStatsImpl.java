@@ -14,12 +14,13 @@
  */
 package org.apache.geode.internal.cache.execute;
 
+import org.apache.geode.stats.common.statistics.GFSStatsImplementer;
 import org.apache.geode.stats.common.statistics.StatisticDescriptor;
 import org.apache.geode.stats.common.statistics.Statistics;
 import org.apache.geode.stats.common.statistics.StatisticsFactory;
 import org.apache.geode.stats.common.statistics.StatisticsType;
 
-public class FunctionServiceStats {
+public class FunctionServiceStatsImpl implements FunctionServiceStats, GFSStatsImplementer {
 
   /** The <code>StatisticsType</code> of the statistics */
   private StatisticsType _type;
@@ -111,7 +112,7 @@ public class FunctionServiceStats {
   /**
    * Static initializer to create and initialize the <code>StatisticsType</code>
    */
-  private void initializeStats(StatisticsFactory factory) {
+  public void initializeStats(StatisticsFactory factory) {
     String statName = "FunctionServiceStatistics";
     String statDescription =
         "This is the aggregate Function Execution Stats (for all function Executions)";
@@ -174,7 +175,7 @@ public class FunctionServiceStats {
    *        instance
    * @param name The name of the <code>Statistics</code>
    */
-  public FunctionServiceStats(StatisticsFactory factory, String name) {
+  public FunctionServiceStatsImpl(StatisticsFactory factory, String name) {
     initializeStats(factory);
     this._stats = factory.createAtomicStatistics(_type, name);
   }
@@ -193,6 +194,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "function Executions completed" stat
    */
+  @Override
   public int getFunctionExecutionsCompleted() {
     return this._stats.getInt(_functionExecutionsCompletedId);
   }
@@ -200,6 +202,7 @@ public class FunctionServiceStats {
   /**
    * Increments the "FunctionExecutionsCompleted" stat.
    */
+  @Override
   public void incFunctionExecutionsCompleted() {
     this._stats.incInt(_functionExecutionsCompletedId, 1);
   }
@@ -209,6 +212,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "functionExecutionCompleteProcessingTime" stat
    */
+  @Override
   public long getFunctionExecutionCompleteProcessingTime() {
     return this._stats.getLong(_functionExecutionsCompletedProcessingTimeId);
   }
@@ -218,6 +222,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "functionExecutionsRunning" stat
    */
+  @Override
   public int getFunctionExecutionsRunning() {
     return this._stats.getInt(_functionExecutionsRunningId);
   }
@@ -225,6 +230,7 @@ public class FunctionServiceStats {
   /**
    * Increments the "FunctionExecutionsRunning" stat.
    */
+  @Override
   public void incFunctionExecutionsRunning() {
     this._stats.incInt(_functionExecutionsRunningId, 1);
   }
@@ -234,6 +240,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "resultsReturned" stat
    */
+  @Override
   public int getResultsSentToResultCollector() {
     return this._stats.getInt(_resultsSentToResultCollectorId);
   }
@@ -241,6 +248,7 @@ public class FunctionServiceStats {
   /**
    * Increments the "ResultsReturnedToResultCollector" stat.
    */
+  @Override
   public void incResultsReturned() {
     this._stats.incInt(_resultsSentToResultCollectorId, 1);
   }
@@ -251,6 +259,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "resultsReturned" stat
    */
+  @Override
   public int getResultsReceived() {
     return this._stats.getInt(_resultsReceived);
   }
@@ -258,6 +267,7 @@ public class FunctionServiceStats {
   /**
    * Increments the "ResultsReturnedToResultCollector" stat.
    */
+  @Override
   public void incResultsReceived() {
     this._stats.incInt(_resultsReceived, 1);
   }
@@ -267,6 +277,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "functionExecutionsCall" stat
    */
+  @Override
   public int getFunctionExecutionCalls() {
     return this._stats.getInt(_functionExecutionCallsId);
   }
@@ -274,6 +285,7 @@ public class FunctionServiceStats {
   /**
    * Increments the "FunctionExecutionsCall" stat.
    */
+  @Override
   public void incFunctionExecutionCalls() {
     this._stats.incInt(_functionExecutionCallsId, 1);
   }
@@ -284,6 +296,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "functionExecutionHasResultCompleteProcessingTime" stat
    */
+  @Override
   public int getFunctionExecutionHasResultCompleteProcessingTime() {
     return this._stats.getInt(_functionExecutionsHasResultCompletedProcessingTimeId);
   }
@@ -294,6 +307,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "functionExecutionHasResultRunning" stat
    */
+  @Override
   public int getFunctionExecutionHasResultRunning() {
     return this._stats.getInt(_functionExecutionsHasResultRunningId);
   }
@@ -301,6 +315,7 @@ public class FunctionServiceStats {
   /**
    * Increments the "FunctionExecutionsCall" stat.
    */
+  @Override
   public void incFunctionExecutionHasResultRunning() {
     this._stats.incInt(_functionExecutionsHasResultRunningId, 1);
   }
@@ -311,6 +326,7 @@ public class FunctionServiceStats {
    *
    * @return the current value of the "functionExecutionHasResultRunning" stat
    */
+  @Override
   public int getFunctionExecutionExceptions() {
     return this._stats.getInt(_functionExecutionExceptions);
   }
@@ -318,6 +334,7 @@ public class FunctionServiceStats {
   /**
    * Increments the "FunctionExecutionsCall" stat.
    */
+  @Override
   public void incFunctionExecutionExceptions() {
     this._stats.incInt(_functionExecutionExceptions, 1);
   }
@@ -327,6 +344,7 @@ public class FunctionServiceStats {
    *
    * @return the current time (ns)
    */
+  @Override
   public long startTime() {
     return System.nanoTime();
   }
@@ -335,6 +353,7 @@ public class FunctionServiceStats {
    * Increments the "_functionExecutionCallsId" and "_functionExecutionsRunningId" stats and
    * "_functionExecutionHasResultRunningId" in case of function.hasResult = true..
    */
+  @Override
   public void startFunctionExecution(boolean haveResult) {
     // Increment number of function execution calls
     this._stats.incInt(_functionExecutionCallsId, 1);
@@ -357,6 +376,7 @@ public class FunctionServiceStats {
    * @param haveResult haveResult=true then update the _functionExecutionHasResultRunningId and
    *        _functionExecutionHasResultCompleteProcessingTimeId
    */
+  @Override
   public void endFunctionExecution(long start, boolean haveResult) {
     long ts = System.nanoTime();
 
@@ -384,6 +404,7 @@ public class FunctionServiceStats {
    * Increments the "_functionExecutionException" and decrements "_functionExecutionsRunningId"
    *
    */
+  @Override
   public void endFunctionExecutionWithException(boolean haveResult) {
     // Decrement function Executions running.
     this._stats.incInt(_functionExecutionsRunningId, -1);

@@ -16,7 +16,7 @@ package org.apache.geode.statistics.wan
 
 import org.apache.geode.stats.common.statistics.StatisticsFactory
 
-class MicrometerAsyncEventQueueStats(statisticsFactory: StatisticsFactory?, private val asyncQueueName: String) :
+class MicrometerAsyncEventQueueStats(statisticsFactory: StatisticsFactory, private val asyncQueueName: String) :
         MicrometerGatewaySenderStats(statisticsFactory,asyncQueueName, "AsyncQueueStats-$asyncQueueName") {
 
 

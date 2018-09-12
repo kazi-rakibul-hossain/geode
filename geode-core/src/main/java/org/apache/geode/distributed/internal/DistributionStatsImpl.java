@@ -973,9 +973,9 @@ public class DistributionStatsImpl implements DistributionStats, GFSStatsImpleme
    * Creates a new <code>DistributionStats</code> and registers itself with the given statistics
    * factory.
    */
-  public DistributionStatsImpl(StatisticsFactory factory, long statId) {
+  public DistributionStatsImpl(StatisticsFactory factory, String statId) {
     initializeStats(factory);
-    this.stats = factory.createAtomicStatistics(type, "distributionStats", statId);
+    this.stats = factory.createAtomicStatistics(type, "distributionStats", Long.parseLong(statId));
     // this.replyHandoffHistogram = new HistogramStats("ReplyHandOff", "nanoseconds", factory,
     // new long[] {100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000},
     // false);

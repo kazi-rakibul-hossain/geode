@@ -612,7 +612,7 @@ public class InternalDistributedSystem extends DistributedSystem {
 
   private void initializeStats() {
     this.internalDistributedSystemStats =
-        InternalDistributedSystemStats.createInstance(this.statsDisabled, this.getConfig(), this);
+        InternalDistributedSystemStats.createInstance(this.statsDisabled);
   }
 
 
@@ -880,6 +880,7 @@ public class InternalDistributedSystem extends DistributedSystem {
    */
   private void endInitLocator() throws IOException {
     InternalLocator loc = this.startedLocator;
+    getInternalDistributedSystemStats().startGemFireStatSampler(statsDisabled, getConfig(), this);
     if (loc != null) {
       boolean finished = false;
       try {

@@ -23,7 +23,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.util.NOW_NANOS
 
-open class MicrometerGatewaySenderStats @JvmOverloads constructor(statisticsFactory: StatisticsFactory?, private val queueName: String, private val groupName: String = "GatewayReceiverStats-$queueName") :
+open class MicrometerGatewaySenderStats @JvmOverloads constructor(statisticsFactory: StatisticsFactory, private val queueName: String, private val groupName: String = "GatewayReceiverStats-$queueName") :
         MicrometerMeterGroup(statisticsFactory, groupName), GatewaySenderStats {
 
 

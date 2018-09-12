@@ -47,40 +47,35 @@ public class InternalDistributedSystemStats {
 
   private StatisticsFactory statisticsFactory = StatsFactory.getStatisticsFactory();
 
-  private InternalDistributedSystemStats() {}
-
-  // TODO Udo: We need to fix the bootstrapping to have DS's and DM's created in order to get the
-  // statsfactory created
-  public InternalDistributedSystemStats(boolean statsDisabled,
-      DistributionConfig distributionConfig,
-      InternalDistributedSystem internalDistributedSystem) {
-    this.statsDisabled = statsDisabled;
-    this.functionServiceStats =
-        StatsFactory.createStatsImpl(FunctionServiceStats.class, "FunctionExecution");
-    if (!statsDisabled && StatsFactory.isLegacyGeodeStats()) {
-      this.sampler = new GemFireStatSampler(internalDistributedSystem.getId(), distributionConfig,
-          internalDistributedSystem.getCancelCriterion(), this,
-          internalDistributedSystem.getDistributionManager());
-      this.sampler.start();
-
-    }
+  private InternalDistributedSystemStats() {
   }
 
-  public static InternalDistributedSystemStats createInstance(boolean statsDisabled,
-      DistributionConfig distributionConfig,
-      InternalDistributedSystem distributedSystem) {
+  public static InternalDistributedSystemStats createInstance(boolean statsDisabled) {
 
     singleton.statsDisabled = statsDisabled;
     singleton.functionServiceStats =
         StatsFactory.createStatsImpl(FunctionServiceStats.class, "FunctionExecution");
+    return singleton;
+  }
+
+  private static void startGemFireStatSampler(boolean statsDisabled,
+                                              DistributionConfig distributionConfig,
+                                              InternalDistributedSystem distributedSystem,
+                                              InternalDistributedSystemStats internalDistributedSystemStats) {
     if (!statsDisabled && StatsFactory.isLegacyGeodeStats()) {
-      singleton.sampler = new GemFireStatSampler(distributedSystem.getId(), distributionConfig,
-          distributedSystem.getCancelCriterion(), singleton,
-          distributedSystem.getDistributionManager());
-      singleton.sampler.start();
+      internalDistributedSystemStats.sampler =
+          new GemFireStatSampler(distributedSystem.getId(), distributionConfig,
+              distributedSystem.getCancelCriterion(), internalDistributedSystemStats,
+              distributedSystem.getDistributionManager());
+      internalDistributedSystemStats.sampler.start();
 
     }
-    return singleton;
+  }
+
+  public void startGemFireStatSampler(boolean statsDisabled,
+                                              DistributionConfig distributionConfig,
+                                              InternalDistributedSystem distributedSystem) {
+    startGemFireStatSampler(statsDisabled, distributionConfig, distributedSystem, this);
   }
 
   public static InternalDistributedSystemStats getSingleton() {

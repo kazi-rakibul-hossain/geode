@@ -19,7 +19,7 @@ import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 public interface LocatorStats extends Stats {
 
-  void hookupStats(StatisticsFactory f, String name);
+  void hookupStats(String name);
 
   void setServerCount(int sc);
 

@@ -30,7 +30,7 @@ import org.apache.geode.distributed.internal.DistributionStatsImpl;
 import org.apache.geode.internal.NanoTimer;
 import org.apache.geode.internal.OSProcess;
 import org.apache.geode.internal.cache.GemFireCacheImpl;
-import org.apache.geode.internal.cache.execute.FunctionServiceStats;
+import org.apache.geode.internal.cache.execute.FunctionServiceStatsImpl;
 import org.apache.geode.internal.statistics.VMStats;
 import org.apache.geode.internal.stats50.VMStats50;
 import org.apache.geode.management.ManagementService;
@@ -52,7 +52,7 @@ public class MemberLevelStatsJUnitTest extends MBeanStatsTestCase {
 
   private CachePerfStats cachePerfStats;
 
-  private FunctionServiceStats funcServiceStats;
+  private FunctionServiceStatsImpl funcServiceStats;
 
   private DistributionStats distributionStats;
 
@@ -69,7 +69,8 @@ public class MemberLevelStatsJUnitTest extends MBeanStatsTestCase {
   public void init() {
     cachePerfStats =
         StatsFactory.createStatsImpl(CachePerfStats.class, null);
-    funcServiceStats = new FunctionServiceStats(system.getStatisticsFactory(), "FunctionExecution");
+    funcServiceStats =
+        new FunctionServiceStatsImpl(system.getStatisticsFactory(), "FunctionExecution");
     long statId = OSProcess.getId();
     distributionStats =
         StatsFactory.createStatsImpl(DistributionStats.class,

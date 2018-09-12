@@ -21,7 +21,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 
-abstract class MicrometerEvictionStatsImpl(statisticsFactory: StatisticsFactory?, private val regionName: String, private val groupName: String = "EvictionStats-$regionName") :
+abstract class MicrometerEvictionStatsImpl(statisticsFactory: StatisticsFactory, private val regionName: String, private val groupName: String = "EvictionStats-$regionName") :
         MicrometerMeterGroup(statisticsFactory,groupName), EvictionStats {
 
 

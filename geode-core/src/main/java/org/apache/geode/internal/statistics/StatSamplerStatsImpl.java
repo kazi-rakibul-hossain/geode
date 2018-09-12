@@ -43,9 +43,9 @@ public class StatSamplerStatsImpl implements StatSampleStats, GFSStatsImplemente
   private int sampleCallbackErrorsId;
   private int sampleCallbackDurationId;
 
-  public StatSamplerStatsImpl(StatisticsFactory factory, long id) {
+  public StatSamplerStatsImpl(StatisticsFactory factory, String id) {
     initializeStats(factory);
-    this.samplerStats = factory.createStatistics(samplerType, "statSampler", id);
+    this.samplerStats = factory.createStatistics(samplerType, "statSampler", Long.parseLong(id));
   }
 
   public void initializeStats(StatisticsFactory factory) {

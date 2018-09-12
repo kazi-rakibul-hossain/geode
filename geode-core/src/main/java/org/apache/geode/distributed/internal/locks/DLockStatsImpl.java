@@ -19,6 +19,7 @@ import org.apache.geode.distributed.internal.DistributionStatsImpl;
 import org.apache.geode.stats.common.distributed.internal.PoolStatHelper;
 import org.apache.geode.stats.common.distributed.internal.QueueStatHelper;
 import org.apache.geode.stats.common.distributed.internal.locks.DLockStats;
+import org.apache.geode.stats.common.statistics.GFSStatsImplementer;
 import org.apache.geode.stats.common.statistics.StatisticDescriptor;
 import org.apache.geode.stats.common.statistics.Statistics;
 import org.apache.geode.stats.common.statistics.StatisticsFactory;
@@ -29,7 +30,7 @@ import org.apache.geode.stats.common.statistics.StatisticsType;
  *
  *
  */
-public class DLockStatsImpl implements DLockStats {
+public class DLockStatsImpl implements DLockStats, GFSStatsImplementer {
 
   // -------------------------------------------------------------------------
   // Statistic "Id" Fields
@@ -109,7 +110,7 @@ public class DLockStatsImpl implements DLockStats {
     return System.nanoTime();
   }
 
-  private void initializeStats(StatisticsFactory factory) {
+  public void initializeStats(StatisticsFactory factory) {
     String statName = "DLockStats";
     String statDescription = "Statistics on the gemfire distribution lock service.";
 
@@ -423,9 +424,9 @@ public class DLockStatsImpl implements DLockStats {
   /**
    * Creates a new <code>DLockStats</code> and registers itself with the given statistics factory.
    */
-  public DLockStatsImpl(StatisticsFactory factory, long statId) {
+  public DLockStatsImpl(StatisticsFactory factory, String statId) {
     initializeStats(factory);
-    this.stats = factory.createAtomicStatistics(type, "dlockStats", statId);
+    this.stats = factory.createAtomicStatistics(type, "dlockStats", Long.parseLong(statId));
   }
 
   // -------------------------------------------------------------------------

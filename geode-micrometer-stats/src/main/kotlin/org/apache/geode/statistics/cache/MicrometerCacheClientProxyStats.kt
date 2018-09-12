@@ -21,7 +21,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerCacheClientProxyStats(statisticsFactory: StatisticsFactory?, private val clientName: String) :
+class MicrometerCacheClientProxyStats(statisticsFactory: StatisticsFactory, private val clientName: String) :
         MicrometerMeterGroup(statisticsFactory,"CacheClientProxyStats-$clientName"), MessageStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("clientName", clientName)

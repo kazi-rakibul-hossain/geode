@@ -22,13 +22,13 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerConnectionStats(private val statisticsFactory: StatisticsFactory?, private val poolName: String, private var poolStats: PoolStats) :
+class MicrometerConnectionStats(private val statisticsFactory: StatisticsFactory, private val poolName: String, private var poolStats: PoolStats) :
         MicrometerMeterGroup(statisticsFactory, "ClientConnectionStats-$poolName"), ConnectionStats {
 
     private val clientStats: MicrometerClientStats = MicrometerClientStats(statisticsFactory, poolName)
     private val clientSendStats: MicrometerClientSendStats = MicrometerClientSendStats(statisticsFactory, poolName)
 
-    override fun registerStatsImplementer(factory: StatisticsFactory?) {
+    override fun registerStatsImplementer(factory: StatisticsFactory) {
         registerMeterGroup(clientStats)
         registerMeterGroup(clientSendStats)
         super.registerStatsImplementer(factory)

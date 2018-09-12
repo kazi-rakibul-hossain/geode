@@ -16,16 +16,18 @@ package org.apache.geode.statistics.internal.micrometer.impl
 
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.binder.MeterBinder
-import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.statistics.internal.micrometer.StatisticsMeterGroup
 import org.apache.geode.statistics.micrometer.MicrometerStatsImplementer
+import org.apache.geode.stats.common.statistics.StatisticsFactory
 
-abstract class MicrometerMeterGroup(private val statisticsFactory: StatisticsFactory?, private val groupName: String) : StatisticsMeterGroup, MeterBinder,
+abstract class MicrometerMeterGroup(private val statisticsFactory: StatisticsFactory,private val groupName: String) : StatisticsMeterGroup, MeterBinder,
         MicrometerStatsImplementer {
-    init{
+
+    override fun postConstruct(factory: StatisticsFactory) {
         initializeImplementer(statisticsFactory)
         registerStatsImplementer(statisticsFactory)
     }
+
     private val registeredMeters = mutableListOf<MicrometerStatisticMeter>()
     private val registeredMeterGroups = mutableListOf<MicrometerMeterGroup>()
 
@@ -35,18 +37,18 @@ abstract class MicrometerMeterGroup(private val statisticsFactory: StatisticsFac
 
     open fun getGroupTags(): Array<String> = emptyArray()
 
-    override fun registerStatsImplementer(factory: StatisticsFactory?) {
-        MicrometerStatisticsManager.registerMeterGroup(this.groupName,this)
+    override fun registerStatsImplementer(factory: StatisticsFactory) {
+        MicrometerStatisticsManager.registerMeterGroup(this.groupName, this)
     }
 
-    override fun initializeImplementer(factory: StatisticsFactory?) {
+    final override fun initializeImplementer(factory: StatisticsFactory) {
         initializeStaticMeters()
     }
 
     override fun getMeterGroupName(): String = groupName
 
     override fun bindTo(registry: MeterRegistry) {
-        registeredMeters.forEach {it.register(registry, commonGroupTags) }
+        registeredMeters.forEach { it.register(registry, commonGroupTags) }
         registeredMeterGroups.forEach { micrometerMeterGroup -> micrometerMeterGroup.registeredMeters.forEach { it.register(registry, commonGroupTags) } }
     }
 

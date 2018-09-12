@@ -14,21 +14,19 @@
  */
 package org.apache.geode.statistics.resourcemanger
 
-import org.apache.geode.stats.common.distributed.internal.PoolStatHelper
-import org.apache.geode.stats.common.distributed.internal.QueueStatHelper
-import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats
-import org.apache.geode.stats.common.statistics.StatisticsFactory
 import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.micrometer.MicrometerStatsImplementer
 import org.apache.geode.statistics.util.NOW_NANOS
+import org.apache.geode.stats.common.distributed.internal.PoolStatHelper
+import org.apache.geode.stats.common.distributed.internal.QueueStatHelper
+import org.apache.geode.stats.common.internal.cache.control.ResourceManagerStats
+import org.apache.geode.stats.common.statistics.StatisticsFactory
 
-class MicrometerResourceManagerStats() :
-        MicrometerMeterGroup(statisticsFactory = null,groupName = "ResourceManagerStats"), ResourceManagerStats, MicrometerStatsImplementer {
-
-    constructor(statisticsFactory: StatisticsFactory, name: String?): this()
+class MicrometerResourceManagerStats(statisticsFactory: StatisticsFactory, name: String) :
+        MicrometerMeterGroup(statisticsFactory = statisticsFactory, groupName = "ResourceManagerStats"), ResourceManagerStats, MicrometerStatsImplementer {
 
     private val resourceRebalanceInProgressMeter = GaugeStatisticMeter("manager.resources.rebalance.inprogress.count", "Current number of cache rebalance operations being directed by this process.")
     private val resourceRebalanceCompletedMeter = CounterStatisticMeter("manager.resources.rebalance.completed.count", "Total number of cache rebalance operations directed by this process.")

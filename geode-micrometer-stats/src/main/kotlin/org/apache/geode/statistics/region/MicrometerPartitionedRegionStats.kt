@@ -24,7 +24,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerPartitionedRegionStats(statisticsFactory: StatisticsFactory?, private val regionName: String) :
+class MicrometerPartitionedRegionStats(statisticsFactory: StatisticsFactory, private val regionName: String) :
         MicrometerMeterGroup(statisticsFactory, "PartitionRegionStats-$regionName"), PartitionedRegionStats {
 
     override fun getGroupTags(): Array<String> = arrayOf("regionName", regionName)

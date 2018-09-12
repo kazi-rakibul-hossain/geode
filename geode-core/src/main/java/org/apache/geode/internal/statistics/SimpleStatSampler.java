@@ -37,33 +37,33 @@ public class SimpleStatSampler extends HostStatSampler {
 
   private static final Logger logger = LogService.getLogger();
 
-  public static final String ARCHIVE_FILE_NAME_PROPERTY = "stats.archive-file";
-  public static final String FILE_SIZE_LIMIT_PROPERTY = "stats.file-size-limit";
-  public static final String DISK_SPACE_LIMIT_PROPERTY = "stats.disk-space-limit";
-  public static final String SAMPLE_RATE_PROPERTY = "stats.sample-rate";
+  static final String ARCHIVE_FILE_NAME_PROPERTY = "stats.archive-file";
+  static final String FILE_SIZE_LIMIT_PROPERTY = "stats.file-size-limit";
+  static final String DISK_SPACE_LIMIT_PROPERTY = "stats.disk-space-limit";
+  static final String SAMPLE_RATE_PROPERTY = "stats.sample-rate";
 
-  public static final String DEFAULT_ARCHIVE_FILE_NAME = "stats.gfs";
-  public static final long DEFAULT_FILE_SIZE_LIMIT = 0;
-  public static final long DEFAULT_DISK_SPACE_LIMIT = 0;
-  public static final int DEFAULT_SAMPLE_RATE = 1000;
+  static final String DEFAULT_ARCHIVE_FILE_NAME = "stats.gfs";
+  private static final long DEFAULT_FILE_SIZE_LIMIT = 0;
+  private static final long DEFAULT_DISK_SPACE_LIMIT = 0;
+  static final int DEFAULT_SAMPLE_RATE = 1000;
 
   private final File archiveFileName =
       new File(System.getProperty(ARCHIVE_FILE_NAME_PROPERTY, DEFAULT_ARCHIVE_FILE_NAME));
   private final long archiveFileSizeLimit =
-      Long.getLong(FILE_SIZE_LIMIT_PROPERTY, DEFAULT_FILE_SIZE_LIMIT).longValue() * (1024 * 1024);
+      Long.getLong(FILE_SIZE_LIMIT_PROPERTY, DEFAULT_FILE_SIZE_LIMIT) * (1024 * 1024);
   private final long archiveDiskSpaceLimit =
-      Long.getLong(DISK_SPACE_LIMIT_PROPERTY, DEFAULT_DISK_SPACE_LIMIT).longValue() * (1024 * 1024);
+      Long.getLong(DISK_SPACE_LIMIT_PROPERTY, DEFAULT_DISK_SPACE_LIMIT) * (1024 * 1024);
   private final int sampleRate =
-      Integer.getInteger(SAMPLE_RATE_PROPERTY, DEFAULT_SAMPLE_RATE).intValue();
+      Integer.getInteger(SAMPLE_RATE_PROPERTY, DEFAULT_SAMPLE_RATE);
 
   private final StatisticsManager sm;
 
-  public SimpleStatSampler(CancelCriterion stopper, StatisticsManager sm) {
+  SimpleStatSampler(CancelCriterion stopper, StatisticsManager sm) {
     this(stopper, sm, new NanoTimer());
   }
 
-  public SimpleStatSampler(CancelCriterion stopper, StatisticsManager sm, NanoTimer timer) {
-    super(stopper, new StatSamplerStatsImpl(sm, sm.getId()), timer);
+  SimpleStatSampler(CancelCriterion stopper, StatisticsManager sm, NanoTimer timer) {
+    super(stopper, new StatSamplerStatsImpl(sm, String.valueOf(sm.getId())), timer);
     this.sm = sm;
     logger.info(LogMarker.STATISTICS_MARKER, LocalizedMessage
         .create(LocalizedStrings.SimpleStatSampler_STATSSAMPLERATE_0, getSampleRate()));

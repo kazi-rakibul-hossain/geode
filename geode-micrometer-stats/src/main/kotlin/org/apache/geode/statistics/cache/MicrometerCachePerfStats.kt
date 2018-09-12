@@ -25,7 +25,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.internal.micrometer.impl.TimerStatisticMeter
 import org.apache.geode.statistics.util.NOW_NANOS
 
-open class MicrometerCachePerfStats @JvmOverloads constructor(statisticsFactory: StatisticsFactory?, private val regionName: String? = null) :
+open class MicrometerCachePerfStats @JvmOverloads constructor(statisticsFactory: StatisticsFactory, private val regionName: String? = null) :
         MicrometerMeterGroup(statisticsFactory,"CachePerfStats${regionName?.let { "-$it" }
                 ?: ""}"), CachePerfStats {
 

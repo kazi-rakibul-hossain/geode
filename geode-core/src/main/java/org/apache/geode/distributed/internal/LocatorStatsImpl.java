@@ -109,15 +109,15 @@ public class LocatorStatsImpl implements LocatorStats, GFSStatsImplementer {
    * Called when the DS comes online so we can hookup the stats
    */
   @Override
-  public void hookupStats(StatisticsFactory f, String name) {
-    if (this._stats == null) {
-      this._stats = f.createAtomicStatistics(type, name);
-      setLocatorCount(known_locators.get());
-      setServerCount(endpoints_known.get());
-      setLocatorRequests(requests_to_locator.get());
-      setLocatorResponses(responses_from_locator.get());
-      setServerLoadUpdates(serverLoadUpdates.get());
-    }
+  public void hookupStats(String name) {
+//    if (this._stats == null) {
+//      this._stats = f.createAtomicStatistics(type, name);
+//      setLocatorCount(known_locators.get());
+//      setServerCount(endpoints_known.get());
+//      setLocatorRequests(requests_to_locator.get());
+//      setLocatorResponses(responses_from_locator.get());
+//      setServerLoadUpdates(serverLoadUpdates.get());
+//    }
   }
 
 

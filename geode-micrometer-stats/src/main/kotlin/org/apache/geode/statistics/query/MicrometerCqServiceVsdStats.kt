@@ -22,11 +22,9 @@ import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 import org.apache.geode.statistics.micrometer.MicrometerStatsImplementer
 import org.apache.geode.statistics.util.NOW_NANOS
 
-class MicrometerCqServiceVsdStats() :
-        MicrometerMeterGroup(statisticsFactory = null, groupName = "CqServiceStats"),
+class MicrometerCqServiceVsdStats(statisticsFactory: StatisticsFactory, identifier: String) :
+        MicrometerMeterGroup(statisticsFactory= statisticsFactory,groupName = "CqServiceStats"),
         CqServiceVsdStats,MicrometerStatsImplementer {
-
-    constructor(statisticsFactory: StatisticsFactory?, identifier: String?) : this()
 
     private val cqNumberCQsCreatedMeter = GaugeStatisticMeter("cq.count", "Number of CQs created")
     private val cqNumberCQsActiveMeter = GaugeStatisticMeter("cq.count", "Number of CQS actively executing.", arrayOf("state", "active"))

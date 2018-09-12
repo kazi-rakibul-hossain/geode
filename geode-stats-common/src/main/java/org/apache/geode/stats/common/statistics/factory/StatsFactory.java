@@ -33,6 +33,8 @@ import org.apache.geode.stats.common.cache.client.internal.ConnectionStats;
 import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 import org.apache.geode.stats.common.internal.cache.PoolStats;
 import org.apache.geode.stats.common.internal.cache.RegionPerfStats;
+import org.apache.geode.stats.common.internal.cache.tier.sockets.CacheServerStats;
+import org.apache.geode.stats.common.internal.cache.wan.GatewayReceiverStats;
 import org.apache.geode.stats.common.statistics.GFSStatsImplementer;
 import org.apache.geode.stats.common.statistics.StatisticsFactory;
 import org.apache.geode.stats.common.statistics.StatsImplementer;
@@ -41,7 +43,7 @@ public class StatsFactory {
 
   private static final boolean isExperimentalEnabled =
       Boolean.getBoolean("geode.experimental.stats.micrometer");
-  private static final StatsFactory statsFactory =
+  private static final StatsFactory singletonStatsFactory =
       new StatsFactory(getStatsImplementor(), getStatisticsTypeFactory());
   private final Class<? extends StatsImplementer> selectedStatsImplementor;
   private final Map<Class<?>, Class<? extends StatsImplementer>> resolvedStatsImplForClass =
@@ -49,7 +51,7 @@ public class StatsFactory {
   private final StatisticsFactory statisticsFactory;
 
   private StatsFactory(Class<? extends StatsImplementer> selectedStatsImplementor,
-      StatisticsFactory statisticsFactory) {
+                       StatisticsFactory statisticsFactory) {
     List<ClassLoader> classLoadersList = new LinkedList<>();
     classLoadersList.add(ClasspathHelper.contextClassLoader());
     classLoadersList.add(ClasspathHelper.staticClassLoader());
@@ -70,7 +72,7 @@ public class StatsFactory {
     try {
       return isExperimentalEnabled
           ? (Class<? extends StatsImplementer>) Class
-              .forName("org.apache.geode.statistics.micrometer.MicrometerStatsImplementer")
+          .forName("org.apache.geode.statistics.micrometer.MicrometerStatsImplementer")
           : GFSStatsImplementer.class;
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
@@ -81,8 +83,10 @@ public class StatsFactory {
   private static StatisticsFactory getStatisticsTypeFactory() {
     final ServiceLoader<StatisticsFactory> services = ServiceLoader.load(StatisticsFactory.class);
     for (StatisticsFactory statisticsFactory : services) {
-      if (isExperimentalEnabled && statisticsFactory.getType().equals("Micrometer")) {
-        return statisticsFactory;
+      if (isExperimentalEnabled) {
+        if (statisticsFactory.getType().equals("Micrometer")) {
+          return statisticsFactory;
+        }
       } else if (statisticsFactory.getType().equals("GeodeStats")) {
         return statisticsFactory;
       }
@@ -92,7 +96,7 @@ public class StatsFactory {
   }
 
   public static <V extends StatsImplementer> V createStatsImpl(Class<?> interfaceClazz,
-      String identifier) {
+                                                               String identifier) {
     return (V) resolveInstanceFromClass(interfaceClazz, identifier);
   }
 
@@ -106,26 +110,29 @@ public class StatsFactory {
   }
 
   private static StatsImplementer resolveInstanceFromClass(Class<?> interfaceClazz, String name) {
-    return statsFactory.createInstanceFromClass(interfaceClazz, name);
+    return singletonStatsFactory.createInstanceFromClass(interfaceClazz, name);
   }
 
   private static StatsImplementer resolveCachePerfInstanceFromClass(String name) {
-    return statsFactory.createInstanceFromClass(CachePerfStats.class, name);
+    return singletonStatsFactory.createInstanceFromClass(CachePerfStats.class, name);
   }
 
   private static StatsImplementer resolveConnectionStatInstanceFromClass(String name,
-      PoolStats poolStats) {
-    return statsFactory.createConnectionStatInstanceFromClass(name, poolStats);
+                                                                         PoolStats poolStats) {
+    return singletonStatsFactory.createConnectionStatInstanceFromClass(name, poolStats);
   }
 
   public static RegionPerfStats createRegionPerfStatsImplFromClass(Class<?> interfaceClazz,
-      CachePerfStats cachePerfStats, String regionName) {
+                                                                   CachePerfStats cachePerfStats,
+                                                                   String regionName) {
     try {
       Class<? extends StatsImplementer> resolvedLocatorClassImpl =
-          statsFactory.resolvedStatsImplForClass.get(interfaceClazz);
-      return (RegionPerfStats) resolvedLocatorClassImpl
+          singletonStatsFactory.resolvedStatsImplForClass.get(interfaceClazz);
+      final StatsImplementer statsImplementer = resolvedLocatorClassImpl
           .getDeclaredConstructor(StatisticsFactory.class, CachePerfStats.class, String.class)
-          .newInstance(statsFactory.getFactory(), cachePerfStats, regionName);
+          .newInstance(singletonStatsFactory.getFactory(), cachePerfStats, regionName);
+      statsImplementer.postConstruct(getStatisticsFactory());
+      return (RegionPerfStats) statsImplementer;
     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
         | InvocationTargetException e) {
       e.printStackTrace();
@@ -134,11 +141,11 @@ public class StatsFactory {
   }
 
   public static boolean isLegacyGeodeStats() {
-    return statsFactory.getFactory().getType().equals("GeodeStats");
+    return singletonStatsFactory.getFactory().getType().equals("GeodeStats");
   }
 
   public static StatisticsFactory getStatisticsFactory() {
-    return statsFactory.statisticsFactory;
+    return singletonStatsFactory.statisticsFactory;
   }
 
   private StatisticsFactory getFactory() {
@@ -158,19 +165,27 @@ public class StatsFactory {
     reflections.getSubTypesOf(CachePerfStats.class).stream()
         .filter(clazz -> selectedStatsImplementor.isAssignableFrom(clazz)
             && !RegionPerfStats.class.isAssignableFrom(clazz) && !clazz.getName()
-                .contains("DummyCachePerfStats"))
+            .contains("DummyCachePerfStats"))
         .forEach(aClass -> resolvedStatsImplForClass
             .put(CachePerfStats.class, (Class<? extends StatsImplementer>) aClass));
+
+    reflections.getSubTypesOf(CacheServerStats.class).stream()
+        .filter(clazz -> selectedStatsImplementor.isAssignableFrom(clazz)
+            && !GatewayReceiverStats.class.isAssignableFrom(clazz))
+        .forEach(aClass -> resolvedStatsImplForClass
+            .put(CacheServerStats.class, (Class<? extends StatsImplementer>) aClass));
   }
 
   private StatsImplementer createConnectionStatInstanceFromClass(String locatorName,
-      PoolStats poolStats) {
+                                                                 PoolStats poolStats) {
     try {
       Class<? extends StatsImplementer> resolvedLocatorClassImpl =
           resolveImplementationForClass(ConnectionStats.class);
-      return resolvedLocatorClassImpl
+      final StatsImplementer statsImplementer = resolvedLocatorClassImpl
           .getDeclaredConstructor(StatisticsFactory.class, String.class, PoolStats.class)
           .newInstance(statisticsFactory, locatorName, poolStats);
+      statsImplementer.postConstruct(statisticsFactory);
+      return statsImplementer;
     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
         | InvocationTargetException e) {
       e.printStackTrace();
@@ -192,9 +207,11 @@ public class StatsFactory {
     try {
       Class<? extends StatsImplementer> resolvedLocatorClassImpl =
           resolveImplementationForClass(interfaceClazz);
-      return resolvedLocatorClassImpl
+      final StatsImplementer statsImplementer = resolvedLocatorClassImpl
           .getDeclaredConstructor(StatisticsFactory.class, String.class)
           .newInstance(statisticsFactory, name);
+      statsImplementer.postConstruct(statisticsFactory);
+      return statsImplementer;
     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
         | InvocationTargetException e) {
       e.printStackTrace();

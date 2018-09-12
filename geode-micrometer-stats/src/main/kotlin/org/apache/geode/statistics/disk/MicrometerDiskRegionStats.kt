@@ -21,7 +21,7 @@ import org.apache.geode.statistics.internal.micrometer.impl.CounterStatisticMete
 import org.apache.geode.statistics.internal.micrometer.impl.GaugeStatisticMeter
 import org.apache.geode.statistics.internal.micrometer.impl.MicrometerMeterGroup
 
-class MicrometerDiskRegionStats(statisticsFactory: StatisticsFactory?, private val diskRegionName: String) :
+class MicrometerDiskRegionStats(statisticsFactory: StatisticsFactory, private val diskRegionName: String) :
         MicrometerMeterGroup(statisticsFactory,"DiskRegionStats-$diskRegionName"), DiskRegionStats {
 
 

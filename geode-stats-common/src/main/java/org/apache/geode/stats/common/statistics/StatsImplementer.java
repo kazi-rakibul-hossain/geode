@@ -20,4 +20,6 @@ public interface StatsImplementer {
   void initializeImplementer(StatisticsFactory factory);
 
   void registerStatsImplementer(StatisticsFactory factory);
+
+  void postConstruct(StatisticsFactory factory);
 }
