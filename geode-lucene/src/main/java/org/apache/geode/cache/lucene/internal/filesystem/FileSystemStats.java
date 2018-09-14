@@ -50,7 +50,7 @@ public class FileSystemStats {
             factory.createIntCounter("fileRenames", "Number of files renamed", "files"),
             factory.createIntGauge("files", "Number of files on this member", "files"),
             factory.createIntGauge("chunks", "Number of file chunks on this member", "chunks"),
-            factory.createLongGauge("bytes", "Number of bytes on this member", "bytes"),});
+            factory.createLongGauge("bytes", "Number of bytes on this member", "bytes")});
 
     readBytesId = statsType.nameToId("readBytes");
     writtenBytesId = statsType.nameToId("writtenBytes");

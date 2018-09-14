@@ -58,11 +58,10 @@ public class StatsFactory {
 
     /* don't exclude Object.class */
     Reflections reflections = new Reflections(new ConfigurationBuilder()
-        .setScanners(new SubTypesScanner(false /* don't exclude Object.class */),
-            new ResourcesScanner())
+        .setScanners(new SubTypesScanner(false /* don't exclude Object.class */))
         .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
         .filterInputsBy(new FilterBuilder()
-            .includePackage("org.apache.geode..*").excludePackage("org.springframework..*")));
+            .includePackage("org.apache.geode..*")));
     this.selectedStatsImplementor = selectedStatsImplementor;
     this.statisticsFactory = statisticsFactory;
     initializeStatsImplementations(reflections);

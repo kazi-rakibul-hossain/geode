@@ -37,10 +37,12 @@ import org.apache.geode.distributed.internal.membership.InternalDistributedMembe
 import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.internal.cache.TXManagerImpl;
 import org.apache.geode.internal.security.SecurityService;
+import org.apache.geode.internal.statistics.InternalDistributedSystemStats;
 import org.apache.geode.pdx.PdxInstanceFactory;
 import org.apache.geode.pdx.internal.TypeRegistry;
 import org.apache.geode.stats.common.internal.cache.CachePerfStats;
 import org.apache.geode.stats.common.statistics.Statistics;
+import org.apache.geode.stats.common.statistics.StatisticsFactory;
 
 /**
  * Factory methods for fake objects for use in test.
@@ -101,6 +103,10 @@ public class Fakes {
     when(system.getClock()).thenReturn(clock);
     when(system.getLogWriter()).thenReturn(logger);
     when(system.getSecurityService()).thenReturn(mock(SecurityService.class));
+    when(system.getInternalDistributedSystemStats())
+        .thenReturn(mock(InternalDistributedSystemStats.class));
+    when(system.getInternalDistributedSystemStats().getStatisticsFactory()).thenReturn(mock(
+        StatisticsFactory.class));
     when(system.getInternalDistributedSystemStats().getStatisticsFactory()
         .createAtomicStatistics(any(), any(), anyLong()))
             .thenReturn(stats);

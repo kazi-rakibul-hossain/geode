@@ -46,14 +46,15 @@ public abstract class AbstractStatisticsFactory implements StatisticsFactory, St
   private final StatisticsTypeFactory statisticsTypeFactory;
   private final long startTime;
 
-  public AbstractStatisticsFactory(StatisticsFactory statisticsFactory, long id, String name,
+  public AbstractStatisticsFactory(StatisticsTypeFactory statisticsTypeFactory, long id,
+      String name,
       long startTime) {
     this.id = id;
     this.name = name;
     this.startTime = startTime;
 
     this.statsListUniqueIdLock = new Object();
-    this.statisticsTypeFactory = statisticsFactory;
+    this.statisticsTypeFactory = statisticsTypeFactory;
   }
 
   public void close() {}

@@ -16,7 +16,6 @@ package org.apache.geode.internal.statistics;
 
 import org.apache.geode.internal.statistics.platform.OsStatisticsFactory;
 import org.apache.geode.stats.common.statistics.Statistics;
-import org.apache.geode.stats.common.statistics.StatisticsFactory;
 import org.apache.geode.stats.common.statistics.StatisticsType;
 
 /**
@@ -26,7 +25,7 @@ public class TestStatisticsManager extends AbstractStatisticsFactory
     implements StatisticsManager, OsStatisticsFactory {
 
   public TestStatisticsManager(final long id, final String name, final long startTime) {
-    super((StatisticsFactory) new StatisticsTypeFactoryImpl(), id, name, startTime);
+    super(new StatisticsTypeFactoryImpl(), id, name, startTime);
   }
 
   @Override

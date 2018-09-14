@@ -56,6 +56,7 @@ import org.apache.geode.internal.cache.tier.sockets.Part;
 import org.apache.geode.internal.cache.tier.sockets.ServerConnection;
 import org.apache.geode.internal.security.AuthorizeRequest;
 import org.apache.geode.internal.security.SecurityService;
+import org.apache.geode.internal.statistics.InternalDistributedSystemStats;
 import org.apache.geode.management.internal.security.ResourcePermissions;
 import org.apache.geode.security.NotAuthorizedException;
 import org.apache.geode.test.junit.categories.ClientServerTest;
@@ -119,11 +120,19 @@ public class ExecuteFunction66Test {
     this.executeFunction66 = new ExecuteFunction66();
     MockitoAnnotations.initMocks(this);
 
+    final InternalDistributedSystem internalDistributedSystem =
+        mock(InternalDistributedSystem.class);
+    final InternalDistributedSystemStats internalDistributedSystemStats =
+        mock(InternalDistributedSystemStats.class);
+    when(InternalDistributedSystem.getAnyInstance()).thenReturn(internalDistributedSystem);
+    when(internalDistributedSystem.getInternalDistributedSystemStats())
+        .thenReturn(internalDistributedSystemStats);
+
     when(this.authzRequest.executeFunctionAuthorize(eq(FUNCTION_ID), eq(null), eq(null), eq(null),
         eq(OPTIMIZE_FOR_WRITE))).thenReturn(this.executeFunctionOperationContext);
 
     when(this.cache.getCancelCriterion()).thenReturn(mock(CancelCriterion.class));
-    when(this.cache.getDistributedSystem()).thenReturn(mock(InternalDistributedSystem.class));
+    when(this.cache.getDistributedSystem()).thenReturn(internalDistributedSystem);
     when(this.cache.getResourceManager()).thenReturn(this.internalResourceManager);
     when(this.cache.getInternalResourceManager()).thenReturn(this.internalResourceManager);
 

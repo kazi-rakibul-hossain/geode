@@ -113,9 +113,9 @@ object MicrometerStatisticsManager : StatisticsManager {
 
     private fun createCompositeRegistry(): CompositeMeterRegistry {
         val compositeMeterRegistry = CompositeMeterRegistry(Clock.SYSTEM)
-//        compositeMeterRegistry.add(createInfluxDB())
+        compositeMeterRegistry.add(createInfluxDB())
 //        compositeMeterRegistry.add(createPrometheus())
-        compositeMeterRegistry.add(createJMX())
+//        compositeMeterRegistry.add(createJMX())
         return compositeMeterRegistry
     }
 
@@ -131,7 +131,7 @@ object MicrometerStatisticsManager : StatisticsManager {
     private fun createInfluxDB(): InfluxMeterRegistry {
         val config = object : InfluxConfig {
             override fun step(): Duration = Duration.ofSeconds(10)
-            override fun db(): String = "mydb3"
+            override fun db(): String = "mydb4"
             override fun get(k: String): String? = null
         }
         return InfluxMeterRegistry(config, Clock.SYSTEM)

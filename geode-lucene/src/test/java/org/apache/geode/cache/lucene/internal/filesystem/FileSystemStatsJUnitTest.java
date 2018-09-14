@@ -41,7 +41,9 @@ public class FileSystemStatsJUnitTest {
   @Before
   public void createStats() {
     StatisticsFactory statsFactory = mock(StatisticsFactory.class);
+    StatisticsType statsType = mock(StatisticsType.class);
     statistics = mock(Statistics.class);
+    when(statsFactory.createType(any(), any(), any())).thenReturn(statsType);
     when(statsFactory.createAtomicStatistics(any(), anyString())).thenReturn(statistics);
     stats = new FileSystemStats(statsFactory, "stats");
 
